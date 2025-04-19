@@ -1,0 +1,278 @@
+{% extends "layout.html" %}
+
+{% block title %}MedXpert - Brain Tumor Detection{% endblock %}
+
+{% block content %}
+<section class="model-header brain-header py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1>Brain Tumor Segmentation</h1>
+                <p class="lead">Upload a brain MRI scan to detect and segment potential tumors using our advanced UNet model.</p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{{ url_for('static', filename='images/brain-icon.png') }}" alt="Brain Tumor Detection" class="model-icon">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="upload-container p-4 rounded shadow-sm">
+                    <h3 class="mb-4">Upload Brain MRI Scan</h3>
+                    <form id="brainUploadForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="brainFile" class="form-label">Select MRI file</label>
+                            <input class="form-control" type="file" id="brainFile" name="file" accept=".nii,.nii.gz,.dcm,.jpg,.jpeg,.png">
+                            <div class="form-text">Supported formats: NIfTI (.nii, .nii.gz), DICOM (.dcm), or standard images (.jpg, .png)</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="analyzeBrainBtn">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            Analyze Scan
+                        </button>
+                    </form>
+                </div>
+
+                <div class="results-container mt-4 d-none" id="brainResults">
+                    <h3>Analysis Results</h3>
+                    <div class="alert" id="brainResultMessage"></div>
+                    
+                    <div class="slice-viewer-container">
+                        <div class="row">
+                            <div class="col-md-10 mx-auto">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <!-- Image slider with navigation controls -->
+                                        <div class="mb-3">
+                                            <button id="prevSliceBtn" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-arrow-left"></i> Previous
+                                            </button>
+                                            <span id="sliceCounter" class="mx-3">Slice 0/0</span>
+                                            <button id="nextSliceBtn" class="btn btn-sm btn-outline-primary">
+                                                Next <i class="fas fa-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Slice image display -->
+                                        <div id="sliceImageContainer" class="position-relative">
+                                            <img id="currentSliceImage" class="img-fluid" alt="Brain Scan Slice">
+                                            <div id="tumorIndicator" class="position-absolute top-0 end-0 m-2 px-2 py-1 badge bg-danger d-none">
+                                                Tumor Detected
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Slider for quick navigation -->
+                                        <div class="mt-3">
+                                            <input type="range" class="form-range" id="sliceSlider" value="0" min="0" max="0">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Additional tumor information -->
+                                <div id="tumorInfoCard" class="card mt-3 d-none">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tumor Information</h5>
+                                        <p>Tumor detected in <span id="tumorSliceCount">0</span> out of <span id="totalSliceCount">0</span> slices.</p>
+                                        <p>Scroll through the slices to view the entire scan. Red overlay indicates predicted tumor regions.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <h3>About Brain Tumor Segmentation</h3>
+                <p>Brain tumors are abnormal growths of tissue in the brain that can be cancerous (malignant) or non-cancerous (benign). Early detection is crucial for effective treatment planning.</p>
+                <p>Our AI model uses a 3D UNet architecture trained on thousands of MRI scans to accurately segment brain tumors. The model identifies the tumor region and creates a detailed segmentation map to assist medical professionals in diagnosis.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    console.log("Brain page initialized");
+    
+    let brainImages = [];
+    let tumorSlices = [];
+    let currentSliceIndex = 0;
+    let totalSlices = 0;
+
+    function updateSliceDisplay() {
+        console.log("Updating slice display");
+        console.log("Brain images length:", brainImages.length);
+        
+        if (brainImages.length === 0) {
+            console.log("No brain images available to display");
+            return;
+        }
+        
+        console.log(`Displaying slice ${currentSliceIndex + 1}/${brainImages.length}`);
+        
+        // Update image
+        $('#currentSliceImage').attr('src', `data:image/png;base64,${brainImages[currentSliceIndex]}`);
+        
+        // Update counter
+        $('#sliceCounter').text(`Slice ${currentSliceIndex + 1}/${brainImages.length}`);
+        
+        // Update slider
+        $('#sliceSlider').val(currentSliceIndex);
+        
+        // Show tumor indicator if this slice has a tumor
+        if (tumorSlices.includes(currentSliceIndex)) {
+            $('#tumorIndicator').removeClass('d-none');
+        } else {
+            $('#tumorIndicator').addClass('d-none');
+        }
+    }
+
+    // Previous slice button
+    $('#prevSliceBtn').click(function() {
+        console.log("Previous slice button clicked");
+        if (currentSliceIndex > 0) {
+            currentSliceIndex--;
+            updateSliceDisplay();
+        }
+    });
+
+    // Next slice button
+    $('#nextSliceBtn').click(function() {
+        console.log("Next slice button clicked");
+        if (currentSliceIndex < brainImages.length - 1) {
+            currentSliceIndex++;
+            updateSliceDisplay();
+        }
+    });
+
+    // Slider navigation
+    $('#sliceSlider').on('input', function() {
+        currentSliceIndex = parseInt($(this).val());
+        updateSliceDisplay();
+    });
+
+    // Mouse wheel navigation
+    $('#sliceImageContainer').on('wheel', function(event) {
+        event.preventDefault();
+        if (event.originalEvent.deltaY < 0 && currentSliceIndex > 0) {
+            // Scrolling up - show previous slice
+            currentSliceIndex--;
+        } else if (event.originalEvent.deltaY > 0 && currentSliceIndex < brainImages.length - 1) {
+            // Scrolling down - show next slice
+            currentSliceIndex++;
+        }
+        updateSliceDisplay();
+    });
+
+    // Form submission
+    $('#brainUploadForm').on('submit', function(e) {
+        console.log("Brain upload form submitted");
+        e.preventDefault();
+        
+        const fileInput = $('#brainFile')[0];
+        if (fileInput.files.length === 0) {
+            alert('Please select a file to upload');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        
+        // Show loading spinner
+        $('#analyzeBrainBtn .spinner-border').removeClass('d-none');
+        $('#analyzeBrainBtn').prop('disabled', true);
+        
+        // Clear previous results
+        $('#brainResults').addClass('d-none');
+        brainImages = [];
+        tumorSlices = [];
+        
+        console.log("Sending AJAX request to /predict/brain");
+        
+        $.ajax({
+            url: '/predict/brain',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                console.log("Received response:", response);
+                $('#brainResults').removeClass('d-none');
+                
+                if (response.status === 'success') {
+                    $('#brainResultMessage').removeClass('alert-danger').addClass('alert-success');
+                    $('#brainResultMessage').text(response.message || "Processing complete");
+                    
+                    if (response.images && response.images.length > 0) {
+                        console.log(`Received ${response.images.length} images`);
+                        
+                        // Store all images and tumor info
+                        brainImages = response.images;
+                        tumorSlices = response.tumorSlices || [];
+                        totalSlices = response.totalSlices || brainImages.length;
+                        
+                        console.log("Brain images array:", brainImages.length);
+                        console.log("Tumor slices:", tumorSlices);
+                        console.log("Total slices:", totalSlices);
+                        
+                        // Update slider max value
+                        $('#sliceSlider').attr('max', brainImages.length - 1);
+                        
+                        // Set initial slice (middle or first tumor slice)
+                        if (tumorSlices.length > 0) {
+                            currentSliceIndex = tumorSlices[0];
+                        } else {
+                            currentSliceIndex = Math.floor(brainImages.length / 2);
+                        }
+                        
+                        console.log("Setting current slice index to:", currentSliceIndex);
+                        
+                        // Update display
+                        updateSliceDisplay();
+                        
+                        // Show tumor info if tumors detected
+                        if (tumorSlices.length > 0) {
+                            $('#tumorInfoCard').removeClass('d-none');
+                            $('#tumorSliceCount').text(tumorSlices.length);
+                            $('#totalSliceCount').text(totalSlices);
+                        } else {
+                            $('#tumorInfoCard').addClass('d-none');
+                        }
+                    } else {
+                        console.log("No images received in the response");
+                        $('#brainResultMessage').text('No scan data available or no tumor detected.');
+                    }
+                } else {
+                    $('#brainResultMessage').removeClass('alert-success').addClass('alert-danger');
+                    $('#brainResultMessage').text(response.message || "An error occurred");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error:", status, error);
+                console.error("Response text:", xhr.responseText);
+                
+                $('#brainResults').removeClass('d-none');
+                $('#brainResultMessage').removeClass('alert-success').addClass('alert-danger');
+                $('#brainResultMessage').text('Error: ' + error);
+            },
+            complete: function() {
+                // Hide loading spinner
+                $('#analyzeBrainBtn .spinner-border').addClass('d-none');
+                $('#analyzeBrainBtn').prop('disabled', false);
+            }
+        });
+    });
+    
+    // Initialize
+    console.log("Brain page setup complete");
+});
+</script>
+{% endblock %}

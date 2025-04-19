@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+*.so
+.Python
+static/uploads/*
+!static/uploads/.gitkeep

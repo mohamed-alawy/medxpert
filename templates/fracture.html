@@ -1,0 +1,189 @@
+{% extends "layout.html" %}
+
+{% block title %}MedXpert - Fracture Detection{% endblock %}
+
+{% block content %}
+<section class="model-header fracture-header py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1>Bone Fracture Detection</h1>
+                <p class="lead">Upload an X-ray image to detect and locate potential bone fractures.</p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{{ url_for('static', filename='images/fracture-icon.png') }}" alt="Fracture Detection" class="model-icon">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="upload-container p-4 rounded shadow-sm">
+                    <h3 class="mb-4">Upload X-ray Image</h3>
+                    <form id="fractureUploadForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="fractureFile" class="form-label">Select X-ray Image</label>
+                            <input class="form-control" type="file" id="fractureFile" name="file" accept=".jpg,.jpeg,.png">
+                            <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="analyzeFractureBtn">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            Detect Fractures
+                        </button>
+                    </form>
+                </div>
+
+                    <!-- In your results section -->
+                    <div class="results-container mt-4 d-none" id="fractureResults">
+                        <h3>Analysis Results</h3>
+                        <div class="alert" id="fractureResultMessage"></div>
+                        
+                        <div class="row">
+                            <!-- Original image column -->
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">Original X-ray Image</div>
+                                    <div class="card-body text-center">
+                                        <img id="originalImage" class="img-fluid" alt="Original X-ray">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Processed image column -->
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">Detected Fractures</div>
+                                    <div class="card-body text-center">
+                                        <img id="resultImage" class="img-fluid" alt="Detected Fractures">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Detection details section -->
+                        <div class="card mt-3 d-none" id="detailsCard">
+                            <div class="card-header">Detection Details</div>
+                            <div class="card-body">
+                                <div id="detectionDetails"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <h3>About Fracture Detection</h3>
+                <p>Bone fractures are common injuries that require prompt and accurate diagnosis for proper treatment. X-ray imaging is the primary tool used to diagnose fractures.</p>
+                <p>Our AI model uses object detection technology to identify and locate potential fractures in X-ray images. The model has been trained on thousands of annotated X-rays to detect various types of fractures across different bones.</p>
+                <p>The system highlights detected fractures with bounding boxes, providing medical professionals with a second opinion to aid in diagnosis.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // File upload preview
+        $('#fractureFile').change(function() {
+            readURL(this, '#imagePreview');
+        });
+    
+        // Form submission
+        $('#fractureUploadForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            const fileInput = $('#fractureFile')[0];
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            
+            // Show loading spinner
+            $('#analyzeFractureBtn .spinner-border').removeClass('d-none');
+            $('#analyzeFractureBtn').prop('disabled', true);
+            
+            // Clear previous results
+            $('#fractureResults').addClass('d-none');
+            
+            $.ajax({
+                url: '/predict/fracture',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    console.log("Received response:", response);
+                    $('#fractureResults').removeClass('d-none');
+                    
+                    if (response.status === 'success') {
+                        $('#fractureResultMessage').removeClass('alert-danger').addClass('alert-success');
+                        $('#fractureResultMessage').text(response.message || "Processing complete");
+                        
+                        // Set original image from response
+                        if (response.original_image) {
+                            console.log("Setting original image");
+                            $('#originalImage').attr('src', 'data:image/jpeg;base64,' + response.original_image);
+                        } else {
+                            console.error("No original image data in response");
+                        }
+                        
+                        // Set result image with the processed image
+                        if (response.image) {
+                            console.log("Setting result image");
+                            $('#resultImage').attr('src', 'data:image/jpeg;base64,' + response.image);
+                        } else {
+                            console.error("No processed image data in response");
+                        }
+                        
+                        // Show detection details if any
+                        if (response.detections && response.detections.length > 0) {
+                            $('#detailsCard').removeClass('d-none');
+                            let detailsHtml = '<table class="table table-striped">';
+                            detailsHtml += '<thead><tr><th>Type</th><th>Confidence</th><th>Location</th></tr></thead><tbody>';
+                            
+                            response.detections.forEach(function(det, index) {
+                                detailsHtml += `<tr>
+                                    <td>${det.class}</td>
+                                    <td>${(det.confidence * 100).toFixed(2)}%</td>
+                                    <td>X: ${det.box[0]}-${det.box[2]}, Y: ${det.box[1]}-${det.box[3]}</td>
+                                </tr>`;
+                            });
+                            
+                            detailsHtml += '</tbody></table>';
+                            $('#detectionDetails').html(detailsHtml);
+                        } else {
+                            $('#detailsCard').addClass('d-none');
+                        }
+                    } else {
+                        $('#fractureResultMessage').removeClass('alert-success').addClass('alert-danger');
+                        $('#fractureResultMessage').text(response.message || "An error occurred");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX error:", status, error);
+                    console.error("Response text:", xhr.responseText);
+                    
+                    $('#fractureResults').removeClass('d-none');
+                    $('#fractureResultMessage').removeClass('alert-success').addClass('alert-danger');
+                    $('#fractureResultMessage').text('Error: ' + error);
+                },
+                complete: function() {
+                    // Hide loading spinner
+                    $('#analyzeFractureBtn .spinner-border').addClass('d-none');
+                    $('#analyzeFractureBtn').prop('disabled', false);
+                }
+            });
+        });
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends "layout.html" %}
+
+{% block title %}MedXpert - Skin Cancer Classification{% endblock %}
+
+{% block content %}
+<section class="model-header skin-header py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1>Skin Cancer Classification</h1>
+                <p class="lead">Upload a skin lesion image to classify it as benign or malignant.</p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{{ url_for('static', filename='images/skin-icon.png') }}" alt="Skin Cancer Classification" class="model-icon">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="upload-container p-4 rounded shadow-sm">
+                    <h3 class="mb-4">Upload Skin Lesion Image</h3>
+                    <form id="skinUploadForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="skinFile" class="form-label">Select Image</label>
+                            <input class="form-control" type="file" id="skinFile" name="file" accept=".jpg,.jpeg,.png">
+                            <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="analyzeSkinBtn">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            Analyze Image
+                        </button>
+                    </form>
+                </div>
+
+                <div class="results-container mt-4 d-none" id="skinResults">
+                    <h3>Analysis Results</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <img id="skinResultImage" src="" class="card-img-top" alt="Skin Lesion Image">
+                                <div class="card-body">
+                                    <h5 class="card-title" id="skinClassification"></h5>
+                                    <p class="card-text" id="skinConfidence"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">What This Means</h5>
+                                    <div id="benignInfo" class="d-none">
+                                        <p><strong>Benign:</strong> The AI model predicts this skin lesion is likely non-cancerous.</p>
+                                        <p>Common benign skin lesions include:</p>
+                                        <ul>
+                                            <li>Moles (Nevi)</li>
+                                            <li>Seborrheic keratoses</li>
+                                            <li>Dermatofibromas</li>
+                                        </ul>
+                                    </div>
+                                    <div id="malignantInfo" class="d-none">
+                                        <p><strong>Malignant:</strong> The AI model predicts this skin lesion may be cancerous.</p>
+                                        <p>Common types of skin cancer include:</p>
+                                        <ul>
+                                            <li>Melanoma</li>
+                                            <li>Basal cell carcinoma</li>
+                                            <li>Squamous cell carcinoma</li>
+                                        </ul>
+                                        <p class="text-danger"><strong>Important:</strong> This is not a medical diagnosis. Please consult a healthcare professional for proper evaluation and diagnosis.</p>
+                                    </div>
+                                    <div class="disclaimer mt-3">
+                                        <p><small>This AI tool is for educational purposes only and is not a substitute for professional medical advice.</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <h3>About Skin Cancer Classification</h3>
+                <p>Skin cancer is one of the most common types of cancer worldwide. Early detection is key to successful treatment, with a high cure rate for skin cancers detected in early stages.</p>
+                <p>Our AI model analyzes images of skin lesions and classifies them as benign (non-cancerous) or malignant (cancerous). The model has been trained on thousands of dermatologist-labeled images to provide accurate classifications.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#skinUploadForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const fileInput = $('#skinFile')[0];
+        if (fileInput.files.length === 0) {
+            alert('Please select a file to upload');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        
+        // Show loading spinner
+        $('#analyzeSkinBtn .spinner-border').removeClass('d-none');
+        $('#analyzeSkinBtn').prop('disabled', true);
+        
+        // Clear previous results
+        $('#skinResults').addClass('d-none');
+        
+        $.ajax({
+            url: '/predict/skin',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Display the result
+                    $('#skinResultImage').attr('src', response.image_path);
+                    $('#skinClassification').text(`Classification: ${response.class}`);
+                    $('#skinConfidence').text(`Confidence: ${response.confidence.toFixed(2)}%`);
+                    
+                    // Show appropriate info section
+                    if (response.class === 'Benign') {
+                        $('#benignInfo').removeClass('d-none');
+                        $('#malignantInfo').addClass('d-none');
+                    } else {
+                        $('#benignInfo').addClass('d-none');
+                        $('#malignantInfo').removeClass('d-none');
+                    }
+                    
+                    // Show results container
+                    $('#skinResults').removeClass('d-none');
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Error processing image: ' + error);
+            },
+            complete: function() {
+                // Hide loading spinner
+                $('#analyzeSkinBtn .spinner-border').addClass('d-none');
+                $('#analyzeSkinBtn').prop('disabled', false);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

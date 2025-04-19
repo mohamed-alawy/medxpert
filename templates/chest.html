@@ -1,0 +1,186 @@
+{% extends "layout.html" %}
+
+{% block title %}MedXpert - Chest X-ray Analysis{% endblock %}
+
+{% block content %}
+<section class="model-header chest-header py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1>Chest X-ray Analysis</h1>
+                <p class="lead">Upload a chest X-ray image to classify it as COVID-19, lung opacity, normal, or viral pneumonia.</p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{{ url_for('static', filename='images/chest-icon.png') }}" alt="Chest X-ray Analysis" class="model-icon">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="upload-container p-4 rounded shadow-sm">
+                    <h3 class="mb-4">Upload Chest X-ray Image</h3>
+                    <form id="chestUploadForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="chestFile" class="form-label">Select X-ray Image</label>
+                            <input class="form-control" type="file" id="chestFile" name="file" accept=".jpg,.jpeg,.png">
+                            <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="analyzeChestBtn">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            Analyze X-ray
+                        </button>
+                    </form>
+                </div>
+
+                <div class="results-container mt-4 d-none" id="chestResults">
+                    <h3>Analysis Results</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <img id="chestResultImage" src="" class="card-img-top" alt="Chest X-ray Image">
+                                <div class="card-body">
+                                    <h5 class="card-title" id="chestClassification"></h5>
+                                    <p class="card-text" id="chestConfidence"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">What This Means</h5>
+                                    <div id="covidInfo" class="condition-info d-none">
+                                        <p><strong>COVID-19:</strong> The AI model predicts this X-ray shows patterns consistent with COVID-19 infection.</p>
+                                        <p>Common radiological findings in COVID-19 include:</p>
+                                        <ul>
+                                            <li>Ground glass opacities, often bilateral</li>
+                                            <li>Peripheral and lower zone predominance</li>
+                                            <li>Consolidation in later stages</li>
+                                        </ul>
+                                    </div>
+                                    <div id="opacityInfo" class="condition-info d-none">
+                                        <p><strong>Lung Opacity:</strong> The AI model detects lung opacities which represent an area of hazy lung density.</p>
+                                        <p>Lung opacities can be caused by:</p>
+                                        <ul>
+                                            <li>Pneumonia (various types)</li>
+                                            <li>Pulmonary edema</li>
+                                            <li>Hemorrhage</li>
+                                            <li>Various other lung conditions</li>
+                                        </ul>
+                                    </div>
+                                    <div id="normalInfo" class="condition-info d-none">
+                                        <p><strong>Normal:</strong> The AI model predicts this X-ray appears normal without significant abnormalities.</p>
+                                        <p>Normal chest X-rays typically show:</p>
+                                        <ul>
+                                            <li>Clear lung fields</li>
+                                            <li>Normal cardiac silhouette</li>
+                                            <li>No significant opacities or consolidations</li>
+                                        </ul>
+                                    </div>
+                                    <div id="pneumoniaInfo" class="condition-info d-none">
+                                        <p><strong>Viral Pneumonia:</strong> The AI model detects patterns consistent with viral pneumonia.</p>
+                                        <p>Common findings in viral pneumonia include:</p>
+                                        <ul>
+                                            <li>Bilateral interstitial patterns</li>
+                                            <li>Patchy or diffuse airspace opacities</li>
+                                            <li>Rarely presents with lobar consolidation</li>
+                                        </ul>
+                                    </div>
+                                    <div class="disclaimer mt-3">
+                                        <p><small>This AI tool is for educational purposes only and is not a substitute for professional medical diagnosis.</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <h3>About Chest X-ray Analysis</h3>
+                <p>Chest X-rays are one of the most common imaging tests in medicine, providing valuable information about the lungs, heart, and chest wall.</p>
+                <p>Our AI model is trained to identify four different conditions in chest X-rays:</p>
+                <ul>
+                    <li><strong>COVID-19:</strong> Lung patterns consistent with COVID-19 infection</li>
+                    <li><strong>Lung Opacity:</strong> Hazy areas in the lungs that could indicate various conditions</li>
+                    <li><strong>Normal:</strong> No significant abnormalities detected</li>
+                    <li><strong>Viral Pneumonia:</strong> Patterns consistent with pneumonia caused by viral infection</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#chestUploadForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const fileInput = $('#chestFile')[0];
+        if (fileInput.files.length === 0) {
+            alert('Please select a file to upload');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        
+        // Show loading spinner
+        $('#analyzeChestBtn .spinner-border').removeClass('d-none');
+        $('#analyzeChestBtn').prop('disabled', true);
+        
+        // Clear previous results
+        $('#chestResults').addClass('d-none');
+        $('.condition-info').addClass('d-none');
+        
+        $.ajax({
+            url: '/predict/chest',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Display the result
+                    $('#chestResultImage').attr('src', response.image_path);
+                    $('#chestClassification').text(`Classification: ${response.class}`);
+                    $('#chestConfidence').text(`Confidence: ${response.confidence.toFixed(2)}%`);
+                    
+                    // Show appropriate info section
+                    $('.condition-info').addClass('d-none');
+                    if (response.class === 'COVID') {
+                        $('#covidInfo').removeClass('d-none');
+                    } else if (response.class === 'Lung_Opacity') {
+                        $('#opacityInfo').removeClass('d-none');
+                    } else if (response.class === 'Normal') {
+                        $('#normalInfo').removeClass('d-none');
+                    } else if (response.class === 'Viral Pneumonia') {
+                        $('#pneumoniaInfo').removeClass('d-none');
+                    }
+                    
+                    // Show results container
+                    $('#chestResults').removeClass('d-none');
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Error processing image: ' + error);
+            },
+            complete: function() {
+                // Hide loading spinner
+                $('#analyzeChestBtn .spinner-border').addClass('d-none');
+                $('#analyzeChestBtn').prop('disabled', false);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

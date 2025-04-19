@@ -1,0 +1,298 @@
+:root {
+    --primary-color: #233cea;
+    --primary-light: #5960ee;
+    --primary-dark: #1a2cb3;
+    --accent-color: #fffaee; /* Very light yellow */
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    background-color: var(--white);
+}
+
+/* Navigation */
+.navbar {
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.logo-placeholder {
+    width: 160px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.nav-link {
+    color: #333 !important;
+    font-weight: 500;
+    padding: 8px 16px !important;
+    margin: 0 4px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+    background-color: rgba(35, 60, 234, 0.1);
+}
+
+.nav-link.active {
+    color: var(--primary-color) !important;
+    background-color: rgba(35, 60, 234, 0.1);
+}
+
+/* Hero Section */
+.hero {
+    background-color: var(--accent-color);
+    padding: 60px 0;
+}
+
+.hero h1 {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 10px 24px;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(35, 60, 234, 0.3);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 8px 20px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(35, 60, 234, 0.3);
+}
+
+/* Feature Cards */
+.feature-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.12);
+}
+
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: rgba(35, 60, 234, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.icon-wrapper i {
+    font-size: 30px;
+    color: var(--primary-color);
+}
+
+.feature-card h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--dark-gray);
+}
+
+/* Model Cards */
+.model-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.model-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.12);
+}
+
+.model-card-img {
+    height: 200px;
+    overflow: hidden;
+}
+
+.model-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.model-card:hover .model-card-img img {
+    transform: scale(1.05);
+}
+
+.model-card-body {
+    padding: 20px;
+}
+
+.model-card-body h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--dark-gray);
+}
+
+/* Model Pages */
+.model-header {
+    background-color: var(--accent-color);
+    padding: 40px 0;
+}
+
+.model-header h1 {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.model-icon {
+    max-width: 200px;
+    margin-bottom: 20px;
+}
+
+.upload-container {
+    background-color: var(--white);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+}
+
+.results-container {
+    background-color: var(--white);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+/* Brain specific styling */
+.brain-header {
+    background: linear-gradient(120deg, var(--accent-color) 0%, #e6f7ff 100%);
+}
+
+/* Skin specific styling */
+.skin-header {
+    background: linear-gradient(120deg, var(--accent-color) 0%, #fff5e6 100%);
+}
+
+/* Chest specific styling */
+.chest-header {
+    background: linear-gradient(120deg, var(--accent-color) 0%, #f0f5ff 100%);
+}
+
+/* Fracture specific styling */
+.fracture-header {
+    background: linear-gradient(120deg, var(--accent-color) 0%, #f0fff4 100%);
+}
+
+/* Footer */
+.footer {
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero {
+        text-align: center;
+        padding: 40px 0;
+    }
+    
+    .hero-image {
+        margin-top: 30px;
+    }
+    
+    .feature-card {
+        margin-bottom: 20px;
+    }
+}
+
+/* Image results */
+.card img.card-img-top {
+    height: 250px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+}
+
+/* Slice viewer styles */
+.slice-viewer-container {
+    margin-bottom: 30px;
+}
+
+#sliceImageContainer {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    cursor: ns-resize; /* Indicates scrolling is available */
+}
+
+#currentSliceImage {
+    max-height: 500px;
+    object-fit: contain;
+}
+
+#tumorIndicator {
+    font-weight: bold;
+}
+
+#sliceSlider {
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Make sure the focus outline doesn't distract from the image */
+#sliceSlider:focus {
+    outline: none;
+}
