@@ -56,4 +56,3 @@ torchvision
 tqdm==4.67.1
 ultralytics
 Werkzeug==2.0.1
-gunicorn
