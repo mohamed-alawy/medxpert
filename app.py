@@ -2,21 +2,21 @@ import os
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
+
 import torch
 import tensorflow as tf
-from flask import Flask, request, render_template, jsonify, url_for, redirect, flash
-from werkzeug.utils import secure_filename
-import cv2
-from PIL import Image
+
 import io
+import cv2
 import base64
-from ultralytics import YOLO
 import traceback
 import matplotlib as mpl
+from ultralytics import YOLO
 from matplotlib.colors import LinearSegmentedColormap
+import matplotlib.pyplot as plt
+from werkzeug.utils import secure_filename
+from flask import Flask, request, render_template, jsonify
 
-# MONAI imports for brain tumor segmentation
 from monai.transforms import (
     Compose, LoadImaged, EnsureChannelFirstd, Spacingd, Orientationd,
     ScaleIntensityRanged, CropForegroundd, Resized, ToTensord
@@ -417,5 +417,5 @@ def predict_fracture():
         'message': 'Invalid file format. Please upload a valid image file.'
     })
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # default is 10000 as per Render docs
+    port = int(os.environ.get("PORT", 5000))  
     app.run(host="0.0.0.0", port=port)
