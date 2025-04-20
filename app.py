@@ -416,7 +416,12 @@ def predict_fracture():
         'status': 'error',
         'message': 'Invalid file format. Please upload a valid image file.'
     })
-if __name__ == '__main__':
+if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 8000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host="0.0.0.0", port=port)
+else:
+    # This is for Gunicorn
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    # No app.run() here as Gunicorn will handle that
