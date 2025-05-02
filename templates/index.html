@@ -1,113 +1,84 @@
 {% extends "layout.html" %}
 
-{% block title %}MedXpert - AI-Powered Medical Imaging{% endblock %}
+{% block title %}الرئيسية - MedXpert{% endblock %}
 
 {% block content %}
-<section class="hero bg-light">
-    <div class="container py-5">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold">Advanced Medical Imaging with AI</h1>
-                <p class="lead my-4">MedXpert leverages artificial intelligence to enhance diagnostic accuracy and efficiency in medical imaging analysis.</p>
-                <a href="#our-models" class="btn btn-primary btn-lg">Explore Our Models</a>
-            </div>
-            <div class="col-lg-6">
-                <div class="hero-image">
-                    <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="AI medical imaging" class="img-fluid rounded shadow">
-                </div>
-            </div>
+<div class="container">
+    <!-- Hero Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold mb-3">نظام التشخيص الطبي المتقدم</h1>
+        <p class="lead text-muted mb-4">استخدم قوة الذكاء الاصطناعي للحصول على تشخيص دقيق وسريع</p>
+        {% if not current_user.is_authenticated %}
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>تسجيل الدخول
+            </a>
+            <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">
+                <i class="fas fa-user-plus me-2"></i>إنشاء حساب
+            </a>
         </div>
+        {% endif %}
     </div>
-</section>
 
-<section id="ai-in-medicine" class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">AI in Medicine: The Future of Healthcare</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="feature-card h-100">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>Enhanced Accuracy</h3>
-                    <p>AI algorithms can detect patterns in medical images that may be invisible to the human eye, leading to more accurate diagnoses.</p>
-                </div>
+    <!-- Features Section -->
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card">
+                <i class="fas fa-brain"></i>
+                <h3>فحص المخ</h3>
+                <p>تحليل صور الرنين المغناطيسي للكشف عن أورام المخ</p>
+                <a href="{{ url_for('brain') }}" class="btn btn-primary">ابدأ الفحص</a>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card h-100">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h3>Time Efficiency</h3>
-                    <p>Automated image analysis can significantly reduce diagnosis time, allowing healthcare providers to focus on patient care.</p>
-                </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card">
+                <i class="fas fa-allergies"></i>
+                <h3>فحص الجلد</h3>
+                <p>تحليل صور الجلد للكشف عن السرطان والأمراض الجلدية</p>
+                <a href="{{ url_for('skin') }}" class="btn btn-primary">ابدأ الفحص</a>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card h-100">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-hospital-user"></i>
-                    </div>
-                    <h3>Improved Patient Outcomes</h3>
-                    <p>Early and accurate detection of conditions leads to better treatment planning and improved patient outcomes.</p>
-                </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card">
+                <i class="fas fa-lungs"></i>
+                <h3>فحص الصدر</h3>
+                <p>تحليل صور الأشعة السينية للصدر للكشف عن الأمراض</p>
+                <a href="{{ url_for('chest') }}" class="btn btn-primary">ابدأ الفحص</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="feature-card">
+                <i class="fas fa-bone"></i>
+                <h3>فحص الكسور</h3>
+                <p>تحليل صور الأشعة للكشف عن الكسور في العظام</p>
+                <a href="{{ url_for('fracture') }}" class="btn btn-primary">ابدأ الفحص</a>
             </div>
         </div>
     </div>
-</section>
 
-<section id="our-models" class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5">Our AI Models</h2>
-        <div class="row g-4">
-            <div class="col-lg-3 col-md-6">
-                <div class="model-card h-100">
-                    <div class="model-card-img">
-                        <img src="{{ url_for('static', filename='images/brain-model.jpg') }}" alt="Brain tumor detection">
-                    </div>
-                    <div class="model-card-body">
-                        <h4>Brain Tumor Detection</h4>
-                        <p>Segment and identify brain tumors in MRI scans using our advanced UNet model.</p>
-                        <a href="{{ url_for('brain') }}" class="btn btn-outline-primary">Try It Now</a>
-                    </div>
-                </div>
+    <!-- Info Section -->
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="text-center mb-4">
+                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                <h3>خصوصية وأمان</h3>
+                <p>نحن نضمن خصوصية وأمان بياناتك الطبية بأحدث تقنيات التشفير</p>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="model-card h-100">
-                    <div class="model-card-img">
-                        <img src="{{ url_for('static', filename='images/skin-model.jpg') }}" alt="Skin cancer classification">
-                    </div>
-                    <div class="model-card-body">
-                        <h4>Skin Cancer Classification</h4>
-                        <p>Distinguish between benign and malignant skin lesions with high accuracy.</p>
-                        <a href="{{ url_for('skin') }}" class="btn btn-outline-primary">Try It Now</a>
-                    </div>
-                </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center mb-4">
+                <i class="fas fa-tachometer-alt fa-3x text-primary mb-3"></i>
+                <h3>سرعة في التشخيص</h3>
+                <p>نتائج فورية ودقيقة باستخدام أحدث تقنيات الذكاء الاصطناعي</p>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="model-card h-100">
-                    <div class="model-card-img">
-                        <img src="{{ url_for('static', filename='images/chest-model.jpg') }}" alt="Chest X-ray analysis">
-                    </div>
-                    <div class="model-card-body">
-                        <h4>Chest X-ray Analysis</h4>
-                        <p>Classify chest X-rays as COVID-19, lung opacity, normal, or viral pneumonia.</p>
-                        <a href="{{ url_for('chest') }}" class="btn btn-outline-primary">Try It Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="model-card h-100">
-                    <div class="model-card-img">
-                        <img src="{{ url_for('static', filename='images/fracture-model.jpg') }}" alt="Fracture detection">
-                    </div>
-                    <div class="model-card-body">
-                        <h4>Fracture Detection</h4>
-                        <p>Identify and locate bone fractures in X-ray images using object detection.</p>
-                        <a href="{{ url_for('fracture') }}" class="btn btn-outline-primary">Try It Now</a>
-                    </div>
-                </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center mb-4">
+                <i class="fas fa-user-md fa-3x text-primary mb-3"></i>
+                <h3>دعم متخصص</h3>
+                <p>فريق دعم متخصص لمساعدتك في جميع استفساراتك الطبية</p>
             </div>
         </div>
     </div>
-</section>
+</div>
 {% endblock %}

@@ -1,64 +1,275 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}MedXpert - AI Medical Imaging{% endblock %}</title>
+    <title>{% block title %}MedXpert - نظام التشخيص الطبي{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #16a34a;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark-color);
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: var(--dark-color) !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color) !important;
+        }
+
+        /* Card Styling */
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            border-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .btn-success:hover {
+            background-color: #15803d;
+            border-color: #15803d;
+            transform: translateY(-2px);
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer Styling */
+        .footer {
+            background-color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-buttons .btn {
+            min-width: 120px;
+        }
+
+        /* Alert Styling */
+        .alert {
+            border-radius: var(--border-radius);
+            border: none;
+        }
+
+        /* Form Controls */
+        .form-control {
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Custom Container Padding */
+        .main-container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        /* User Welcome */
+        .user-welcome {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+        }
+    </style>
     {% block head %}{% endblock %}
 </head>
+
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('home') }}">
-                <div class="logo-placeholder">
-                    <!-- Logo placeholder -->
-                    <span class="logo-text">MedXpert</span>
-                </div>
+                <i class="fas fa-heartbeat me-2"></i>MedXpert
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('home') }}">
+                            <i class="fas fa-home me-1"></i>الرئيسية
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/brain' %}active{% endif %}" href="{{ url_for('brain') }}">Brain Tumor</a>
+                        <a class="nav-link {% if request.path == '/brain' %}active{% endif %}"
+                            href="{{ url_for('brain') }}">
+                            <i class="fas fa-brain me-1"></i>فحص المخ
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/skin' %}active{% endif %}" href="{{ url_for('skin') }}">Skin Cancer</a>
+                        <a class="nav-link {% if request.path == '/skin' %}active{% endif %}"
+                            href="{{ url_for('skin') }}">
+                            <i class="fas fa-allergies me-1"></i>فحص الجلد
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/chest' %}active{% endif %}" href="{{ url_for('chest') }}">Chest X-ray</a>
+                        <a class="nav-link {% if request.path == '/chest' %}active{% endif %}"
+                            href="{{ url_for('chest') }}">
+                            <i class="fas fa-lungs me-1"></i>فحص الصدر
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/fracture' %}active{% endif %}" href="{{ url_for('fracture') }}">Fracture Detection</a>
+                        <a class="nav-link {% if request.path == '/fracture' %}active{% endif %}"
+                            href="{{ url_for('fracture') }}">
+                            <i class="fas fa-bone me-1"></i>فحص الكسور
+                        </a>
                     </li>
                 </ul>
+
+                <div class="auth-buttons">
+                    {% if current_user.is_authenticated %}
+                    <span class="user-welcome">
+                        <i class="fas fa-user me-1"></i>مرحباً، {{ current_user.username }}
+                    </span>
+                    <a href="{{ url_for('profile') }}" class="btn btn-light">
+                        <i class="fas fa-user-circle me-1"></i>الملف الشخصي
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt me-1"></i>تسجيل الخروج
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-1"></i>تسجيل الدخول
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-success">
+                        <i class="fas fa-user-plus me-1"></i>إنشاء حساب
+                    </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
 
+    <!-- Flash Messages -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <i class="fas fa-info-circle me-2"></i>{{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
     <!-- Main Content -->
-    <main>
+    <main class="container main-container">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="footer mt-5 py-4 bg-white">
+    <footer class="footer">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>MedXpert</h5>
-                    <p>Advanced AI solutions for medical imaging diagnostics</p>
+                    <h5><i class="fas fa-heartbeat me-2"></i>MedXpert</h5>
+                    <p>حلول الذكاء الاصطناعي المتقدمة للتشخيص الطبي</p>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2025 MedXpert. All rights reserved.</p>
+                <div class="col-md-6 text-start">
+                    <p>جميع الحقوق محفوظة &copy; 2025 MedXpert</p>
                 </div>
             </div>
         </div>
@@ -66,7 +277,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
+
 </html>

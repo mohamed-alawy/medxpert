@@ -1,33 +1,104 @@
 import os
 import numpy as np
-import matplotlib
-matplotlib.use('Agg')
-
-import torch
-import tensorflow as tf
-
 import io
-import cv2
+import gdown
 import base64
 import traceback
-import matplotlib as mpl
-from ultralytics import YOLO
-from matplotlib.colors import LinearSegmentedColormap
+import logging
+from datetime import datetime
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from werkzeug.utils import secure_filename
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, redirect, url_for, flash, session
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from monai.transforms import (
-    Compose, LoadImaged, EnsureChannelFirstd, Spacingd, Orientationd,
-    ScaleIntensityRanged, CropForegroundd, Resized, ToTensord
-)
-from monai.inferers import sliding_window_inference
-from monai.networks.nets import UNet
-from monai.networks.layers import Norm
-from monai.data import Dataset
+print("Starting application...")
 
+# Try importing library dependencies with error handling
+try:
+    import torch
+    print("PyTorch imported successfully...")
+except Exception as e:
+    print(f"Error importing PyTorch: {str(e)}")
+
+try:
+    import tensorflow as tf
+    print("TensorFlow imported successfully...")
+except Exception as e:
+    print(f"Error importing TensorFlow: {str(e)}")
+
+try:
+    import cv2
+    print("OpenCV imported successfully...")
+except Exception as e:
+    print(f"Error importing OpenCV: {str(e)}")
+
+try:
+    from ultralytics import YOLO
+    print("YOLO imported successfully...")
+except Exception as e:
+    print(f"Error importing YOLO: {str(e)}")
+
+try:
+    from monai.transforms import (
+        Compose, LoadImaged, EnsureChannelFirstd, Spacingd, Orientationd,
+        ScaleIntensityRanged, CropForegroundd, Resized, ToTensord
+    )
+    from monai.inferers import sliding_window_inference
+    from monai.networks.nets import UNet
+    from monai.networks.layers import Norm
+    from monai.data import Dataset
+    print("MONAI imports completed successfully...")
+except Exception as e:
+    print(f"Error importing MONAI: {str(e)}")
+
+# Flask application setup
 app = Flask(__name__)
 app.secret_key = 'medxpert_secret_key'
+
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Login manager configuration
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+# User model
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    email = db.Column(db.String(120), unique=True)
+    full_name = db.Column(db.String(120))
+    phone = db.Column(db.String(20))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_login = db.Column(db.DateTime)
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+        
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Create database tables
+with app.app_context():
+    try:
+        db.drop_all()  # Drop existing tables
+        db.create_all()  # Create new tables
+        print("Database tables recreated successfully")
+    except Exception as e:
+        print(f"Error recreating database tables: {str(e)}")
 
 # Configure upload folders
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
@@ -43,10 +114,11 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS or
         filename.endswith('.nii.gz')  # Special handling for .nii.gz files
     )
+
 # Set up device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Load models
+# Model loading functions
 def load_brain_model():
     model = UNet(
         spatial_dims=3,
@@ -57,33 +129,76 @@ def load_brain_model():
         num_res_units=2,
         norm=Norm.BATCH,
     ).to(device)
+    model_path = "models/best_metric_model.pth"
+    if not os.path.exists(model_path):
+        print("Downloading brain model...")
+        url = "https://drive.google.com/uc?id=1NdiZM8C7Y_TPiNiCsh7XTFwFk54nWGRl" 
+        gdown.download(url, model_path, quiet=False)
     model.load_state_dict(torch.load("models/best_metric_model.pth", map_location=device))
     model.eval()
     return model
 
 def load_skin_model():
+    model_path = "models/best_model_skin.h5"
+    if not os.path.exists(model_path):
+        print("Downloading skin model...")
+        url = "https://drive.google.com/uc?id=1XDHYlsBvm_H1VdrXgundaKjXGoERYj0i" 
+        gdown.download(url, model_path, quiet=False)
     model = tf.keras.models.load_model("models/best_model_skin.h5")
     return model
 
 def load_chest_model():
+    model_path = "models/best_model_chest.h5"
+    if not os.path.exists(model_path):
+        print("Downloading chest model...")
+        url = "https://drive.google.com/uc?id=1u2f_iLKcvUELn_SqOoqhOoRdudUGJdJf"
+        gdown.download(url, model_path, quiet=False)
     model = tf.keras.models.load_model("models/best_model_chest.h5")
     return model
 
 def load_fracture_model():
+    model_path = "models/best.pt"
+    if not os.path.exists(model_path):
+        print("Downloading fracture model...")
+        url = "https://drive.google.com/uc?id=10OZEogmn3zCqd_ybkSTJ5U0w_TZxGP9N" 
+        gdown.download(url, model_path, quiet=False)
     model = YOLO("models/best.pt")
     return model
 
-# Load models on startup
-print("Loading models...")
-try:
-    brain_model = load_brain_model()
-    skin_model = load_skin_model()
-    chest_model = load_chest_model()
-    fracture_model = load_fracture_model()
-    print("All models loaded successfully")
-except Exception as e:
-    print(f"Error loading models: {e}")
-    # Continue without crashing, models will be reloaded when needed
+# Initialize model variables as None for lazy loading
+print("Initializing application...")
+brain_model = None
+skin_model = None
+chest_model = None
+fracture_model = None
+
+def get_brain_model():
+    global brain_model
+    if brain_model is None:
+        print("Loading brain model...")
+        brain_model = load_brain_model()
+    return brain_model
+
+def get_skin_model():
+    global skin_model
+    if skin_model is None:
+        print("Loading skin model...")
+        skin_model = load_skin_model()
+    return skin_model
+
+def get_chest_model():
+    global chest_model
+    if chest_model is None:
+        print("Loading chest model...")
+        chest_model = load_chest_model()
+    return chest_model
+
+def get_fracture_model():
+    global fracture_model
+    if fracture_model is None:
+        print("Loading fracture model...")
+        fracture_model = load_fracture_model()
+    return fracture_model
 
 # Brain tumor transforms
 brain_transforms = Compose([
@@ -97,31 +212,52 @@ brain_transforms = Compose([
     ToTensord(keys=["vol"]),
 ])
 
+# Configure logging
+logging.basicConfig(filename='app.log', level=logging.INFO,
+                   format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Error handlers
+@app.errorhandler(500)
+def internal_error(error):
+    app.logger.error(f'Server error: {error}')
+    return render_template('error.html', error="Internal server error occurred. Please try again."), 500
+
+@app.errorhandler(404)
+def not_found_error(error):
+    app.logger.error(f'Page not found: {request.url}')
+    return render_template('error.html', error="Page not found."), 404
+
 # Routes
 @app.route('/')
 def home():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 @app.route('/brain')
+@login_required
 def brain():
     return render_template('brain.html')
 
 @app.route('/skin')
+@login_required
 def skin():
     return render_template('skin.html')
 
 @app.route('/chest')
+@login_required
 def chest():
     return render_template('chest.html')
 
 @app.route('/fracture')
+@login_required
 def fracture():
     return render_template('fracture.html')
 
 @app.route('/predict/brain', methods=['POST'])
 def predict_brain():
     if 'file' not in request.files:
-        return jsonify({'status': 'error', 'message': 'No file uploaded'})
+        return jsonify({'status': 'error', 'message': 'No file was uploaded'})
         
     file = request.files['file']
     if file.filename == '':
@@ -135,6 +271,9 @@ def predict_brain():
             
             print(f"File saved to: {filepath}")
             
+            # Get model on demand
+            model = get_brain_model()
+            
             # Process with brain tumor model
             test_sample = {"vol": filepath}
             test_ds = Dataset(data=[test_sample], transform=brain_transforms)
@@ -147,7 +286,7 @@ def predict_brain():
             print(f"Volume shape: {t_volume.shape}")
                 
             with torch.no_grad():
-                test_outputs = sliding_window_inference(t_volume, (128, 128, 64), 4, brain_model)
+                test_outputs = sliding_window_inference(t_volume, (128, 128, 64), 4, model)
                 test_outputs = torch.sigmoid(test_outputs)
                 test_outputs = test_outputs > 0.9
             
@@ -176,12 +315,11 @@ def predict_brain():
                 plt.figure(figsize=(10, 8))
                 plt.imshow(orig_vol[:,:,slice_idx], cmap='gray')
                 
-                    # Only overlay tumor if detected in this slice
+                # Only overlay tumor if detected in this slice
                 if slice_scores[slice_idx] > 0:
                     plt.imshow(pred_mask[:,:,slice_idx], alpha=0.5, cmap=tumor_cmap)
                 plt.axis('off')
                 plt.title(f"Slice {slice_idx+1}/{pred_mask.shape[2]}", fontsize=14)
-                
                 
                 # Save to bytes buffer
                 buf = io.BytesIO()
@@ -221,11 +359,11 @@ def predict_brain():
 @app.route('/predict/skin', methods=['POST'])
 def predict_skin():
     if 'file' not in request.files:
-        return jsonify({'status': 'error', 'message': 'No file part'})
+        return jsonify({'status': 'error', 'message': 'No file was uploaded'})
         
     file = request.files['file']
     if file.filename == '':
-        return jsonify({'status': 'error', 'message': 'No selected file'})
+        return jsonify({'status': 'error', 'message': 'No file selected'})
         
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -233,12 +371,15 @@ def predict_skin():
         file.save(filepath)
         
         try:
+            # Get model on demand
+            model = get_skin_model()
+            
             # Process with skin cancer model
             img = tf.keras.preprocessing.image.load_img(filepath, target_size=(300, 300))
             img_array = tf.keras.preprocessing.image.img_to_array(img)
             img_array = np.expand_dims(img_array, axis=0) / 255.0
             
-            prediction = skin_model.predict(img_array)
+            prediction = model.predict(img_array)
             predicted_class = np.argmax(prediction, axis=1)[0]
             confidence = float(prediction[0][predicted_class]) * 100
             
@@ -266,11 +407,11 @@ def predict_skin():
 @app.route('/predict/chest', methods=['POST'])
 def predict_chest():
     if 'file' not in request.files:
-        return jsonify({'status': 'error', 'message': 'No file part'})
+        return jsonify({'status': 'error', 'message': 'No file was uploaded'})
         
     file = request.files['file']
     if file.filename == '':
-        return jsonify({'status': 'error', 'message': 'No selected file'})
+        return jsonify({'status': 'error', 'message': 'No file selected'})
         
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -278,12 +419,15 @@ def predict_chest():
         file.save(filepath)
         
         try:
+            # Get model on demand
+            model = get_chest_model()
+            
             # Process with chest X-ray model
             img = tf.keras.preprocessing.image.load_img(filepath, target_size=(224, 224))
             img_array = tf.keras.preprocessing.image.img_to_array(img)
             img_array = np.expand_dims(img_array, axis=0) / 255.0
             
-            pred_probs = chest_model.predict(img_array)[0]
+            pred_probs = model.predict(img_array)[0]
             predicted_class = np.argmax(pred_probs)
             confidence = float(pred_probs[predicted_class]) * 100
             
@@ -312,7 +456,7 @@ def predict_chest():
 @app.route('/predict/fracture', methods=['POST'])
 def predict_fracture():
     if 'file' not in request.files:
-        return jsonify({'status': 'error', 'message': 'No file uploaded'})
+        return jsonify({'status': 'error', 'message': 'No file was uploaded'})
         
     file = request.files['file']
     if file.filename == '':
@@ -323,6 +467,9 @@ def predict_fracture():
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
+            
+            # Get model on demand
+            model = get_fracture_model()
             
             # Read image
             img = cv2.imread(filepath)
@@ -341,7 +488,7 @@ def predict_fracture():
             height, width = img.shape[:2]
             
             # Run inference
-            results = fracture_model(img)
+            results = model(img)
             
             # Process results
             detections = []
@@ -356,21 +503,21 @@ def predict_fracture():
                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
                     
                     # Draw rectangle with the specified yellow color
-                    cv2.rectangle(img, (x1, y1), (x2, y2), color=(102, 242, 246), thickness=2)  # OpenCV uses BGR format (246, 242, 102)
+                    cv2.rectangle(img, (x1, y1), (x2, y2), color=(102, 242, 246), thickness=2)
                     
                     # Get confidence score and class name
                     conf = float(box.conf[0])
                     cls = int(box.cls[0])
-                    label = f"{fracture_model.names[cls]} {conf:.2f}"
+                    label = f"Fructure {conf:.2f}%"
                     
                     # Draw label with yellow background
                     text_size = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
-                    cv2.rectangle(img, (x1, y1 - text_size[1] - 5), (x1 + text_size[0], y1), (102, 242, 246), -1)  # Filled rectangle
+                    cv2.rectangle(img, (x1, y1 - text_size[1] - 5), (x1 + text_size[0], y1), (102, 242, 246), -1)
                     cv2.putText(img, label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
                     
                     # Store detection data
                     detections.append({
-                        'class': fracture_model.names[cls],
+                        'class': model.names[cls],
                         'confidence': float(conf),
                         'box': [x1, y1, x2, y2]
                     })
@@ -394,8 +541,8 @@ def predict_fracture():
             return jsonify({
                 'status': 'success',
                 'message': message,
-                'original_image': original_img_str,  # Add the original image
-                'image': img_str,                    # Processed image with fractures
+                'original_image': original_img_str,
+                'image': img_str,
                 'detections': detections,
                 'dimensions': {
                     'width': width,
@@ -414,8 +561,140 @@ def predict_fracture():
     
     return jsonify({
         'status': 'error',
-        'message': 'Invalid file format. Please upload a valid image file.'
+        'message': 'Invalid file format. Please upload a valid image.'
     })
+
+# Add security headers middleware with error handling
+@app.after_request
+def add_security_headers(response):
+    try:
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        response.headers['X-XSS-Protection'] = '1; mode=block'
+        response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    except Exception as e:
+        logging.error(f"Error adding security headers: {str(e)}")
+    return response
+
+# Create error template if it doesn't exist
+def create_error_template():
+    error_template = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Error</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            .error-container { text-align: center; }
+            .error-message { color: #721c24; background-color: #f8d7da; padding: 20px; border-radius: 5px; }
+        </style>
+    </head>
+    <body>
+        <div class="error-container">
+            <h1>Error</h1>
+            <div class="error-message">
+                {{ error }}
+            </div>
+            <p><a href="{{ url_for('home') }}">Return to Home</a></p>
+        </div>
+    </body>
+    </html>
+    """
+    try:
+        os.makedirs('templates', exist_ok=True)
+        with open('templates/error.html', 'w') as f:
+            f.write(error_template)
+    except Exception as e:
+        logging.error(f"Error creating error template: {str(e)}")
+
+# Create error template on startup
+create_error_template()
+
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    if request.method == 'POST':
+        # Update user information
+        current_user.email = request.form.get('email')
+        current_user.full_name = request.form.get('full_name')
+        current_user.phone = request.form.get('phone')
+        
+        # Update password if provided
+        new_password = request.form.get('new_password')
+        if new_password:
+            current_user.set_password(new_password)
+            
+        db.session.commit()
+        flash('Profile updated successfully')
+        return redirect(url_for('profile'))
+        
+    return render_template('profile.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+        
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        user = User.query.filter_by(username=username).first()
+        
+        if user and user.check_password(password):
+            login_user(user)
+            user.last_login = datetime.utcnow()  # Update last login time
+            db.session.commit()
+            next_page = request.args.get('next')
+            if not next_page or not next_page.startswith('/'):
+                next_page = url_for('home')
+            return redirect(next_page)
+        else:
+            flash('Invalid username or password')
+            
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+        
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists')
+            return redirect(url_for('register'))
+            
+        user = User(username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        
+        flash('Registration successful! You can now log in')
+        return redirect(url_for('login'))
+        
+    return render_template('register.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Logged out successfully')
+    return redirect(url_for('home'))
+
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  
-    app.run(host="0.0.0.0", port=port)
+    try:
+        # Try default Flask port 5000
+        port = int(os.environ.get("PORT", 7860))
+        # Create models directory if it doesn't exist
+        os.makedirs('models', exist_ok=True)
+        # Create uploads directory if it doesn't exist
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        
+        app.run(host="0.0.0.0", port=port)
+    except Exception as e:
+        print(f"Error starting Flask application: {str(e)}")
+        print("Detailed error:")
+        traceback.print_exc()
