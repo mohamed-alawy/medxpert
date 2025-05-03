@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}تسجيل الدخول - MedXpert{% endblock %}
+{% block title %}Login - MedXpert{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -9,31 +9,30 @@
             <div class="card shadow">
                 <div class="card-body p-5">
                     <div class="text-center mb-4">
-                        <h1 class="h3">مرحباً بك في MedXpert</h1>
-                        <p class="text-muted">نظام التشخيص الطبي المتقدم</p>
+                        <h1 class="h3">Welcome to MedXpert</h1>
+                        <p class="text-muted">Advanced Medical Diagnosis System</p>
                     </div>
 
                     <form method="POST" action="{{ url_for('login') }}">
                         <div class="mb-4">
-                            <label for="username" class="form-label">اسم المستخدم</label>
+                            <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control form-control-lg" id="username" name="username"
                                 required>
                         </div>
 
                         <div class="mb-4">
-                            <label for="password" class="form-label">كلمة المرور</label>
+                            <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control form-control-lg" id="password" name="password"
                                 required>
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">تسجيل الدخول</button>
+                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
                         </div>
                     </form>
 
                     <div class="text-center mt-4">
-                        <p class="mb-0">ليس لديك حساب؟ <a href="{{ url_for('register') }}" class="text-primary">إنشاء
-                                حساب جديد</a></p>
+                        <p class="mb-0">Don't have an account? <a href="{{ url_for('register') }}" class="text-primary">Create an account</a></p>
                     </div>
                 </div>
             </div>

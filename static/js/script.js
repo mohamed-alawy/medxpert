@@ -1,58 +1,41 @@
-// Common JavaScript functions for MedXpert
-
-// File input preview
-function readURL(input, previewElement) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        
-        reader.onload = function(e) {
-            $(previewElement).attr('src', e.target.result);
-            $(previewElement).parent().removeClass('d-none');
+// Animated counters
+document.addEventListener("DOMContentLoaded", function() {
+    function animateCounter(el, end, duration=1600) {
+        let start = 0, startTime = null;
+        function animate(time) {
+            if (!startTime) startTime = time;
+            const progress = Math.min((time - startTime) / duration, 1);
+            el.textContent = Math.floor(progress * (end - start) + start).toLocaleString();
+            if (progress < 1) requestAnimationFrame(animate);
+            else el.textContent = end.toLocaleString();
         }
-        
-        reader.readAsDataURL(input.files[0]);
+        requestAnimationFrame(animate);
     }
-}
-
-// Show file name after selection
-function updateFileLabel(input) {
-    const fileName = input.files[0]?.name || "No file chosen";
-    const fileLabel = $(input).siblings('.file-name');
-    if (fileLabel.length) {
-        fileLabel.text(fileName);
-    }
-}
-
-// Format confidence percentage
-function formatConfidence(confidence) {
-    return parseFloat(confidence).toFixed(2) + '%';
-}
-
-// Show loading state
-function showLoading(buttonElement) {
-    $(buttonElement).prop('disabled', true);
-    $(buttonElement).find('.spinner-border').removeClass('d-none');
-}
-
-// Hide loading state
-function hideLoading(buttonElement) {
-    $(buttonElement).prop('disabled', false);
-    $(buttonElement).find('.spinner-border').addClass('d-none');
-}
-
-// Initialize Bootstrap 5 tooltips
-$(function () {
-    // Updated for Bootstrap 5
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
+    document.querySelectorAll('.counter').forEach(el => {
+        animateCounter(el, parseInt(el.dataset.count));
     });
+
+    // Animate .animate-reveal on scroll
+    function revealOnScroll() {
+        document.querySelectorAll('.animate-reveal:not(.animated)').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 75) {
+                el.classList.add('animated');
+            }
+        });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    // Animate fadein/fadeup
+    setTimeout(() => {
+        document.querySelectorAll('.animate-fadein, .animate-fadein-delay, .animate-fadein-delay2, .animate-fadeup')
+            .forEach(el => el.style.opacity = 1);
+    }, 100);
+
+    // Testimonials carousel auto-slide
+    const carousel = document.getElementById('testimonialCarousel');
+    if (carousel) {
+        let bsCarousel = new bootstrap.Carousel(carousel, { interval: 5000, ride: 'carousel' });
+    }
 });
-
-// Enable all tooltips
-function enableTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-}

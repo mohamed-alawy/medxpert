@@ -1,7 +1,6 @@
 flask==2.0.1
 flask-sqlalchemy==2.5.1
 flask-login==0.5.0
-gdown
 werkzeug==2.0.1
 numpy==1.21.0
 matplotlib==3.4.2

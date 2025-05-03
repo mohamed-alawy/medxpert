@@ -1,82 +1,145 @@
 {% extends "layout.html" %}
 
-{% block title %}الرئيسية - MedXpert{% endblock %}
+{% block title %}MedXpert - Smart Medical Diagnosis{% endblock %}
 
 {% block content %}
-<div class="container">
-    <!-- Hero Section -->
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold mb-3">نظام التشخيص الطبي المتقدم</h1>
-        <p class="lead text-muted mb-4">استخدم قوة الذكاء الاصطناعي للحصول على تشخيص دقيق وسريع</p>
-        {% if not current_user.is_authenticated %}
-        <div class="d-flex justify-content-center gap-3">
-            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
-                <i class="fas fa-sign-in-alt me-2"></i>تسجيل الدخول
-            </a>
-            <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">
-                <i class="fas fa-user-plus me-2"></i>إنشاء حساب
-            </a>
-        </div>
-        {% endif %}
-    </div>
-
-    <!-- Features Section -->
-    <div class="row g-4">
-        <div class="col-md-6 col-lg-3">
-            <div class="feature-card">
-                <i class="fas fa-brain"></i>
-                <h3>فحص المخ</h3>
-                <p>تحليل صور الرنين المغناطيسي للكشف عن أورام المخ</p>
-                <a href="{{ url_for('brain') }}" class="btn btn-primary">ابدأ الفحص</a>
+<div class="modern-hero position-relative bg-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="display-3 fw-bold mb-3 animate-fadein">Welcome to <span class="text-primary">MedXpert</span></h1>
+                <p class="lead text-muted mb-4 animate-fadein-delay">
+                    The AI revolution in medical diagnosis.<br>
+                    Precision, speed, and privacy—all in one place.
+                </p>
+                <div class="d-flex justify-content-center justify-content-lg-start gap-3">
+                    <a href="{{ url_for('brain') }}" class="btn btn-primary btn-lg animate-bounce">Start Diagnosis</a>
+                    <a href="#features" class="btn btn-outline-primary btn-lg animate-fadein-delay2">Learn More</a>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="feature-card">
-                <i class="fas fa-allergies"></i>
-                <h3>فحص الجلد</h3>
-                <p>تحليل صور الجلد للكشف عن السرطان والأمراض الجلدية</p>
-                <a href="{{ url_for('skin') }}" class="btn btn-primary">ابدأ الفحص</a>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="feature-card">
-                <i class="fas fa-lungs"></i>
-                <h3>فحص الصدر</h3>
-                <p>تحليل صور الأشعة السينية للصدر للكشف عن الأمراض</p>
-                <a href="{{ url_for('chest') }}" class="btn btn-primary">ابدأ الفحص</a>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="feature-card">
-                <i class="fas fa-bone"></i>
-                <h3>فحص الكسور</h3>
-                <p>تحليل صور الأشعة للكشف عن الكسور في العظام</p>
-                <a href="{{ url_for('fracture') }}" class="btn btn-primary">ابدأ الفحص</a>
+            <div class="col-lg-6 mt-5 mt-lg-0 text-center hero-img-anim">
+                <img src="{{ url_for('static', filename='hero-doctor.svg') }}" class="img-fluid" style="max-height:380px;" alt="MedXpert Doctor AI">
             </div>
         </div>
     </div>
+    <svg class="wave-svg" viewBox="0 0 1440 160"><path fill="#233cea" fill-opacity="0.08" d="M0,64L48,80C96,96,192,128,288,144C384,160,480,160,576,144C672,128,768,96,864,69.3C960,43,1056,21,1152,37.3C1248,53,1344,107,1392,133.3L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
+</div>
 
-    <!-- Info Section -->
-    <div class="row mt-5">
-        <div class="col-md-4">
-            <div class="text-center mb-4">
-                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
-                <h3>خصوصية وأمان</h3>
-                <p>نحن نضمن خصوصية وأمان بياناتك الطبية بأحدث تقنيات التشفير</p>
+<!-- Features Section -->
+<div class="container py-5" id="features">
+    <div class="row mb-5">
+        <div class="col text-center">
+            <h2 class="fw-bold animate-fadeup">MedXpert Features</h2>
+            <p class="text-muted">Accurate and fast diagnosis at your fingertips</p>
+        </div>
+    </div>
+    <div class="row g-4 justify-content-center">
+        {% for feature in [
+            {'icon':'brain', 'title':'Brain Scan', 'desc':'Analyze MRI images for brain tumor detection', 'url':'brain'},
+            {'icon':'allergies', 'title':'Skin Exam', 'desc':'Analyze skin images for cancer and skin diseases', 'url':'skin'},
+            {'icon':'lungs', 'title':'Chest Exam', 'desc':'Analyze chest X-rays for diseases', 'url':'chest'},
+            {'icon':'bone', 'title':'Fracture Detection', 'desc':'Analyze bone X-rays for fractures', 'url':'fracture'}
+        ] %}
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="feature-card pro-card animate-reveal">
+                <div class="icon-wrapper"><i class="fas fa-{{ feature.icon }}"></i></div>
+                <h3>{{ feature.title }}</h3>
+                <p>{{ feature.desc }}</p>
+                <a href="{{ url_for(feature.url) }}" class="btn btn-outline-primary btn-sm mt-2">Start Now</a>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="text-center mb-4">
-                <i class="fas fa-tachometer-alt fa-3x text-primary mb-3"></i>
-                <h3>سرعة في التشخيص</h3>
-                <p>نتائج فورية ودقيقة باستخدام أحدث تقنيات الذكاء الاصطناعي</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- About Section -->
+<div class="about-modern py-5 bg-white">
+    <div class="container">
+        <div class="row align-items-center gy-4">
+            <div class="col-md-6 order-md-2 animate-fadein">
+                <img src="{{ url_for('static', filename='about-illustration.svg') }}" alt="About MedXpert" class="img-fluid rounded-3 shadow">
+            </div>
+            <div class="col-md-6 order-md-1 animate-fadeup">
+                <h2 class="fw-bold mb-3">Why MedXpert?</h2>
+                <ul class="list-unstyled fs-5">
+                    <li><i class="fas fa-check-circle text-primary me-2"></i> Instant, highly accurate results</li>
+                    <li><i class="fas fa-check-circle text-primary me-2"></i> Full data encryption and security</li>
+                    <li><i class="fas fa-check-circle text-primary me-2"></i> User-friendly interface for everyone</li>
+                    <li><i class="fas fa-check-circle text-primary me-2"></i> Professional technical and medical support</li>
+                </ul>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="text-center mb-4">
-                <i class="fas fa-user-md fa-3x text-primary mb-3"></i>
-                <h3>دعم متخصص</h3>
-                <p>فريق دعم متخصص لمساعدتك في جميع استفساراتك الطبية</p>
+    </div>
+</div>
+
+<!-- Testimonials Carousel -->
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h2 class="fw-bold animate-fadeup">User Testimonials</h2>
+            <p class="text-muted">What our clients say about MedXpert</p>
+        </div>
+    </div>
+    <div id="testimonialCarousel" class="carousel slide carousel-fade animate-fadein" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active text-center">
+                <blockquote class="blockquote">
+                    <p class="mb-4">"I received an accurate diagnosis in minutes. Beautiful interface and excellent support team!"</p>
+                </blockquote>
+                <img src="{{ url_for('static', filename='user1.jpg') }}" class="rounded-circle mb-2" width="64" height="64" alt="User 1">
+                <h6 class="fw-bold mb-0">Dr. Ahmed Said</h6>
+                <small class="text-muted">Neurologist</small>
+            </div>
+            <div class="carousel-item text-center">
+                <blockquote class="blockquote">
+                    <p class="mb-4">"MedXpert changed how I work and helped me quickly diagnose complex cases."</p>
+                </blockquote>
+                <img src="{{ url_for('static', filename='user2.jpg') }}" class="rounded-circle mb-2" width="64" height="64" alt="User 2">
+                <h6 class="fw-bold mb-0">Sarah Mostafa</h6>
+                <small class="text-muted">Dermatologist</small>
+            </div>
+            <div class="carousel-item text-center">
+                <blockquote class="blockquote">
+                    <p class="mb-4">"The ease of use and privacy made me trust MedXpert."</p>
+                </blockquote>
+                <img src="{{ url_for('static', filename='user3.jpg') }}" class="rounded-circle mb-2" width="64" height="64" alt="User 3">
+                <h6 class="fw-bold mb-0">Yasser Helmy</h6>
+                <small class="text-muted">IT Engineer</small>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h2 class="fw-bold animate-fadeup">Frequently Asked Questions</h2>
+        </div>
+    </div>
+    <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="faq1h"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true">Is my medical data protected with MedXpert?</button></h2>
+            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">Yes, all your data is encrypted and protected with the latest security technologies.</div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="faq2h"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">How long does diagnosis take?</button></h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">Results appear within seconds after uploading the required images.</div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="faq3h"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Is the service free?</button></h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">You can use some features for free, with advanced plans available for professionals and medical centers.</div>
             </div>
         </div>
     </div>

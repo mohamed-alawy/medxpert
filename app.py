@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import io
-import gdown
 import base64
 import traceback
 import logging
@@ -15,6 +14,7 @@ from flask import Flask, request, render_template, jsonify, redirect, url_for, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.orm import Session
 
 print("Starting application...")
 
@@ -89,7 +89,7 @@ class User(UserMixin, db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 # Create database tables
 with app.app_context():
@@ -129,39 +129,19 @@ def load_brain_model():
         num_res_units=2,
         norm=Norm.BATCH,
     ).to(device)
-    model_path = "models/best_metric_model.pth"
-    if not os.path.exists(model_path):
-        print("Downloading brain model...")
-        url = "https://drive.google.com/uc?id=1NdiZM8C7Y_TPiNiCsh7XTFwFk54nWGRl" 
-        gdown.download(url, model_path, quiet=False)
     model.load_state_dict(torch.load("models/best_metric_model.pth", map_location=device))
     model.eval()
     return model
 
 def load_skin_model():
-    model_path = "models/best_model_skin.h5"
-    if not os.path.exists(model_path):
-        print("Downloading skin model...")
-        url = "https://drive.google.com/uc?id=1XDHYlsBvm_H1VdrXgundaKjXGoERYj0i" 
-        gdown.download(url, model_path, quiet=False)
     model = tf.keras.models.load_model("models/best_model_skin.h5")
     return model
 
 def load_chest_model():
-    model_path = "models/best_model_chest.h5"
-    if not os.path.exists(model_path):
-        print("Downloading chest model...")
-        url = "https://drive.google.com/uc?id=1u2f_iLKcvUELn_SqOoqhOoRdudUGJdJf"
-        gdown.download(url, model_path, quiet=False)
     model = tf.keras.models.load_model("models/best_model_chest.h5")
     return model
 
 def load_fracture_model():
-    model_path = "models/best.pt"
-    if not os.path.exists(model_path):
-        print("Downloading fracture model...")
-        url = "https://drive.google.com/uc?id=10OZEogmn3zCqd_ybkSTJ5U0w_TZxGP9N" 
-        gdown.download(url, model_path, quiet=False)
     model = YOLO("models/best.pt")
     return model
 
@@ -687,13 +667,13 @@ def logout():
 if __name__ == "__main__":
     try:
         # Try default Flask port 5000
-        port = int(os.environ.get("PORT", 7860))
+        port = int(os.environ.get("PORT", 5000))
         # Create models directory if it doesn't exist
         os.makedirs('models', exist_ok=True)
         # Create uploads directory if it doesn't exist
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
         
-        app.run(host="0.0.0.0", port=port)
+        app.run(host="127.0.0.1", port=port, debug=True)
     except Exception as e:
         print(f"Error starting Flask application: {str(e)}")
         print("Detailed error:")
