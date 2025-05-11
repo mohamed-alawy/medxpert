@@ -1,0 +1,738 @@
+{% extends "layout.html" %}
+
+{% block title %}MedXpert - Admin Dashboard{% endblock %}
+
+{% block head %}
+<style>
+    /* Admin page modern styling */
+    .admin-container {
+        position: relative;
+        z-index: 5;
+        margin: 100px auto 5rem;
+        max-width: 1200px;
+        padding: 0 1.5rem;
+    }
+    
+    .admin-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .admin-header h1 {
+        position: relative;
+        font-weight: 700;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+        padding-bottom: 5px;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        font-size: 2.5rem;
+        letter-spacing: -0.5px;
+        animation: fadeInDown 0.8s ease-out;
+    }
+    
+    .admin-subtitle {
+        color: var(--text-dark);
+        font-size: 1.1rem;
+        opacity: 0.8;
+        max-width: 700px;
+        margin: 0 auto;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .admin-card {
+        border: none;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+        transition: all 0.4s ease;
+        background-color: white;
+        animation: fadeIn 0.8s ease-out;
+    }
+    
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(35, 60, 234, 0.15);
+    }
+    
+    .admin-card-header {
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        padding: 1.5rem;
+        color: white;
+        font-weight: 600;
+        font-size: 1.25rem;
+        border-bottom: none;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .admin-card-header:before {
+        content: "";
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        top: -100px;
+        right: -50px;
+        pointer-events: none;
+    }
+    
+    .admin-card-header i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .admin-card-body {
+        padding: 1.5rem;
+    }
+
+    /* User table styling */
+    .table-responsive {
+        border-radius: var(--radius);
+        overflow: hidden;
+    }
+    
+    .admin-table {
+        width: 100%;
+        margin-bottom: 0;
+        color: var(--text-dark);
+        vertical-align: top;
+        border-color: #f0f0f5;
+    }
+    
+    .admin-table > thead {
+        background-color: rgba(35, 60, 234, 0.05);
+    }
+    
+    .admin-table > :not(caption) > * > * {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+    
+    .admin-table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        color: #6c757d;
+    }
+    
+    .admin-table tbody tr {
+        transition: all 0.3s ease;
+    }
+    
+    .admin-table tbody tr:hover {
+        background-color: rgba(35, 60, 234, 0.08);
+        transform: scale(1.01);
+    }
+    
+    /* Form controls styled like the homepage */
+    .form-control {
+        border-radius: var(--radius);
+        padding: 0.75rem 1rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(35, 60, 234, 0.15);
+        background-color: white;
+        transform: translateY(-2px);
+    }
+    
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--dark-gray);
+    }
+    
+    .btn-admin {
+        border-radius: var(--radius);
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .btn-admin:before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.3s;
+        border-radius: 50% 50% 0 0;
+        z-index: -1;
+    }
+    
+    .btn-admin:hover:before {
+        height: 180%;
+    }
+    
+    .btn-admin-primary {
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        border: none;
+    }
+    
+    .btn-admin-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(35, 60, 234, 0.3);
+        color: white;
+    }
+    
+    .btn-admin-warning {
+        background-color: #ffc107;
+        color: #212529;
+        border: none;
+    }
+    
+    .btn-admin-warning:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3);
+        background-color: #e5ac00;
+        color: #212529;
+    }
+    
+    .btn-admin-danger {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+    }
+    
+    .btn-admin-danger:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(220, 53, 69, 0.3);
+        color: white;
+        background-color: #c82333;
+    }
+    
+    /* Metrics cards */
+    .admin-metrics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .metric-card {
+        flex: 1;
+        min-width: 200px;
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .metric-card:nth-child(1) { animation: fadeIn 0.8s ease-out 0.1s both; }
+    .metric-card:nth-child(2) { animation: fadeIn 0.8s ease-out 0.2s both; }
+    .metric-card:nth-child(3) { animation: fadeIn 0.8s ease-out 0.3s both; }
+    .metric-card:nth-child(4) { animation: fadeIn 0.8s ease-out 0.4s both; }
+    
+    .metric-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 15px 30px rgba(35, 60, 234, 0.15);
+    }
+    
+    .metric-card:before {
+        content: "";
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(rgba(35, 60, 234, 0.05), transparent);
+        border-radius: 50%;
+        bottom: -70px;
+        right: -70px;
+        pointer-events: none;
+    }
+    
+    .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(26, 44, 179, 0.1), rgba(35, 60, 234, 0.15));
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .metric-card:hover .metric-icon {
+        transform: scale(1.15);
+        background: linear-gradient(135deg, rgba(26, 44, 179, 0.15), rgba(35, 60, 234, 0.25));
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #1a2cb3, #3346e8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .metric-card:hover .metric-value {
+        transform: scale(1.1);
+    }
+    
+    .metric-label {
+        color: #6c757d;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    /* Modal styling */
+    .modal-content {
+        border: none;
+        border-radius: var(--radius);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    }
+    
+    .modal-header {
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        border-bottom: none;
+        border-top-left-radius: var(--radius);
+        border-top-right-radius: var(--radius);
+        padding: 1.5rem;
+    }
+    
+    .modal-header .close {
+        color: white;
+        opacity: 0.8;
+        text-shadow: none;
+    }
+    
+    .modal-body {
+        padding: 2rem;
+    }
+    
+    .modal-footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.5rem 2rem;
+    }
+    
+    /* Status badges */
+    .user-status {
+        padding: 0.35rem 0.85rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    
+    .user-status.active {
+        background-color: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+    
+    .user-status.inactive {
+        background-color: rgba(108, 117, 125, 0.1);
+        color: #6c757d;
+    }
+    
+    .user-status.admin {
+        background-color: rgba(35, 60, 234, 0.1);
+        color: var(--primary-color);
+    }
+
+    /* Animation keyframes */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+        from { 
+            opacity: 0;
+            transform: translateY(20px); 
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0); 
+        }
+    }
+
+    @keyframes fadeInDown {
+        from { 
+            opacity: 0;
+            transform: translateY(-20px); 
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0); 
+        }
+    }
+    
+    /* Alert message styling */
+    .admin-alert {
+        border-radius: var(--radius);
+        padding: 1rem 1.5rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    .admin-alert-success {
+        background-color: rgba(40, 167, 69, 0.1);
+        border-left: 4px solid #28a745;
+        color: #28a745;
+    }
+    
+    .admin-alert-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-left: 4px solid #dc3545;
+        color: #dc3545;
+    }
+    
+    .admin-alert-icon {
+        margin-right: 1rem;
+        font-size: 1.25rem;
+    }
+    
+    /* Fancy button hover effect */
+    .btn-fancy {
+        transition: all 0.3s;
+        position: relative;
+    }
+    
+    .btn-fancy:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transition: all 0.5s ease;
+    }
+    
+    .btn-fancy:active:after {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+    }
+
+    /* Delete confirmation modal styling */
+    .delete-confirmation {
+        text-align: center;
+        padding: 1.5rem 0;
+    }
+
+    .delete-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 1.5rem;
+    }
+
+    .delete-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #dc3545;
+    }
+
+    .delete-description {
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+    }
+
+    .delete-username {
+        font-weight: 700;
+        color: #333;
+        padding: 0 0.25rem;
+    }
+
+    .btn-modal-cancel {
+        background-color: #f8f9fa;
+        color: #333;
+        border: 1px solid #ddd;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius);
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .btn-modal-cancel:hover {
+        background-color: #e9ecef;
+    }
+
+    .btn-modal-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius);
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+    }
+    
+    .btn-modal-delete:hover {
+        background-color: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    .btn-modal-delete:active,
+    .btn-modal-delete:focus {
+        background-color: #bd2130;
+        color: white;
+        transform: translateY(0);
+    }
+</style>
+
+<!-- Updated modal script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle success/error messages
+    let message = '{{ message }}';
+    let messageType = '{{ message_type }}';
+    
+    if (message && messageType) {
+        setTimeout(function() {
+            let alertElement = document.querySelector('.admin-alert');
+            if (alertElement) {
+                alertElement.style.opacity = '0';
+                setTimeout(() => alertElement.remove(), 500);
+            }
+        }, 5000);
+    }
+    
+    // Fix modal backdrop issues using native Bootstrap events
+    var deleteButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+    deleteButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Store the user ID in the modal's dataset for reference
+            var userId = this.getAttribute('data-user-id');
+            var modal = document.getElementById('deleteUserModal');
+            
+            // Update the delete link with the correct user ID
+            var deleteLink = modal.querySelector('.btn-delete-user');
+            deleteLink.href = '/admin/delete_user/' + userId;
+            
+            // Update the username in the confirmation message
+            var username = this.getAttribute('data-username');
+            modal.querySelector('.username-to-delete').textContent = username;
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="content-section">
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <p class="admin-subtitle">Manage users and system settings from this central control panel</p>
+        </div>
+        
+        {% if message %}
+        <div class="admin-alert {% if message_type == 'success' %}admin-alert-success{% else %}admin-alert-danger{% endif %}">
+            <i class="admin-alert-icon fas {% if message_type == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+            <div>{{ message }}</div>
+        </div>
+        {% endif %}
+        
+        <!-- Admin Metrics -->
+        <div class="admin-metrics">
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="metric-value">{{ users|length }}</div>
+                <div class="metric-label">Total Users</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="metric-value">{{ users|selectattr('is_admin')|list|length }}</div>
+                <div class="metric-label">Admin Users</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="metric-value">56</div>
+                <div class="metric-label">Today's Analyses</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="metric-value">99.9%</div>
+                <div class="metric-label">System Uptime</div>
+            </div>
+        </div>
+        
+        <!-- Create User Card -->
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <i class="fas fa-user-plus"></i> Create New User
+            </div>
+            <div class="admin-card-body">
+                <form method="POST" action="{{ url_for('create_user') }}">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="is_admin" name="is_admin">
+                                <label class="form-check-label" for="is_admin">
+                                    Admin User
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-admin btn-admin-primary btn-fancy">Create User</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- User List Card -->
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <i class="fas fa-users"></i> User Management
+            </div>
+            <div class="admin-card-body">
+                <div class="table-responsive">
+                    <table class="admin-table table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.full_name or 'N/A' }}</td>
+                                <td>
+                                    {% if user.is_admin %}
+                                    <span class="user-status admin">Admin</span>
+                                    {% else %}
+                                    <span class="user-status active">User</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('edit_user', user_id=user.id) }}" class="btn btn-admin btn-admin-warning btn-sm btn-fancy">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <button type="button" class="btn btn-admin btn-admin-danger btn-sm btn-fancy" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#deleteUserModal"
+                                            data-user-id="{{ user.id }}"
+                                            data-username="{{ user.username }}">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Single Reusable Delete Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="delete-confirmation">
+                    <div class="delete-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h4 class="delete-title">Are you sure?</h4>
+                    <p class="delete-description">
+                        You are about to delete user <span class="delete-username username-to-delete"></span>.<br>
+                        This action cannot be undone and all user data will be permanently deleted.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </button>
+                <a href="#" class="btn btn-modal-delete btn-delete-user">
+                    <i class="fas fa-trash-alt me-2"></i>Delete User
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

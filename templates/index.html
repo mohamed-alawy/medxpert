@@ -1,147 +1,2210 @@
 {% extends "layout.html" %}
 
-{% block title %}MedXpert - Smart Medical Diagnosis{% endblock %}
+{% block title %}MedXpert - Advanced Medical Imaging Analysis{% endblock %}
 
 {% block content %}
-<div class="modern-hero position-relative bg-light py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 text-center text-lg-start">
-                <h1 class="display-3 fw-bold mb-3 animate-fadein">Welcome to <span class="text-primary">MedXpert</span></h1>
-                <p class="lead text-muted mb-4 animate-fadein-delay">
-                    The AI revolution in medical diagnosis.<br>
-                    Precision, speed, and privacy—all in one place.
-                </p>
-                <div class="d-flex justify-content-center justify-content-lg-start gap-3">
-                    <a href="{{ url_for('brain') }}" class="btn btn-primary btn-lg animate-bounce">Start Diagnosis</a>
-                    <a href="#features" class="btn btn-outline-primary btn-lg animate-fadein-delay2">Learn More</a>
+<!-- Unified Hero Section with all content -->
+<section class="unified-hero-section" style="margin-top: 0; padding-top: 0;">
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="content-container py-5">
+        <!-- Main Hero Text -->
+        <div class="row justify-content-center" style="padding-top: 140px;">
+            <div class="col-lg-10 hero-content text-center">
+                <h1 class="hero-title" style="font-size: 6.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 4rem; color: white; line-height: 1.2;">
+                    <span class="animate-word" style="visibility: hidden; opacity: 0; transform: scale(0);">See</span>
+                    <span class="animate-word" style="visibility: hidden; opacity: 0; transform: scale(0);">beyond</span>
+                    <br>
+                    <span class="animate-word" style="visibility: hidden; opacity: 0; transform: scale(0); margin-top: 20px; display: inline-block;">with</span>
+                    <span class="animate-word" style="visibility: hidden; opacity: 0; transform: scale(0);">AI</span>
+                </h1>
+            </div>
+        </div>
+        
+        <!-- Spacer -->
+        <div class="row">
+            <div class="col">
+                <div style="height: 40px;"></div>
+    </div>
+        </div>
+        
+        <!-- Subtitle Text -->
+        <div class="row justify-content-center mt-5 pt-5">
+            <div class="col-lg-8">
+                <h2 id="subtitle-text" class="tech-title-modern text-center" style="opacity: 0; transform: scale(0.9);">AI-powered medical imaging for precise diagnostics</h2>
+                <div id="explore-button" class="d-flex justify-content-center gap-3 mt-5 pt-3" style="opacity: 0; visibility: hidden; transform: scale(0.5);">
+                    <a href="#models" class="tech-btn-modern">
+                        <span>Explore Models</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
-            <div class="col-lg-6 mt-5 mt-lg-0 text-center hero-img-anim">
-                <img src="{{ url_for('static', filename='hero-doctor.svg') }}" class="img-fluid" style="max-height:380px;" alt="MedXpert Doctor AI">
+        </div>
+        
+        <!-- Spacer div for additional space -->
+        <div class="row">
+            <div class="col">
+                <div style="height: 100px;"></div>
+    </div>
+        </div>
+        
+        <!-- Stats Section -->
+        <div class="row justify-content-center mt-5 pt-5">
+            <div class="col-lg-10">
+                <div class="text-center mb-5">
+                    <h2 class="tech-title-modern">Advanced Medical Imaging Analytics</h2>
+                </div>
+        
+                <div class="row tech-grid">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="tech-card-modern">
+                            <div class="tech-card-body">
+                                <div class="tech-metric">
+                                    <div class="tech-metric-value">97%</div>
+                                    <div class="tech-metric-label">Detection Accuracy</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="tech-card-modern">
+                            <div class="tech-card-body">
+                                <div class="tech-metric">
+                                    <div class="tech-metric-value">4</div>
+                                    <div class="tech-metric-label">Medical Models</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="tech-card-modern">
+                            <div class="tech-card-body">
+                                <div class="tech-metric">
+                                    <div class="tech-metric-value">5,000+</div>
+                                    <div class="tech-metric-label">Analyses Performed</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="tech-card-modern">
+                            <div class="tech-card-body">
+                                <div class="tech-metric">
+                                    <div class="tech-metric-value">3s</div>
+                                    <div class="tech-metric-label">Average Processing</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <!-- Spacer div for additional space -->
+        <div class="row">
+            <div class="col">
+                <div style="height: 100px;"></div>
             </div>
         </div>
     </div>
-    <svg class="wave-svg" viewBox="0 0 1440 160"><path fill="#233cea" fill-opacity="0.08" d="M0,64L48,80C96,96,192,128,288,144C384,160,480,160,576,144C672,128,768,96,864,69.3C960,43,1056,21,1152,37.3C1248,53,1344,107,1392,133.3L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
-</div>
+</section>
 
-<!-- Features Section -->
-<div class="container py-5" id="features">
-    <div class="row mb-5">
-        <div class="col text-center">
-            <h2 class="fw-bold animate-fadeup">MedXpert Features</h2>
-            <p class="text-muted">Accurate and fast diagnosis at your fingertips</p>
-        </div>
-    </div>
-    <div class="row g-4 justify-content-center">
-        {% for feature in [
-            {'icon':'brain', 'title':'Brain Scan', 'desc':'Analyze MRI images for brain tumor detection', 'url':'brain'},
-            {'icon':'allergies', 'title':'Skin Exam', 'desc':'Analyze skin images for cancer and skin diseases', 'url':'skin'},
-            {'icon':'lungs', 'title':'Chest Exam', 'desc':'Analyze chest X-rays for diseases', 'url':'chest'},
-            {'icon':'bone', 'title':'Fracture Detection', 'desc':'Analyze bone X-rays for fractures', 'url':'fracture'}
-        ] %}
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="feature-card pro-card animate-reveal">
-                <div class="icon-wrapper"><i class="fas fa-{{ feature.icon }}"></i></div>
-                <h3>{{ feature.title }}</h3>
-                <p>{{ feature.desc }}</p>
-                <a href="{{ url_for(feature.url) }}" class="btn btn-outline-primary btn-sm mt-2">Start Now</a>
+<!-- Combined Models and How It Works Section -->
+<section class="content-section" id="models" style="padding-top: 150px;">
+    <div class="content-container">
+        <!-- Models Section Title -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="text-center" data-aos="fade-up">
+                    <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; padding-bottom: 5px; line-height: 1.3;">Our Medical Imaging Models</h2>
+                    <span class="team-subtitle">Advanced neural networks trained on thousands of medical images to assist healthcare professionals in diagnosis</span>
+                </div>
             </div>
         </div>
-        {% endfor %}
+        
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6 col-md-6 stagger-item">
+                <div class="model-card-3d">
+                    <div class="model-card-shine"></div>
+                    <div class="model-card-inner">
+                        <div class="model-card-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="model-card-content">
+                            <h4 class="model-card-title">Brain Tumor Detection</h4>
+                            <div class="model-card-badge">Dice: 0.73</div>
+                            <p class="model-card-description">Segment and visualize brain tumors from MRI scans with state-of-the-art neural network models.</p>
+                            <div class="model-card-tags">
+                                <span class="model-tag">MRI Analysis</span>
+                                <span class="model-tag">U-Net</span>
+                                <span class="model-tag">Segmentation</span>
+                            </div>
+                            <div class="model-card-action">
+                                <a href="{{ url_for('brain') }}" class="model-card-btn">
+                                    <span class="btn-text">Try Model</span>
+                                    <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-6 stagger-item">
+                <div class="model-card-3d">
+                    <div class="model-card-shine"></div>
+                    <div class="model-card-inner">
+                        <div class="model-card-icon">
+                            <i class="fas fa-lungs"></i>
+                        </div>
+                        <div class="model-card-content">
+                            <h4 class="model-card-title">Chest X-ray Analysis</h4>
+                            <div class="model-card-badge">Accuracy: 95%</div>
+                            <p class="model-card-description">Identify abnormalities including pneumonia, COVID-19, and other lung conditions with high precision.</p>
+                            <div class="model-card-tags">
+                                <span class="model-tag">X-ray</span>
+                                <span class="model-tag">CNN</span>
+                                <span class="model-tag">Classification</span>
+                            </div>
+                            <div class="model-card-action">
+                                <a href="{{ url_for('chest') }}" class="model-card-btn">
+                                    <span class="btn-text">Try Model</span>
+                                    <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-6 stagger-item">
+                <div class="model-card-3d">
+                    <div class="model-card-shine"></div>
+                    <div class="model-card-inner">
+                        <div class="model-card-icon">
+                            <i class="fas fa-diagnoses"></i>
+                        </div>
+                        <div class="model-card-content">
+                            <h4 class="model-card-title">Skin Cancer Detection</h4>
+                            <div class="model-card-badge">Accuracy: 93%</div>
+                            <p class="model-card-description">Analyze skin lesions to classify them as benign or malignant with advanced visual recognition.</p>
+                            <div class="model-card-tags">
+                                <span class="model-tag">Dermatology</span>
+                                <span class="model-tag">ResNet</span>
+                                <span class="model-tag">Binary Classification</span>
+                            </div>
+                            <div class="model-card-action">
+                                <a href="{{ url_for('skin') }}" class="model-card-btn">
+                                    <span class="btn-text">Try Model</span>
+                                    <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-6 stagger-item">
+                <div class="model-card-3d">
+                    <div class="model-card-shine"></div>
+                    <div class="model-card-inner">
+                        <div class="model-card-icon">
+                            <i class="fas fa-bone"></i>
+                        </div>
+                        <div class="model-card-content">
+                            <h4 class="model-card-title">Fracture Detection</h4>
+                            <div class="model-card-badge">mAP50: 0.94</div>
+                            <p class="model-card-description">Detect and locate bone fractures in X-ray images with advanced object detection technology.</p>
+                            <div class="model-card-tags">
+                                <span class="model-tag">X-ray</span>
+                                <span class="model-tag">YOLO</span>
+                                <span class="model-tag">Object Detection</span>
+                            </div>
+                            <div class="model-card-action">
+                                <a href="{{ url_for('fracture') }}" class="model-card-btn">
+                                    <span class="btn-text">Try Model</span>
+                                    <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+        </div>
+        
+        <!-- How It Works Section - Inside the same container -->
+        <div class="row justify-content-center mt-5 pt-4">
+            <div class="col-lg-10">
+        <div class="text-center mb-5">
+                    <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; padding-bottom: 5px; line-height: 1.3;">How It Works</h2>
+                    <span class="team-subtitle">Our platform provides advanced AI analysis for medical imaging in just a few simple steps</span>
+        </div>
+        
+                <div class="row">
+                    <div class="col-12">
+                        <div class="workflow-container">
+                            <div class="workflow-step" data-step="1">
+                                <div class="workflow-number">1</div>
+                                <div class="workflow-content">
+                                    <div class="workflow-icon">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                                    <h5>Upload</h5>
+                            <p>Upload your medical image to our secure, HIPAA-compliant platform</p>
+                        </div>
+                    </div>
+                            
+                            <div class="workflow-path"></div>
+                            
+                            <div class="workflow-step" data-step="2">
+                                <div class="workflow-number">2</div>
+                                <div class="workflow-content">
+                                    <div class="workflow-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                                    <h5>Process</h5>
+                            <p>Our AI models analyze the image with state-of-the-art algorithms</p>
+                        </div>
+                    </div>
+                            
+                            <div class="workflow-path"></div>
+                            
+                            <div class="workflow-step" data-step="3">
+                                <div class="workflow-number">3</div>
+                                <div class="workflow-content">
+                                    <div class="workflow-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                                    <h5>Analyze</h5>
+                            <p>Get detailed results with visual annotations and confidence scores</p>
+                        </div>
+                    </div>
+                            
+                            <div class="workflow-path"></div>
+                            
+                            <div class="workflow-step" data-step="4">
+                                <div class="workflow-number">4</div>
+                                <div class="workflow-content">
+                                    <div class="workflow-icon">
+                                <i class="fas fa-file-medical-alt"></i>
+                            </div>
+                                    <h5>Report</h5>
+                            <p>Download or share analysis reports securely with your team</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<!-- About Section -->
-<div class="about-modern py-5 bg-white">
-    <div class="container">
-        <div class="row align-items-center gy-4">
-            <div class="col-md-6 order-md-2 animate-fadein">
-                <img src="{{ url_for('static', filename='about-illustration.svg') }}" alt="About MedXpert" class="img-fluid rounded-3 shadow">
+<!-- Technology Section - Blue section -->
+<section class="content-section tech-section-modern">
+    <div class="content-container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center mb-5">
+                <h2 class="tech-title-modern">Powered by Advanced AI Technology</h2>
+                <p class="tech-subtitle-modern">MedXpert utilizes the latest advancements in deep learning and computer vision to analyze medical images with exceptional accuracy.</p>
             </div>
-            <div class="col-md-6 order-md-1 animate-fadeup">
-                <h2 class="fw-bold mb-3">Why MedXpert?</h2>
-                <ul class="list-unstyled fs-5">
-                    <li><i class="fas fa-check-circle text-primary me-2"></i> Instant, highly accurate results</li>
-                    <li><i class="fas fa-check-circle text-primary me-2"></i> Full data encryption and security</li>
-                    <li><i class="fas fa-check-circle text-primary me-2"></i> User-friendly interface for everyone</li>
-                    <li><i class="fas fa-check-circle text-primary me-2"></i> Professional technical and medical support</li>
-                </ul>
+        </div>
+                
+        <div class="row tech-grid">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="tech-card-modern">
+                    <div class="tech-card-header">
+                        <i class="fas fa-brain"></i>
+                        <h3>Convolutional Neural Networks</h3>
+                    </div>
+                    <div class="tech-card-body">
+                    <p>Specialized deep learning architectures designed for image processing and feature extraction.</p>
+                        <div class="tech-metric">
+                            <div class="tech-metric-value">99.7%</div>
+                            <div class="tech-metric-label">Feature Detection</div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="tech-card-modern">
+                    <div class="tech-card-header">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>Transfer Learning</h3>
+                    </div>
+                    <div class="tech-card-body">
+                    <p>Models pre-trained on millions of images and fine-tuned on specialized medical datasets.</p>
+                        <div class="tech-metric">
+                            <div class="tech-metric-value">10M+</div>
+                            <div class="tech-metric-label">Training Images</div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="tech-card-modern">
+                    <div class="tech-card-header">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Real-time Processing</h3>
+                    </div>
+                    <div class="tech-card-body">
+                    <p>Optimized inference algorithms provide analysis results in seconds, not minutes.</p>
+                        <div class="tech-metric">
+                            <div class="tech-metric-value">3s</div>
+                            <div class="tech-metric-label">Average Analysis Time</div>
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>
+                
+        <div class="row">
+            <div class="col-12 text-center mt-4">
+                <a href="#models" class="tech-btn-modern">
+                    <span>Explore Our Models</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- Testimonials Carousel -->
-<div class="container py-5">
-    <div class="row mb-4">
-        <div class="col text-center">
-            <h2 class="fw-bold animate-fadeup">User Testimonials</h2>
-            <p class="text-muted">What our clients say about MedXpert</p>
-        </div>
-    </div>
-    <div id="testimonialCarousel" class="carousel slide carousel-fade animate-fadein" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active text-center">
-                <blockquote class="blockquote">
-                    <p class="mb-4">"I received an accurate diagnosis in minutes. Beautiful interface and excellent support team!"</p>
-                </blockquote>
-                <img src="{{ url_for('static', filename='user1.jpg') }}" class="rounded-circle mb-2" width="64" height="64" alt="User 1">
-                <h6 class="fw-bold mb-0">Dr. Ahmed Said</h6>
-                <small class="text-muted">Neurologist</small>
-            </div>
-            <div class="carousel-item text-center">
-                <blockquote class="blockquote">
-                    <p class="mb-4">"MedXpert changed how I work and helped me quickly diagnose complex cases."</p>
-                </blockquote>
-                <img src="{{ url_for('static', filename='user2.jpg') }}" class="rounded-circle mb-2" width="64" height="64" alt="User 2">
-                <h6 class="fw-bold mb-0">Sarah Mostafa</h6>
-                <small class="text-muted">Dermatologist</small>
-            </div>
-            <div class="carousel-item text-center">
-                <blockquote class="blockquote">
-                    <p class="mb-4">"The ease of use and privacy made me trust MedXpert."</p>
-                </blockquote>
-                <img src="{{ url_for('static', filename='user3.jpg') }}" class="rounded-circle mb-2" width="64" height="64" alt="User 3">
-                <h6 class="fw-bold mb-0">Yasser Helmy</h6>
-                <small class="text-muted">IT Engineer</small>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-    </div>
-</div>
+<style>
+    /* Modern Technology Section Redesign */
+    .tech-section-modern {
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        padding: 5rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tech-section-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    .tech-title-modern {
+        color: white;
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+    
+    .tech-subtitle-modern {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1rem;
+        margin-bottom: 3rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .tech-grid {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .tech-card-modern {
+        background-color: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+        height: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .tech-card-modern:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .tech-card-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+    }
+    
+    .tech-card-header i {
+        font-size: 1.5rem;
+        color: white;
+        margin-right: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .tech-card-modern:hover .tech-card-header i {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(5deg);
+    }
+    
+    .tech-card-header h3 {
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .tech-card-body {
+        padding: 1.5rem;
+    }
+    
+    .tech-card-body p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+    
+    .tech-metric {
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+        padding: 1rem;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .tech-metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.2rem;
+    }
+    
+    .tech-metric-label {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .tech-btn-modern {
+        display: inline-flex;
+        align-items: center;
+        background-color: white;
+        color: #233cea;
+        font-weight: 600;
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 2;
+    }
+    
+    .tech-btn-modern span {
+        position: relative;
+        z-index: 2;
+        margin-right: 0.5rem;
+    }
+    
+    .tech-btn-modern i {
+        position: relative;
+        z-index: 2;
+        transition: transform 0.3s ease;
+    }
+    
+    .tech-btn-modern:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        color: #233cea;
+    }
+    
+    .tech-btn-modern:hover i {
+        transform: translateX(5px);
+    }
+    
+    .tech-btn-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(233, 233, 255, 0.2), rgba(255, 255, 255, 0));
+        transform: translateX(-100%);
+        transition: transform 0.5s ease;
+        z-index: 1;
+    }
+    
+    .tech-btn-modern:hover::before {
+        transform: translateX(100%);
+    }
+    
+    @media (max-width: 768px) {
+        .tech-title-modern {
+            font-size: 2rem;
+        }
+        
+        .tech-subtitle-modern {
+            font-size: 1rem;
+        }
+        
+        .tech-card-header {
+            padding: 1.2rem;
+        }
+        
+        .tech-card-header i {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+        }
+        
+        .tech-card-header h3 {
+            font-size: 1.1rem;
+        }
+        
+        .tech-card-body {
+            padding: 1.2rem;
+        }
+        
+        .tech-metric-value {
+            font-size: 1.7rem;
+        }
+    }
+</style>
 
-<!-- FAQ Section -->
-<div class="container py-5">
-    <div class="row mb-4">
-        <div class="col text-center">
-            <h2 class="fw-bold animate-fadeup">Frequently Asked Questions</h2>
+<!-- Team Section - Modern Slider Design -->
+<section class="team-section">
+    <div class="team-container">
+        <div class="team-header">
+            <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; padding-bottom: 5px; line-height: 1.3;">Our Team</h2>
+            <span class="team-subtitle">The experts behind MedXpert</span>
+        </div>
+        
+        <div class="team-slider-container">
+            <div class="team-slider">
+                <!-- Team Member: Mohamed -->
+                <div class="member-slide">
+                    <div class="member-card">
+                        <div class="member-image-wrapper">
+                            <img src="{{ url_for('static', filename='Mohamed-Alawy.png') }}" alt="Mohamed Alawy">
+                    </div>
+                        <div class="member-content">
+                            <h3>Mohamed Alawy</h3>
+                            <span class="member-role">ML & CV Engineer</span>
+                            <div class="member-socials">
+                                <a href="https://www.linkedin.com/in/mohamed-alawy/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member: Sara -->
+                <div class="member-slide">
+                    <div class="member-card featured">
+                        <div class="member-image-wrapper">
+                            <div class="member-badge">Lead</div>
+                            <img src="{{ url_for('static', filename='Osama-Khalil.png') }}" alt="Sara Johnson">
+                    </div>
+                        <div class="member-content"> 
+                            <h3>Osama Khalil</h3>
+                            <span class="member-role">Project Lead & ML Engineer</span>
+                            <div class="member-socials">
+                                <a href="https://www.linkedin.com/in/osama-khalil-bb3873231/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member: Raj -->
+                <div class="member-slide">
+                    <div class="member-card">
+                        <div class="member-image-wrapper">
+                            <img src="{{ url_for('static', filename='Sherif-Serag.png') }}" alt="Raj Kumar">
+                    </div>
+                        <div class="member-content">
+                            <h3>Sherif Serag</h3>
+                            <span class="member-role">ML Engineer</span>
+                            <div class="member-socials">
+                                <a href="https://www.linkedin.com/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member: Emily -->
+                <div class="member-slide">
+                    <div class="member-card">
+                        <div class="member-image-wrapper">
+                            <img src="{{ url_for('static', filename='Ibrahim-Khaled.png') }}" alt="Emily Parker">
+                    </div>
+                        <div class="member-content">
+                            <h3>Ibrahim Khaled</h3>
+                            <span class="member-role">Frontend Developer</span>
+                            <div class="member-socials">
+                                <a href="https://www.linkedin.com/in/ibrahim-khaled-17b178236/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member: David -->
+                <div class="member-slide">
+                    <div class="member-card">
+                        <div class="member-image-wrapper">
+                            <img src="{{ url_for('static', filename='Karim.png') }}" alt="David Torres">
+                    </div>
+                        <div class="member-content">
+                            <h3>Karim Elwaraky</h3>
+                            <span class="member-role">Cloud Engineer</span>
+                            <div class="member-socials">
+                                <a href="https://www.linkedin.com/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member: Li -->
+                <div class="member-slide">
+                    <div class="member-card">
+                        <div class="member-image-wrapper">
+                            <img src="{{ url_for('static', filename='to.png') }}" alt="Li Zhang">
+                    </div>
+                        <div class="member-content">
+                            <h3>Abdelrahman Eltoukhy</h3>
+                            <span class="member-role">Data Analyst</span>
+                            <div class="member-socials">
+                                <a href="https://www.linkedin.com/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Slider navigation -->
+            <div class="slider-nav">
+                <button class="slider-prev" aria-label="Previous team member">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="slider-dots">
+                    <span class="slider-dot active" data-index="0"></span>
+                    <span class="slider-dot" data-index="1"></span>
+                    <span class="slider-dot" data-index="2"></span>
+                    <span class="slider-dot" data-index="3"></span>
+                    <span class="slider-dot" data-index="4"></span>
+                    <span class="slider-dot" data-index="5"></span>
+                </div>
+                <button class="slider-next" aria-label="Next team member">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
     </div>
-    <div class="accordion" id="faqAccordion">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="faq1h"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true">Is my medical data protected with MedXpert?</button></h2>
-            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">Yes, all your data is encrypted and protected with the latest security technologies.</div>
-            </div>
+</section>
+
+<!-- CTA Section - Changed to black background -->
+<section class="content-section section-centered cta-section" style="background-color: #000000; color: white;">
+    <div class="content-container">
+        {% if current_user.is_authenticated %}
+        <h2 class="mb-4">Welcome back to MedXpert!</h2>
+        <p class="lead mb-4 content-narrow mx-auto">Continue your medical imaging analysis with our advanced AI models.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#models" class="btn btn-light btn-lg">Explore Models</a>
+            <a href="{{ url_for('profile') }}" class="btn btn-outline-light btn-lg">View Profile</a>
         </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="faq2h"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">How long does diagnosis take?</button></h2>
-            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">Results appear within seconds after uploading the required images.</div>
-            </div>
+        {% else %}
+        <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; color: white; display: inline-block; padding-bottom: 5px; line-height: 1.3;">Ready to enhance your diagnostic capabilities?</h2>
+        <p class="lead mb-4 content-narrow mx-auto">Join thousands of healthcare professionals using MedXpert to improve their diagnostic accuracy.</p>
+        <div class="d-flex justify-content-center gap-3 stagger-item">
+            <a href="{{ url_for('register') }}" class="btn btn-light btn-lg" style="color: #000 !important; font-weight: 900;">Create Free Account</a>
+            <a href="#models" class="btn btn-outline-light btn-lg">Explore Models</a>
         </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="faq3h"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Is the service free?</button></h2>
-            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">You can use some features for free, with advanced plans available for professionals and medical centers.</div>
-            </div>
-        </div>
+        {% endif %}
     </div>
+</section>
+
+<!-- Back to Top Button -->
+<div id="back-to-top" class="back-to-top">
+    <button aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize team slider
+        initTeamSlider();
+        
+        // Animate hero text
+        animateHeroText();
+        
+        // Back to top button functionality
+        initBackToTop();
+    });
+    
+    // Back to top button
+    function initBackToTop() {
+        const backToTopBtn = document.getElementById('back-to-top');
+        
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        // Scroll to top when clicked
+        backToTopBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+    
+    function animateHeroText() {
+        const words = document.querySelectorAll('.hero-title .animate-word');
+        
+        words.forEach((word, index) => {
+            setTimeout(() => {
+                word.style.visibility = 'visible';
+                word.style.opacity = '1';
+                word.style.transform = 'scale(1)';
+                word.style.transition = 'opacity 0.6s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            }, 300 * (index + 1)); // Staggered delay for each word
+        });
+        
+        // Animate subtitle text as a single element
+        setTimeout(() => {
+            const subtitleText = document.getElementById('subtitle-text');
+            if (subtitleText) {
+                subtitleText.style.opacity = '1';
+                subtitleText.style.transform = 'scale(1)';
+                subtitleText.style.transition = 'opacity 0.8s ease, transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            }
+        }, 1800);
+        
+        // Animate explore button
+        setTimeout(() => {
+            const exploreButton = document.getElementById('explore-button');
+            if (exploreButton) {
+                exploreButton.style.visibility = 'visible';
+                exploreButton.style.opacity = '1';
+                exploreButton.style.transform = 'scale(1)';
+                exploreButton.style.transition = 'opacity 0.6s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            }
+        }, 2500);
+    }
+    
+    function initTeamSlider() {
+        const slider = document.querySelector('.team-slider');
+        const slides = Array.from(document.querySelectorAll('.member-slide'));
+        const prevBtn = document.querySelector('.slider-prev');
+        const nextBtn = document.querySelector('.slider-next');
+        const dots = Array.from(document.querySelectorAll('.slider-dot'));
+        
+        if (!slider || !slides.length || !prevBtn || !nextBtn) return;
+        
+        let currentIndex = 0;
+        let slidesToShow = getSlidesToShow();
+        let slideWidth = 100 / slidesToShow;
+        
+        // Initial setup
+        updateSlider();
+        
+        // Update on window resize
+        window.addEventListener('resize', function() {
+            slidesToShow = getSlidesToShow();
+            slideWidth = 100 / slidesToShow;
+            updateSlider();
+        });
+        
+        // Navigation buttons
+        prevBtn.addEventListener('click', function() {
+            currentIndex = Math.max(0, currentIndex - 1);
+            updateSlider();
+        });
+        
+        nextBtn.addEventListener('click', function() {
+            currentIndex = Math.min(slides.length - slidesToShow, currentIndex + 1);
+            updateSlider();
+        });
+        
+        // Dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', function() {
+                currentIndex = Math.min(index, slides.length - slidesToShow);
+                updateSlider();
+            });
+        });
+        
+        // Touch swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        slider.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].clientX;
+        });
+        
+        slider.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].clientX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchStartX - touchEndX > swipeThreshold) {
+                // Swipe left - next slide
+                currentIndex = Math.min(slides.length - slidesToShow, currentIndex + 1);
+                updateSlider();
+            } else if (touchEndX - touchStartX > swipeThreshold) {
+                // Swipe right - previous slide
+                currentIndex = Math.max(0, currentIndex - 1);
+                updateSlider();
+            }
+        }
+        
+        // Update slider position and state
+        function updateSlider() {
+            // Calculate the actual transform value with overlap adjustment
+            const transformValue = currentIndex * (slideWidth - 10);
+            
+            // Update transform with overlap adjustment
+            slider.style.transform = `translateX(-${transformValue}%)`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+            
+            // Update button states
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex >= slides.length - slidesToShow;
+            
+            // Apply visual states to slides
+            slides.forEach((slide, index) => {
+                const position = index - currentIndex;
+                
+                if (position >= 0 && position < slidesToShow) {
+                    slide.classList.add('active');
+                    slide.classList.remove('inactive');
+                    
+                    // Add special effects for center slide
+                    if (slidesToShow % 2 !== 0 && position === Math.floor(slidesToShow / 2)) {
+                        slide.classList.add('center-slide');
+                } else {
+                        slide.classList.remove('center-slide');
+                    }
+                    
+                    // Apply z-index based on position for proper stacking
+                    slide.style.zIndex = 10 - Math.abs(position);
+                    
+                } else {
+                    slide.classList.remove('active', 'center-slide');
+                    slide.classList.add('inactive');
+                    slide.style.zIndex = 1;
+                }
+            });
+        }
+        
+        // Function to determine number of slides to show based on screen width
+        function getSlidesToShow() {
+            if (window.innerWidth >= 1200) {
+                return 3; // Large desktop
+            } else if (window.innerWidth >= 768) {
+                return 2; // Small desktop & tablet
+            } else {
+                return 1; // Mobile
+            }
+        }
+    }
+</script>
+
+<style>
+    /* Unified Hero Section */
+    .unified-hero-section {
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        color: white;
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    /* Make the hero section take up the entire viewport width and start from the very top */
+    .home-page .unified-hero-section {
+        margin-top: -70px; /* Offset the padding we'll add to content */
+        width: 100%;
+        border-radius: 0 0 2rem 2rem;
+        box-shadow: 0 10px 30px rgba(26, 44, 179, 0.2);
+    }
+    
+    /* Hero Animations */
+    .bg-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(45deg, rgba(255,255,255,0.03), rgba(255,255,255,0.08));
+        animation: float 20s infinite alternate ease-in-out;
+    }
+    
+    .bg-circle-1 {
+        width: 800px;
+        height: 800px;
+        top: -300px;
+        left: -300px;
+        animation-delay: 0s;
+    }
+    
+    .bg-circle-2 {
+        width: 600px;
+        height: 600px;
+        bottom: -200px;
+        right: -200px;
+        animation-delay: 5s;
+    }
+    
+    @keyframes float {
+        0% { transform: translate(0, 0); }
+        50% { transform: translate(-20px, 20px); }
+        100% { transform: translate(20px, -20px); }
+    }
+    
+    /* Title and subtitle styles */
+    .hero-title {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .hero-title .animate-word {
+        margin-right: 16px;
+        display: inline-block;
+        visibility: hidden;
+        opacity: 0;
+        transform: scale(0);
+    }
+    
+    .subtitle-text .animate-subtitle-word {
+        display: inline-block;
+        margin-right: 6px;
+        visibility: hidden;
+        opacity: 0;
+        transform: scale(0);
+    }
+    
+    /* Button styling */
+    .btn-modern {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+    
+    .btn-modern:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(35, 60, 234, 0.2) !important;
+    }
+    
+    .btn-modern:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: -1;
+    }
+    
+    .btn-modern:hover:after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+    
+    /* Global section styles */
+    .content-section {
+        position: relative;
+        padding: 5rem 0;
+        z-index: 1;
+    }
+    
+    /* Section headers with team section style */
+    .content-section h2,
+    .team-header h2 {
+        font-family: var(--header-font);
+        font-size: 2.8rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .content-section h2::after,
+    .team-header h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background-color: #233cea;
+        border-radius: 3px;
+    }
+    
+    .section-subtitle,
+    .team-subtitle {
+        display: block;
+        font-family: var(--body-font);
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 3rem;
+        margin-top: 0rem;
+    }
+    
+    /* Team section styling */
+    .team-section {
+        padding: 5rem 0;
+        background-color: var(--bg-light);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .team-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+    
+    .team-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .team-header h2 {
+        font-weight: 700;
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .team-subtitle {
+        font-weight: 500;
+        font-size: 1.2rem;
+        color: #666;
+    }
+    
+    .team-description {
+        max-width: 800px;
+        margin: 1.5rem auto 0;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #555;
+        font-weight: 500;
+    }
+    
+    /* Apply team section design to other section titles */
+    .section-models .text-center h2,
+    .section-light .text-center h2 {
+        font-family: var(--header-font);
+        font-size: 2.8rem;
+        font-weight: 500;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .section-models .text-center h2::after,
+    .section-light .text-center h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background-color: #233cea;
+        border-radius: 3px;
+    }
+    
+    /* Consistent card styling */
+    .card {
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: all 0.4s ease;
+        overflow: hidden;
+    }
+    
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(35, 60, 234, 0.15);
+    }
+    
+    .card-title {
+        font-family: var(--header-font);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    /* Process steps with enhanced styling */
+    .process-step {
+        text-align: center;
+        padding: 2rem;
+        border-radius: 1rem;
+        background-color: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: all 0.4s ease;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .process-step:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(35, 60, 234, 0.15);
+    }
+    
+    .process-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        box-shadow: 0 10px 20px rgba(26, 44, 179, 0.2);
+        transition: all 0.4s ease;
+    }
+    
+    .process-step:hover .process-icon {
+        transform: scale(1.1);
+    }
+    
+    /* Consistent heading underline styles */
+    .team-header h2::after,
+    h2[style*="background: linear-gradient"]::after,
+    .content-section.section-centered h2:not(.no-underline)::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        border-radius: 4px;
+    }
+    
+    /* No underline for specific elements */
+    .no-underline::after {
+        display: none !important;
+    }
+    
+    /* Hide background circles for CTA section */
+    .cta-section::before,
+    .cta-section::after {
+        display: none !important;
+    }
+    
+    /* Modern Tech Section Styles */
+    .tech-section {
+        position: relative;
+        overflow: hidden;
+        padding: 6rem 0;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+    }
+    
+    .tech-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background-color: transparent;
+        opacity: 0.15;
+        background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+            radial-gradient(circle at 50px 50px, rgba(255, 255, 255, 0.2) 3px, transparent 3px),
+            radial-gradient(circle at 150px 150px, rgba(255, 255, 255, 0.2) 2px, transparent 2px),
+            radial-gradient(circle at 250px 250px, rgba(255, 255, 255, 0.2) 4px, transparent 4px),
+            radial-gradient(circle at 350px 350px, rgba(255, 255, 255, 0.2) 2px, transparent 2px),
+            radial-gradient(circle at 450px 450px, rgba(255, 255, 255, 0.2) 3px, transparent 3px);
+        background-size: 
+            40px 40px,
+            40px 40px,
+            400px 400px,
+            400px 400px,
+            400px 400px,
+            400px 400px,
+            400px 400px;
+        background-position: 
+            0 0,
+            0 0,
+            0 0,
+            100px 100px,
+            200px 200px,
+            300px 300px,
+            400px 400px;
+    }
+    
+    /* Add digital circuit lines */
+    .tech-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            linear-gradient(90deg, transparent 98%, rgba(255, 255, 255, 0.1) 98%, transparent 100%),
+            linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 
+            50px 100%, 
+            100% 50px, 
+            20px 20px,
+            20px 20px;
+        z-index: 0;
+    }
+    
+    /* Add floating digital particles */
+    .tech-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 100px 100px, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+            radial-gradient(circle at 200px 300px, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+            radial-gradient(circle at 300px 200px, rgba(255, 255, 255, 0.25) 1px, transparent 1px),
+            radial-gradient(circle at 400px 400px, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+            radial-gradient(circle at 500px 100px, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+        background-size: 600px 600px;
+        animation: floatingParticles 30s infinite linear;
+        z-index: 0;
+    }
+    
+    @keyframes floatingParticles {
+        0% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 100% 100%;
+        }
+    }
+    
+    .tech-title {
+        font-size: 3rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1.2rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .tech-subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    
+    .tech-cards-container {
+        position: relative;
+        z-index: 10;
+    }
+    
+    .tech-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 30px;
+        height: 100%;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 
+                    inset 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+    
+    .tech-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        z-index: 0;
+    }
+    
+    .tech-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                    inset 0 0 30px rgba(255, 255, 255, 0.1),
+                    0 0 15px rgba(35, 60, 234, 0.3);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .tech-icon-wrapper {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 5;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 
+                    inset 0 0 10px rgba(255, 255, 255, 0.1),
+                    0 0 15px rgba(255, 255, 255, 0.2);
+        animation: pulse-glow 3s infinite alternate;
+    }
+    
+    @keyframes pulse-glow {
+        0% {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 
+                       inset 0 0 10px rgba(255, 255, 255, 0.1),
+                       0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        100% {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 
+                       inset 0 0 10px rgba(255, 255, 255, 0.1),
+                       0 0 20px rgba(255, 255, 255, 0.4);
+        }
+    }
+    
+    .tech-icon {
+        font-size: 1.8rem;
+        color: white;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    
+    .tech-card-content {
+        flex-grow: 1;
+        position: relative;
+        z-index: 5;
+    }
+    
+    .tech-card-title {
+        font-size: 1.5rem;
+        color: white;
+        font-weight: 700;
+        margin-bottom: 15px;
+        font-family: var(--header-font);
+    }
+    
+    .tech-card-text {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    
+    .tech-stats {
+        margin-top: auto;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tech-stats::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        animation: scanning 4s infinite linear;
+        z-index: 1;
+    }
+    
+    @keyframes scanning {
+        0% {
+            transform: rotate(30deg) translateX(-100%);
+        }
+        100% {
+            transform: rotate(30deg) translateX(100%);
+        }
+    }
+    
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white;
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .tech-cta {
+        margin-top: 20px;
+    }
+    
+    .tech-btn {
+        display: inline-flex;
+        align-items: center;
+        background: white;
+        color: #233cea;
+        font-weight: 700;
+        padding: 14px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tech-btn::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+    
+    .tech-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        color: #233cea;
+    }
+    
+    .tech-btn:hover::before {
+        transform: translateX(100%);
+    }
+    
+    .tech-btn i {
+        transition: transform 0.3s ease;
+    }
+    
+    .tech-btn:hover i {
+        transform: translateX(5px);
+    }
+    
+    /* Add shimmer effect for tech cards */
+    @keyframes shimmer {
+        0% { background-position: -1000px 0; }
+        100% { background-position: 1000px 0; }
+    }
+    
+    .tech-card::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        animation: shimmer 10s infinite linear;
+        z-index: 1;
+        pointer-events: none;
+    }
+    
+    /* Responsive design for tech section */
+    @media (max-width: 992px) {
+        .tech-title {
+            font-size: 2.5rem;
+        }
+        
+        .tech-subtitle {
+            font-size: 1.1rem;
+        }
+        
+        .tech-card {
+            margin-bottom: 30px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .tech-title {
+            font-size: 2rem;
+        }
+        
+        .tech-card-title {
+            font-size: 1.3rem;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+        }
+    }
+    
+    /* Attention-Grabbing 3D Model Cards */
+    .model-card-3d {
+        position: relative;
+        background-color: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(35, 60, 234, 0.08);
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin-bottom: 30px;
+        height: 100%;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        transform: translateZ(0);
+        border: 1px solid rgba(35, 60, 234, 0.1);
+    }
+    
+    .model-card-3d:hover {
+        transform: translateY(-15px) rotateX(5deg);
+        box-shadow: 0 30px 60px rgba(35, 60, 234, 0.2);
+        z-index: 10;
+    }
+    
+    .model-card-inner {
+        display: flex;
+        padding: 20px;
+        position: relative;
+        z-index: 3;
+        transition: transform 0.3s ease-out;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(5px);
+        height: 100%;
+    }
+    
+    .model-card-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        color: white;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 6px 14px;
+        border-radius: 30px;
+        margin-bottom: 15px;
+        box-shadow: 0 5px 15px rgba(35, 60, 234, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .model-card-3d:hover .model-card-badge {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(35, 60, 234, 0.3);
+    }
+    
+    .model-card-shine {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.1) 15%,
+            rgba(255, 255, 255, 0.4) 30%,
+            rgba(255, 255, 255, 0.4) 40%,
+            rgba(255, 255, 255, 0.1) 60%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        z-index: 2;
+        transform: translateX(-100%);
+        transition: transform 0.7s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+    
+    .model-card-3d:hover .model-card-shine {
+        transform: translateX(100%);
+    }
+    
+    .model-card-icon {
+        width: 90px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        color: white;
+        font-size: 2.2rem;
+        border-radius: 50%;
+        margin-right: 25px;
+        box-shadow: 0 15px 30px rgba(35, 60, 234, 0.3);
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        position: relative;
+        animation: pulse-icon 3s infinite alternate;
+        flex-shrink: 0;
+    }
+    
+    @keyframes pulse-icon {
+        0% { box-shadow: 0 15px 30px rgba(35, 60, 234, 0.3); }
+        100% { box-shadow: 0 20px 40px rgba(35, 60, 234, 0.5), 0 0 0 10px rgba(35, 60, 234, 0.1); }
+    }
+    
+    .model-card-3d:hover .model-card-icon {
+        transform: scale(1.15) rotate(10deg);
+        animation-play-state: paused;
+    }
+    
+    .model-card-content {
+        flex-grow: 1;
+        position: relative;
+        z-index: 3;
+    }
+    
+    .model-card-title {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #111;
+        margin-bottom: 15px;
+        font-family: var(--header-font);
+        background: linear-gradient(135deg, #111111, #333333);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .model-card-3d:hover .model-card-title {
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transform: translateX(5px);
+    }
+    
+    .model-card-description {
+        color: #444;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .model-card-3d:hover .model-card-description {
+        color: #222;
+    }
+    
+    .model-card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+    
+    .model-tag {
+        padding: 6px 14px;
+        background-color: rgba(35, 60, 234, 0.08);
+        color: #233cea;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 10px rgba(35, 60, 234, 0.05);
+    }
+    
+    .model-card-3d:hover .model-tag {
+        background-color: rgba(35, 60, 234, 0.15);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(35, 60, 234, 0.1);
+    }
+    
+    .model-card-action {
+        margin-top: auto;
+    }
+    
+    .model-card-btn {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        color: white;
+        font-weight: 700;
+        border-radius: 50px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(35, 60, 234, 0.2);
+    }
+    
+    .model-card-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+    
+    .model-card-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(35, 60, 234, 0.3);
+        color: white;
+    }
+    
+    .model-card-btn:hover::before {
+        transform: translateX(100%);
+    }
+    
+    .btn-text {
+        margin-right: 10px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .btn-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+        transition: transform 0.3s ease;
+    }
+    
+    .model-card-btn:hover .btn-icon {
+        transform: translateX(5px);
+    }
+    
+    /* Before/After card effects for depth */
+    .model-card-3d::before,
+    .model-card-3d::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        pointer-events: none;
+    }
+    
+    .model-card-3d::before {
+        top: 5px;
+        left: 0;
+        background: rgba(35, 60, 234, 0.03);
+        z-index: 0;
+        transform: scale(0.98);
+        transition: all 0.3s ease;
+    }
+    
+    .model-card-3d::after {
+        top: 15px;
+        left: 0;
+        background: rgba(35, 60, 234, 0.02);
+        z-index: -1;
+        transform: scale(0.96);
+        transition: all 0.3s ease;
+    }
+    
+    .model-card-3d:hover::before {
+        transform: scale(1.02) translateY(-5px);
+        opacity: 0.1;
+    }
+    
+    .model-card-3d:hover::after {
+        transform: scale(1.04) translateY(-10px);
+        opacity: 0.05;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .model-card-3d {
+            margin-bottom: 20px;
+        }
+        
+        .model-card-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+            margin-right: 15px;
+        }
+        
+        .model-card-title {
+            font-size: 1.4rem;
+        }
+        
+        .model-card-description {
+            font-size: 0.95rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .model-card-inner {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .model-card-icon {
+            margin: 0 auto 20px;
+        }
+        
+        .model-card-tags {
+            justify-content: center;
+        }
+        
+        .model-card-action {
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 99;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .back-to-top.visible {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .back-to-top button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        color: white;
+        border: none;
+        box-shadow: 0 5px 15px rgba(35, 60, 234, 0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .back-to-top button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.4);
+    }
+    
+    .back-to-top button i {
+        transition: transform 0.2s ease;
+    }
+    
+    .back-to-top button:hover i {
+        transform: translateY(-3px);
+    }
+
+    /* New Modern How It Works Section */
+    .workflow-container {
+        display: flex;
+        flex-direction: column;
+        margin: 20px 0 60px;
+        position: relative;
+    }
+    
+    .workflow-step {
+        display: flex;
+        align-items: flex-start;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+        padding: 25px;
+        margin-bottom: 20px;
+        position: relative;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        z-index: 2;
+    }
+    
+    .workflow-step:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(35, 60, 234, 0.08);
+        background-color: #fafafa;
+        border-color: rgba(35, 60, 234, 0.1);
+    }
+    
+    .workflow-number {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-right: 20px;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(35, 60, 234, 0.2);
+    }
+    
+    .workflow-step:hover .workflow-number {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(35, 60, 234, 0.3);
+    }
+    
+    .workflow-content {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+    }
+    
+    .workflow-icon {
+        width: 60px;
+        height: 60px;
+        background-color: rgba(35, 60, 234, 0.08);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #233cea;
+        margin-right: 20px;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .workflow-step:hover .workflow-icon {
+        background-color: rgba(35, 60, 234, 0.12);
+        transform: rotate(5deg);
+    }
+    
+    .workflow-content h5 {
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 5px;
+        transition: all 0.3s ease;
+    }
+    
+    .workflow-content p {
+        font-weight: 500;
+        font-size: 1rem;
+        color: #555;
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    .workflow-step:hover h5 {
+        color: #233cea;
+    }
+    
+    .workflow-path {
+        height: 20px;
+        width: 2px;
+        background: linear-gradient(to bottom, rgba(35, 60, 234, 0.3), rgba(35, 60, 234, 0.1));
+        margin-left: 20px;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .workflow-path::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: rgba(35, 60, 234, 0.2);
+    }
+    
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+        .workflow-container {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .workflow-step {
+            flex-direction: column;
+            width: 22%;
+            margin-bottom: 0;
+            padding: 25px 20px;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .workflow-number {
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+        
+        .workflow-content {
+            flex-direction: column;
+        }
+        
+        .workflow-icon {
+            margin-right: 0;
+            margin-bottom: 15px;
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+        }
+        
+        .workflow-path {
+            flex-grow: 1;
+            height: 2px;
+            width: auto;
+            margin: 0 -10px;
+            align-self: center;
+            background: linear-gradient(to right, rgba(35, 60, 234, 0.3), rgba(35, 60, 234, 0.1));
+        }
+        
+        .workflow-path::before {
+            top: -4px;
+            left: auto;
+            right: 0;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .workflow-step {
+            padding: 20px;
+        }
+        
+        .workflow-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.3rem;
+        }
+        
+        .workflow-content h5 {
+            font-size: 1.1rem;
+        }
+        
+        .workflow-content p {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<style>
+    /* Modern Analytics Section */
+    .analytics-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 3rem;
+        letter-spacing: -0.5px;
+    }
+    
+    .analytics-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .analytics-item {
+        text-align: center;
+        padding: 0 1rem;
+    }
+    
+    .analytics-value {
+        font-size: 3.2rem;
+        font-weight: 700;
+        color: white;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+    
+    .analytics-value span {
+        font-size: 1.8rem;
+        font-weight: 500;
+        opacity: 0.8;
+        margin-left: 2px;
+    }
+    
+    .analytics-label {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        line-height: 1.3;
+    }
+    
+    .analytics-divider {
+        width: 1px;
+        height: 60px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+    }
+    
+    @media (max-width: 992px) {
+        .analytics-bar {
+            flex-direction: column;
+            padding: 2rem 1rem;
+        }
+        
+        .analytics-item {
+            width: 100%;
+            padding: 1.5rem 0;
+        }
+        
+        .analytics-divider {
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+        }
+    }
+</style>
 {% endblock %}

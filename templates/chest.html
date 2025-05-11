@@ -2,115 +2,501 @@
 
 {% block title %}MedXpert - Chest X-ray Analysis{% endblock %}
 
+{% block head %}
+<style>
+    .chest-header {
+        background-color: rgba(22, 163, 74, 0.1);
+        border-radius: var(--border-radius);
+    }
+    
+    .model-icon {
+        max-height: 180px;
+    }
+    
+    .upload-container {
+        background-color: white;
+    }
+    
+    .gradcam-toggle-container {
+        margin-top: 1rem;
+        text-align: center;
+    }
+    
+    .image-compare-container {
+        position: relative;
+        max-width: 100%;
+        margin: 1rem auto;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .image-compare-container img {
+        width: 100%;
+        display: block;
+    }
+    
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+    
+    .accuracy-chart-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .classification-label {
+        text-align: center;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+    
+    .covid-label {
+        background-color: rgba(220, 38, 38, 0.1);
+        color: #dc2626;
+    }
+    
+    .opacity-label {
+        background-color: rgba(245, 158, 11, 0.1);
+        color: #d97706;
+    }
+    
+    .normal-label {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #059669;
+    }
+    
+    .pneumonia-label {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+
+    .image-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .slider-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+
+    .slider-container label {
+        margin-right: 1rem;
+        width: 80px;
+        text-align: right;
+    }
+
+    .slider-container input {
+        flex-grow: 1;
+    }
+
+    .slider-value {
+        width: 40px;
+        margin-left: 1rem;
+        text-align: center;
+    }
+
+    .class-probability-bars {
+        margin-top: 1rem;
+    }
+
+    .class-probability-bar {
+        margin-bottom: 0.5rem;
+    }
+
+    .progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.25rem;
+    }
+
+    .probability-bar {
+        height: 10px;
+        border-radius: 5px;
+        background-color: #e2e8f0;
+        overflow: hidden;
+    }
+
+    .probability-value {
+        height: 100%;
+        background-color: var(--primary-color);
+        border-radius: 5px;
+    }
+    
+    .condition-info h5 {
+        margin-top: 1rem;
+        color: var(--primary-color);
+    }
+    
+    .finding-list li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .treatment-box {
+        background-color: #f8fafc;
+        border-left: 4px solid var(--primary-color);
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 0 4px 4px 0;
+    }
+    
+    /* Fix for sliders */
+    .form-range::-webkit-slider-thumb {
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    
+    .form-range::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+    }
+    
+    /* Make the meaning section wider */
+    .meaning-section {
+        margin-top: 2rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="model-header chest-header py-5">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
+            <div class="col-lg-12 text-center">
                 <h1>Chest X-ray Analysis</h1>
                 <p class="lead">Upload a chest X-ray image to classify it as COVID-19, lung opacity, normal, or viral pneumonia.</p>
-            </div>
-            <div class="col-lg-6 text-center">
-                <img src="{{ url_for('static', filename='images/chest-icon.png') }}" alt="Chest X-ray Analysis" class="model-icon">
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-5">
+<!-- Section 1: Upload and X-ray Analysis -->
+<section class="py-5 bg-light">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="upload-container p-4 rounded shadow-sm">
-                    <h3 class="mb-4">Upload Chest X-ray Image</h3>
-                    <form id="chestUploadForm" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="chestFile" class="form-label">Select X-ray Image</label>
-                            <input class="form-control" type="file" id="chestFile" name="file" accept=".jpg,.jpeg,.png">
-                            <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="analyzeChestBtn">
-                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            Analyze X-ray
-                        </button>
-                    </form>
-                </div>
-
-                <div class="results-container mt-4 d-none" id="chestResults">
-                    <h3>Analysis Results</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <img id="chestResultImage" src="" class="card-img-top" alt="Chest X-ray Image">
-                                <div class="card-body">
-                                    <h5 class="card-title" id="chestClassification"></h5>
-                                    <p class="card-text" id="chestConfidence"></p>
-                                </div>
+            <div class="col-lg-10">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-upload me-2"></i>Image Upload</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="chestUploadForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="chestFile" class="form-label">Select X-ray Image</label>
+                                <input class="form-control" type="file" id="chestFile" name="file" accept=".jpg,.jpeg,.png">
+                                <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
                             </div>
+                            <button type="submit" class="btn btn-primary" id="analyzeChestBtn">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                Analyze X-ray
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 2: Results Analysis -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="results-container mt-2 d-none" id="chestResults">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card mb-4 shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Analysis Results</h3>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">What This Means</h5>
-                                    <div id="covidInfo" class="condition-info d-none">
-                                        <p><strong>COVID-19:</strong> The AI model predicts this X-ray shows patterns consistent with COVID-19 infection.</p>
-                                        <p>Common radiological findings in COVID-19 include:</p>
-                                        <ul>
-                                            <li>Ground glass opacities, often bilateral</li>
-                                            <li>Peripheral and lower zone predominance</li>
-                                            <li>Consolidation in later stages</li>
-                                        </ul>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <!-- Control Panel moved to left side -->
+                                    <div class="control-panel p-3 border rounded bg-white">
+                                        <h5 class="mb-3">Image Controls</h5>
+                                        <div class="mb-3">
+                                            <label for="brightness" class="form-label mb-1">Brightness: <span id="brightnessValue">0</span></label>
+                                            <input type="range" class="form-range" min="-100" max="100" value="0" id="brightness">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="contrast" class="form-label mb-1">Contrast: <span id="contrastValue">100</span>%</label>
+                                            <input type="range" class="form-range" min="0" max="200" value="100" id="contrast">
+                                        </div>
+                                        
+                                        <!-- Grad-CAM controls -->
+                                        <hr>
+                                        <h5 class="mb-3">Grad-CAM Controls</h5>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="toggleGradCAM" checked>
+                                            <label class="form-check-label ms-2" for="toggleGradCAM">Show Heatmap</label>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="opacitySlider" class="form-label mb-1">Opacity: <span id="opacityValue">100%</span></label>
+                                            <input type="range" class="form-range" id="opacitySlider" min="0" max="100" value="100">
+                                        </div>
+                                        
+                                        <div class="text-center mt-3">
+                                            <button class="btn btn-sm btn-outline-primary" id="resetAdjustments">Reset Adjustments</button>
+                                        </div>
+                                        
+                                        <!-- Classification Result Summary -->
+                                        <div class="mt-4">
+                                            <div id="chestClassification" class="classification-label p-2 mt-3">Classification: Unknown</div>
+                                            <div id="chestConfidence" class="text-center mt-1">Confidence: 0%</div>
+                                        </div>
                                     </div>
-                                    <div id="opacityInfo" class="condition-info d-none">
-                                        <p><strong>Lung Opacity:</strong> The AI model detects lung opacities which represent an area of hazy lung density.</p>
-                                        <p>Lung opacities can be caused by:</p>
-                                        <ul>
-                                            <li>Pneumonia (various types)</li>
-                                            <li>Pulmonary edema</li>
-                                            <li>Hemorrhage</li>
-                                            <li>Various other lung conditions</li>
-                                        </ul>
-                                    </div>
-                                    <div id="normalInfo" class="condition-info d-none">
-                                        <p><strong>Normal:</strong> The AI model predicts this X-ray appears normal without significant abnormalities.</p>
-                                        <p>Normal chest X-rays typically show:</p>
-                                        <ul>
-                                            <li>Clear lung fields</li>
-                                            <li>Normal cardiac silhouette</li>
-                                            <li>No significant opacities or consolidations</li>
-                                        </ul>
-                                    </div>
-                                    <div id="pneumoniaInfo" class="condition-info d-none">
-                                        <p><strong>Viral Pneumonia:</strong> The AI model detects patterns consistent with viral pneumonia.</p>
-                                        <p>Common findings in viral pneumonia include:</p>
-                                        <ul>
-                                            <li>Bilateral interstitial patterns</li>
-                                            <li>Patchy or diffuse airspace opacities</li>
-                                            <li>Rarely presents with lobar consolidation</li>
-                                        </ul>
-                                    </div>
-                                    <div class="disclaimer mt-3">
-                                        <p><small>This AI tool is for educational purposes only and is not a substitute for professional medical diagnosis.</small></p>
+                                </div>
+                                
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <!-- Image container moved to left side of this column -->
+                                            <div class="image-compare-container">
+                                                <!-- Original image -->
+                                                <img id="original-xray" src="" alt="Original X-ray Image">
+                                                
+                                                <!-- Grad-CAM overlay (togglable) -->
+                                                <div id="gradcam-overlay" class="image-overlay">
+                                                    <img id="gradcam-xray" src="" alt="Grad-CAM Visualization">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-5">
+                                            <!-- Class probability bars moved to the right -->
+                                            <div class="card h-100">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Classification Probabilities</h5>
+                                                    <div class="class-probability-bars">
+                                                        <div class="class-probability-bar">
+                                                            <div class="progress-label">
+                                                                <span>COVID-19</span>
+                                                                <span id="covidProb">0%</span>
+                                                            </div>
+                                                            <div class="probability-bar">
+                                                                <div class="probability-value covid-prob" style="width: 0%"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="class-probability-bar">
+                                                            <div class="progress-label">
+                                                                <span>Lung Opacity</span>
+                                                                <span id="opacityProb">0%</span>
+                                                            </div>
+                                                            <div class="probability-bar">
+                                                                <div class="probability-value opacity-prob" style="width: 0%"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="class-probability-bar">
+                                                            <div class="progress-label">
+                                                                <span>Normal</span>
+                                                                <span id="normalProb">0%</span>
+                                                            </div>
+                                                            <div class="probability-bar">
+                                                                <div class="probability-value normal-prob" style="width: 0%"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="class-probability-bar">
+                                                            <div class="progress-label">
+                                                                <span>Viral Pneumonia</span>
+                                                                <span id="pneumoniaProb">0%</span>
+                                                            </div>
+                                                            <div class="probability-bar">
+                                                                <div class="probability-value pneumonia-prob" style="width: 0%"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="alert alert-info mt-3 mb-0">
+                                                        <small><strong>Note:</strong> Grad-CAM visualization highlights the regions that influenced the model's classification decision.</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+            </div>
+            
+            <!-- Diagnostic Information -->
+            <div class="row justify-content-center mt-5">
+                <div class="col-lg-10">
+                    <div class="card mb-4 shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0"><i class="fas fa-stethoscope me-2"></i>Diagnostic Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="covidInfo" class="condition-info d-none">
+                                <h5>COVID-19 <i class="fas fa-virus"></i></h5>
+                                <p>The AI model predicts this X-ray shows patterns consistent with COVID-19 infection.</p>
+                                
+                                <h6>Common Radiological Findings:</h6>
+                                <ul class="finding-list">
+                                    <li><strong>Ground glass opacities</strong> - often bilateral and peripheral</li>
+                                    <li><strong>Consolidation</strong> in later stages</li>
+                                    <li><strong>Crazy paving pattern</strong> - thickened interlobular and intralobular lines</li>
+                                    <li>Peripheral and lower zone predominance</li>
+                                </ul>
+                                
+                                <div class="treatment-box">
+                                    <h6>Typical Management:</h6>
+                                    <p>Treatment typically involves supportive care, monitoring oxygen levels, and in severe cases, respiratory support. Specific treatments depend on disease severity and current guidelines.</p>
+                                </div>
+                            </div>
+                            
+                            <div id="opacityInfo" class="condition-info d-none">
+                                <h5>Lung Opacity <i class="fas fa-lungs"></i></h5>
+                                <p>The AI model detects lung opacities which represent an area of hazy lung density.</p>
+                                
+                                <h6>Possible Causes:</h6>
+                                <ul class="finding-list">
+                                    <li><strong>Pneumonia</strong> (bacterial, viral, or fungal)</li>
+                                    <li><strong>Pulmonary edema</strong> (fluid in lungs)</li>
+                                    <li><strong>Pulmonary hemorrhage</strong> (bleeding)</li>
+                                    <li><strong>Atelectasis</strong> (collapsed or airless lung)</li>
+                                    <li>Various other inflammatory or infectious conditions</li>
+                                </ul>
+                                
+                                <div class="treatment-box">
+                                    <h6>Next Steps:</h6>
+                                    <p>Further evaluation is needed to determine the cause of opacity. This may include additional imaging, laboratory tests, or clinical assessment.</p>
+                                </div>
+                            </div>
+                            
+                            <div id="normalInfo" class="condition-info d-none">
+                                <h5>Normal <i class="fas fa-check-circle"></i></h5>
+                                <p>The AI model predicts this X-ray appears normal without significant abnormalities.</p>
+                                
+                                <h6>Characteristics of Normal Chest X-rays:</h6>
+                                <ul class="finding-list">
+                                    <li><strong>Clear lung fields</strong> without opacities or consolidations</li>
+                                    <li><strong>Normal cardiac silhouette</strong> (width less than half the thorax)</li>
+                                    <li><strong>Normal mediastinum</strong> and hilar structures</li>
+                                    <li><strong>Clear costophrenic angles</strong> (no fluid)</li>
+                                    <li>Normal bony thorax without deformities</li>
+                                </ul>
+                                
+                                <div class="alert alert-success mt-3">
+                                    <p class="mb-0">If the patient is showing symptoms despite a normal X-ray, further evaluation may be needed, as some conditions may not be visible on plain radiographs.</p>
+                                </div>
+                            </div>
+                            
+                            <div id="pneumoniaInfo" class="condition-info d-none">
+                                <h5>Viral Pneumonia <i class="fas fa-biohazard"></i></h5>
+                                <p>The AI model detects patterns consistent with viral pneumonia.</p>
+                                
+                                <h6>Typical Radiological Features:</h6>
+                                <ul class="finding-list">
+                                    <li><strong>Bilateral interstitial patterns</strong> - typically diffuse</li>
+                                    <li><strong>Patchy or diffuse airspace opacities</strong></li>
+                                    <li><strong>Ground-glass opacities</strong></li>
+                                    <li>Generally lacks lobar consolidation (more common in bacterial pneumonia)</li>
+                                    <li>May have small pleural effusions</li>
+                                </ul>
+                                
+                                <div class="treatment-box">
+                                    <h6>Typical Management:</h6>
+                                    <p>Treatment usually focuses on supportive care including rest, hydration, and fever management. Antiviral medications may be considered in specific cases.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="disclaimer mt-3">
+                                <hr>
+                                <p><small class="text-muted"><strong>Disclaimer:</strong> This AI tool is for educational purposes only and is not a substitute for professional medical diagnosis. Always consult with healthcare providers for medical decisions.</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <div class="row mt-5">
-            <div class="col-lg-12">
-                <h3>About Chest X-ray Analysis</h3>
-                <p>Chest X-rays are one of the most common imaging tests in medicine, providing valuable information about the lungs, heart, and chest wall.</p>
-                <p>Our AI model is trained to identify four different conditions in chest X-rays:</p>
-                <ul>
-                    <li><strong>COVID-19:</strong> Lung patterns consistent with COVID-19 infection</li>
-                    <li><strong>Lung Opacity:</strong> Hazy areas in the lungs that could indicate various conditions</li>
-                    <li><strong>Normal:</strong> No significant abnormalities detected</li>
-                    <li><strong>Viral Pneumonia:</strong> Patterns consistent with pneumonia caused by viral infection</li>
-                </ul>
+<!-- Section 3: Educational Information -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-book-medical me-2"></i>Educational Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>About Chest X-ray Analysis</h4>
+                        <p>Chest X-rays are one of the most common imaging tests in medicine, providing valuable information about the lungs, heart, and chest wall.</p>
+                        
+                        <h5 class="mt-4">How Our AI Works</h5>
+                        <p>Our AI model has been trained on thousands of chest X-ray images to identify four different conditions:</p>
+                        
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h6><span class="badge bg-danger me-2">COVID-19</span></h6>
+                                <p>Radiographic patterns consistent with COVID-19 infection, typically showing bilateral peripheral ground-glass opacities.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><span class="badge bg-warning me-2">Lung Opacity</span></h6>
+                                <p>Hazy areas in the lungs that could indicate various conditions such as pneumonia, edema, or hemorrhage.</p>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h6><span class="badge bg-success me-2">Normal</span></h6>
+                                <p>No significant abnormalities detected in the lung fields or other visible structures.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><span class="badge bg-primary me-2">Viral Pneumonia</span></h6>
+                                <p>Patterns consistent with pneumonia caused by viral infection, showing diffuse interstitial patterns.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h5>What is Grad-CAM?</h5>
+                                <p>Gradient-weighted Class Activation Mapping (Grad-CAM) is a technique that helps visualize which parts of an image are most important for the model's classification decision. The heatmap highlights regions that strongly influenced the model's output, providing insight into what the AI is "looking at" when making diagnoses.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Clinical Applications</h5>
+                                <ul>
+                                    <li>Screening for respiratory conditions</li>
+                                    <li>Emergency department triage</li>
+                                    <li>Monitoring disease progression</li>
+                                    <li>Educational purposes for medical training</li>
+                                    <li>Research on pulmonary diseases</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-4">
+                            <p class="mb-0"><strong>Note:</strong> While our AI model provides valuable insights, it should be used as a supportive tool for qualified healthcare professionals rather than a standalone diagnostic system.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -118,8 +504,120 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 $(document).ready(function() {
+    // Initialize variables
+    let gradcamOpacity = 1.0;
+    let classificationData = {
+        'COVID': 0,
+        'Lung_Opacity': 0,
+        'Normal': 0,
+        'Viral Pneumonia': 0
+    };
+    
+    // Handle brightness and contrast adjustments
+    $('#brightness').on('input', function() {
+        const brightnessValue = $(this).val();
+        $('#brightnessValue').text(brightnessValue);
+        updateImageAdjustments();
+    });
+    
+    $('#contrast').on('input', function() {
+        const contrastValue = $(this).val();
+        $('#contrastValue').text(contrastValue);
+        updateImageAdjustments();
+    });
+    
+    $('#resetAdjustments').on('click', function() {
+        $('#brightness').val(0);
+        $('#contrast').val(100);
+        $('#brightnessValue').text(0);
+        $('#contrastValue').text(100);
+        $('#opacitySlider').val(100);
+        $('#opacityValue').text('100%');
+        gradcamOpacity = 1.0;
+        updateImageAdjustments();
+        
+        if ($('#toggleGradCAM').is(':checked')) {
+            $('#gradcam-overlay').css('opacity', gradcamOpacity);
+        }
+    });
+    
+    function updateImageAdjustments() {
+        const brightness = parseInt($('#brightness').val());
+        const contrast = parseInt($('#contrast').val());
+        
+        // Apply filters to the original image using proper calculation
+        $('#original-xray').css('filter', `brightness(${(brightness+100)/100}) contrast(${contrast/100})`);
+        
+        // Apply the same filters to the gradcam image to maintain consistency
+        $('#gradcam-xray').css('filter', `brightness(${(brightness+100)/100}) contrast(${contrast/100})`);
+    }
+    
+    // Toggle Grad-CAM visibility
+    $('#toggleGradCAM').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('#gradcam-overlay').css('opacity', gradcamOpacity);
+        } else {
+            $('#gradcam-overlay').css('opacity', 0);
+        }
+    });
+    
+    // Opacity slider
+    $('#opacitySlider').on('input', function() {
+        gradcamOpacity = $(this).val() / 100;
+        $('#opacityValue').text($(this).val() + '%');
+        
+        if ($('#toggleGradCAM').is(':checked')) {
+            $('#gradcam-overlay').css('opacity', gradcamOpacity);
+        }
+    });
+    
+    // Function to apply class styling to the classification label
+    function setClassificationStyle(className) {
+        // Remove all possible classes first
+        $('#chestClassification').removeClass('covid-label opacity-label normal-label pneumonia-label');
+        
+        // Add appropriate class based on classification
+        if (className === 'COVID') {
+            $('#chestClassification').addClass('covid-label');
+        } else if (className === 'Lung_Opacity') {
+            $('#chestClassification').addClass('opacity-label');
+        } else if (className === 'Normal') {
+            $('#chestClassification').addClass('normal-label');
+        } else if (className === 'Viral Pneumonia') {
+            $('#chestClassification').addClass('pneumonia-label');
+        }
+    }
+    
+    // Update probability bars
+    function updateProbabilityBars(classData) {
+        // Set width and text for each class probability
+        for (const [className, probability] of Object.entries(classData)) {
+            const probPercent = (probability * 100).toFixed(1) + '%';
+            let classSelector, probId;
+            
+            if (className === 'COVID') {
+                classSelector = '.covid-prob';
+                probId = '#covidProb';
+            } else if (className === 'Lung_Opacity') {
+                classSelector = '.opacity-prob';
+                probId = '#opacityProb';
+            } else if (className === 'Normal') {
+                classSelector = '.normal-prob';
+                probId = '#normalProb';
+            } else if (className === 'Viral Pneumonia') {
+                classSelector = '.pneumonia-prob';
+                probId = '#pneumoniaProb';
+            }
+            
+            $(classSelector).css('width', probPercent);
+            $(probId).text(probPercent);
+        }
+    }
+
+    // Form submission
     $('#chestUploadForm').on('submit', function(e) {
         e.preventDefault();
         
@@ -148,10 +646,32 @@ $(document).ready(function() {
             processData: false,
             success: function(response) {
                 if (response.status === 'success') {
-                    // Display the result
-                    $('#chestResultImage').attr('src', response.image_path);
-                    $('#chestClassification').text(`Classification: ${response.class}`);
+                    // Display results
+                    $('#chestResults').removeClass('d-none');
+                    
+                    // Reset image adjustments
+                    $('#brightness').val(0);
+                    $('#contrast').val(100);
+                    $('#brightnessValue').text(0);
+                    $('#contrastValue').text(100);
+                    
+                    // Set classification and confidence
+                    const classText = response.class.replace('_', ' ');
+                    $('#chestClassification').text(`Classification: ${classText}`);
                     $('#chestConfidence').text(`Confidence: ${response.confidence.toFixed(2)}%`);
+                    
+                    // Apply appropriate styling
+                    setClassificationStyle(response.class);
+                    
+                    // Set original image
+                    if (response.original_base64) {
+                        $('#original-xray').attr('src', `data:image/png;base64,${response.original_base64}`);
+                    } else {
+                        $('#original-xray').attr('src', response.image_path);
+                    }
+                    
+                    // Handle Grad-CAM with comprehensive error protection
+                    handleGradCam(response);
                     
                     // Show appropriate info section
                     $('.condition-info').addClass('d-none');
@@ -165,8 +685,21 @@ $(document).ready(function() {
                         $('#pneumoniaInfo').removeClass('d-none');
                     }
                     
-                    // Show results container
-                    $('#chestResults').removeClass('d-none');
+                    // Update probability bars with mock data for demonstration
+                    // In a real app, these would come from the model
+                    const classData = {
+                        'COVID': 0.05,
+                        'Lung_Opacity': 0.08,
+                        'Normal': 0.02,
+                        'Viral Pneumonia': 0.03
+                    };
+                    
+                    // Set the detected class to high probability
+                    classData[response.class] = response.confidence / 100;
+                    
+                    // Update probability bars
+                    updateProbabilityBars(classData);
+                    
                 } else {
                     alert('Error: ' + response.message);
                 }
@@ -181,6 +714,67 @@ $(document).ready(function() {
             }
         });
     });
+    
+    // Handle Grad-CAM with comprehensive error protection
+    function handleGradCam(response) {
+        // Remove any previous error messages
+        $('.gradcam-error-message').remove();
+        
+        try {
+            // Check if there's an explicit gradcam_error in the response
+            if (response.gradcam_error) {
+                throw new Error(response.gradcam_error);
+            }
+            
+            // Check if gradcam_base64 exists and is not empty
+            if (!response.gradcam_base64 || response.gradcam_base64.trim().length === 0) {
+                throw new Error('Grad-CAM data missing');
+            }
+            
+            // Verify it's a valid base64 string
+            const validBase64 = /^[A-Za-z0-9+/=]+$/.test(response.gradcam_base64.trim());
+            if (!validBase64) {
+                throw new Error('Invalid Grad-CAM data');
+            }
+            
+            // Set the Grad-CAM image
+            $('#gradcam-xray').attr('src', `data:image/png;base64,${response.gradcam_base64}`);
+            
+            // Enable Grad-CAM controls
+            $('#gradcam-overlay').css('opacity', gradcamOpacity);
+            $('#toggleGradCAM').prop('checked', true).prop('disabled', false);
+            $('#opacitySlider').prop('disabled', false);
+            
+            // Add load event handler to detect image loading issues
+            $('#gradcam-xray').on('error', function() {
+                // If image fails to load after setting src
+                displayGradCAMError('Failed to render Grad-CAM visualization');
+            });
+            
+        } catch (error) {
+            // Handle all Grad-CAM errors
+            console.error('Grad-CAM error:', error);
+            displayGradCAMError();
+        }
+    }
+    
+    // Function to display Grad-CAM error message
+    function displayGradCAMError(message = null) {
+        // Disable Grad-CAM functionality
+        $('#gradcam-overlay').css('opacity', 0);
+        $('#gradcam-xray').attr('src', '');
+        $('#toggleGradCAM').prop('checked', false).prop('disabled', true);
+        $('#opacitySlider').prop('disabled', true);
+        
+        // Show user-friendly error message
+        const errorDiv = $('<div class="alert alert-warning mt-3 gradcam-error-message" role="alert">' +
+            '<i class="fas fa-exclamation-triangle me-2"></i>' +
+            'Grad-CAM visualization is currently unavailable for this image. Analysis results are still valid.' +
+            '</div>');
+            
+        // Add error message below the image
+        $('.image-compare-container').after(errorDiv);
+    }
 });
 </script>
 {% endblock %}

@@ -10,6 +10,11 @@
     --shadow: 0 6px 32px rgba(35,60,234,0.08),0 1.5px 4.5px rgba(35,60,234,0.06);
 }
 
+/* Bootstrap overrides */
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
 body {
     font-family: 'Cairo', 'Roboto', sans-serif;
     background: var(--light-gray);
@@ -106,3 +111,779 @@ body {
 @keyframes bounceBtn { 0%{transform:scale(1);} 55%{transform:scale(1.08);} 70%{transform:scale(0.97);} 100%{transform:scale(1.03);} }
 .animate-reveal { opacity: 0; transform:translateY(30px); transition:all 0.65s cubic-bezier(.16,.8,.62,1.52); }
 .animate-reveal.animated { opacity: 1; transform:none; }
+
+/* Enhanced animations - Gleamer style */
+.hero-text-reveal h1 {
+    overflow: hidden;
+    position: relative;
+}
+
+/* Add bottom margin to row align-items-center */
+.row.align-items-center {
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+}
+
+/* Add bottom margin to content-container for model cards */
+.content-container {
+    margin-bottom: 3rem;
+}
+
+/* Add extra bottom padding to login/register containers */
+.login-container {
+    padding-bottom: 5rem !important;
+}
+
+.hero-text-reveal h1 span {
+    display: inline-block;
+    transform: translateY(100%);
+    opacity: 0;
+    animation: slideUpFade 1.2s forwards cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.hero-text-reveal p {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1.2s 0.8s forwards;
+}
+
+.hero-text-reveal .btn {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1.2s 1.2s forwards;
+}
+
+@keyframes slideUpFade {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Staggered animations */
+.stagger-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.stagger-item.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Parallax effect */
+.parallax-element {
+    transition: transform 0.4s cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+/* Gradient text animation */
+.gradient-text {
+    background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    position: relative;
+    display: inline-block;
+}
+
+.gradient-text::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(120deg, var(--primary-light), var(--primary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+
+.gradient-text:hover::after {
+    opacity: 1;
+}
+
+/* Animated counter for statistics */
+.counter-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.counter {
+    display: inline-block;
+    font-weight: bold;
+}
+
+/* Image reveal animation */
+.image-reveal {
+    position: relative;
+    overflow: hidden;
+}
+
+.image-reveal img {
+    transform: scale(1.1);
+    transition: transform 1.5s cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.image-reveal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--primary-color);
+    transform: scaleX(1);
+    transform-origin: right;
+    transition: transform 1s cubic-bezier(0.5, 0, 0.1, 1);
+    z-index: 1;
+}
+
+.image-reveal.animated::before {
+    transform: scaleX(0);
+}
+
+.image-reveal.animated img {
+    transform: scale(1);
+}
+
+/* Card hover animation */
+.hover-card {
+    transition: all 0.4s cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.hover-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(35, 60, 234, 0.15);
+}
+
+/* Team Grid Layout */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.team-member {
+    perspective: 1000px;
+    height: 400px;
+}
+
+.team-member-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.team-member:hover .team-member-inner {
+    transform: rotateY(180deg);
+}
+
+.team-member-front, .team-member-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.team-member-front {
+    background-color: #fff;
+}
+
+.team-member-back {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.team-img-wrap {
+    height: 70%;
+    overflow: hidden;
+    position: relative;
+}
+
+.team-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.team-member:hover .team-img-wrap img {
+    transform: scale(1.05);
+}
+
+.team-member-info {
+    padding: 20px;
+    text-align: center;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.team-member-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    color: #222;
+    font-weight: 600;
+}
+
+.team-member-info p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.team-member-bio {
+    text-align: center;
+    padding: 10px;
+}
+
+.team-member-bio p {
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.team-social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.team-social-links a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.team-social-links a:hover {
+    background: white;
+    color: var(--primary-color);
+    transform: translateY(-5px);
+}
+
+.team-role-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(35, 60, 234, 0.9);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive styles for team grid */
+@media (max-width: 992px) {
+    .team-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    
+    .team-member {
+        height: 380px;
+    }
+}
+
+@media (max-width: 768px) {
+    .team-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .team-member {
+        height: 360px;
+    }
+}
+
+@media (max-width: 576px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+}
+
+/* Creative Modern Team Carousel */
+.team-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, #f9fafc 0%, #f5f7ff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.team-section::before {
+    content: '';
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, rgba(35, 60, 234, 0.05), rgba(35, 60, 234, 0.1));
+    top: -300px;
+    left: -300px;
+    z-index: 0;
+    animation: float 15s infinite alternate ease-in-out;
+}
+
+.team-section::after {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, rgba(35, 60, 234, 0.05), rgba(35, 60, 234, 0.1));
+    bottom: -200px;
+    right: -200px;
+    z-index: 0;
+    animation: float 20s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-30px, 30px); }
+    100% { transform: translate(30px, -30px); }
+}
+
+.team-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.team-header {
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.team-header h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    background: linear-gradient(120deg, #233cea, #5960ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    display: inline-block;
+    position: relative;
+}
+
+.team-header h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #233cea, #5960ee);
+    border-radius: 4px;
+}
+
+.team-subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    display: block;
+    margin-top: 25px;
+    letter-spacing: 0.5px;
+}
+
+/* Creative 3D Carousel */
+.team-slider-container {
+    position: relative;
+    perspective: 1200px;
+    padding: 0px 0 100px;
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+.team-slider {
+    display: flex;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Creative Card Design */
+.member-slide {
+    min-width: 250px;
+    padding: 15px;
+    position: relative;
+    transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin: 0 8px;
+}
+
+.member-card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform: scale(0.95);
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.member-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(130deg, transparent 0%, rgba(35, 60, 234, 0.03) 100%);
+    z-index: -1;
+    border-radius: 20px;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+.member-card:hover {
+    transform: translateY(-15px) scale(1);
+    box-shadow: 0 25px 50px rgba(35, 60, 234, 0.15);
+}
+
+.member-card:hover::before {
+    opacity: 1;
+}
+
+/* Creative Image Effect */
+.member-image-wrapper {
+    height: 260px;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    transition: all 0.5s ease;
+}
+
+/* Improved sharp image rendering */
+.member-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+    image-rendering: -webkit-optimize-contrast; /* Improves sharpness in Chrome/Safari */
+    backface-visibility: hidden; /* Prevents blurring during animations */
+    transform: translateZ(0); /* Force GPU acceleration */
+    will-change: transform; /* Hint to browser about properties that will animate */
+}
+
+.member-card:hover .member-image-wrapper {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+}
+
+.member-card:hover .member-image-wrapper img {
+    transform: scale(1.08); /* Reduced from 1.1 for sharper scaling */
+}
+
+/* Add a slight sharpening filter on hover for perceived sharpness */
+.member-card:hover .member-image-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: transparent;
+    backdrop-filter: contrast(1.03) brightness(1.03);
+    -webkit-backdrop-filter: contrast(1.03) brightness(1.03);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.member-card:hover .member-image-wrapper::after {
+    opacity: 1;
+}
+
+.member-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #ffffff;
+    color: #233cea;
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 6px 14px rgba(255, 255, 255, 0.25);
+    z-index: 2;
+    transform: translateZ(20px);
+    transition: all 0.3s ease;
+}
+
+.member-card:hover .member-badge {
+    transform: translateZ(30px) scale(1.1);
+}
+
+.member-content {
+    padding: 20px;
+    position: relative;
+    background: white;
+}
+
+.member-content::before {
+    content: '';
+    position: absolute;
+    left: 25px;
+    top: 0;
+    width: 40px;
+    height: 3px;
+    background: #233cea;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.member-card:hover .member-content::before {
+    transform: scaleX(1);
+}
+
+.member-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    font-weight: 700;
+    color: #222;
+    transition: color 0.3s ease;
+}
+
+.member-card:hover .member-content h3 {
+    color: #233cea;
+}
+
+.member-role {
+    color: #666;
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+/* Interactive Social Links */
+.member-socials {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+}
+
+.member-socials a {
+    display: block;
+    width: 36px;
+    height: 36px;
+    position: relative;
+    z-index: 5;
+}
+
+.social-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #f5f7ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #233cea;
+    font-size: 1rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.social-icon:hover {
+    background: #233cea;
+    color: white;
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(35, 60, 234, 0.2);
+    border-radius: 8px;
+}
+
+.social-icon i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Aligned Navigation */
+.slider-nav {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    z-index: 10;
+}
+
+.navigation-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    background: white;
+    padding: 10px 25px;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.slider-prev,
+.slider-next {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(35, 60, 234, 0.1);
+    color: #233cea;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.slider-prev:hover,
+.slider-next:hover {
+    background: #233cea;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(35, 60, 234, 0.2);
+}
+
+.slider-dots {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 0 15px;
+}
+
+.slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.slider-dot.active {
+    background: #233cea;
+    transform: scale(1.3);
+}
+
+.slider-dot:hover {
+    background: #5960ee;
+}
+
+/* Active/Center Card Highlight */
+.member-slide.active .member-card {
+    transform: scale(1.05);
+    box-shadow: 0 25px 50px rgba(35, 60, 234, 0.18);
+    z-index: 5;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .member-slide {
+        min-width: 230px;
+    }
+}
+
+@media (max-width: 992px) {
+    .member-slide {
+        min-width: 220px;
+    }
+    
+    .member-image-wrapper {
+        height: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .member-slide {
+        min-width: 200px;
+    }
+    
+    .member-image-wrapper {
+        height: 220px;
+    }
+    
+    .team-header h2 {
+        font-size: 2.4rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .team-slider-container {
+        padding: 30px 0 90px;
+    }
+    
+    .member-slide {
+        min-width: 190px;
+    }
+    
+    .member-image-wrapper {
+        height: 200px;
+    }
+    
+    .navigation-container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .slider-dots {
+        margin-bottom: 5px;
+    }
+    
+    .slider-prev, .slider-next {
+        width: 38px;
+        height: 38px;
+    }
+}

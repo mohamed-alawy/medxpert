@@ -2,85 +2,507 @@
 
 {% block title %}MedXpert - Fracture Detection{% endblock %}
 
+{% block head %}
+<style>
+    .fracture-header {
+        background-color: rgba(35, 60, 234, 0.1);
+        border-radius: var(--border-radius);
+    }
+    
+    .model-icon {
+        max-height: 180px;
+    }
+    
+    .upload-container {
+        background-color: white;
+    }
+    
+    .image-comparison {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+        .image-comparison {
+            flex-direction: row;
+        }
+    }
+    
+    .image-container {
+        position: relative;
+        height: 400px; /* Fixed height for consistency */
+        margin-bottom: 20px;
+        text-align: center; /* Center the image horizontally */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    /* Professional zoom styles */
+    .zoom-container {
+        position: relative;
+        overflow: hidden; /* Hide overflow when zooming */
+        border-radius: 12px;
+        cursor: crosshair;
+    }
+    
+    .zoom-result {
+        position: absolute;
+        border: 2px solid #233cea;
+        background-color: white;
+        border-radius: 100%;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        height: 150px;
+        width: 150px;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        background-repeat: no-repeat;
+    }
+    
+    .zoom-lens {
+        position: absolute;
+        border: 2px solid #233cea;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+    
+    /* Zoom tools */
+    .zoom-tools {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .zoom-level-indicator {
+        padding: 0.25rem 0.5rem;
+        background-color: rgba(35, 60, 234, 0.1);
+        border-radius: 4px;
+        color: #233cea;
+        font-weight: 600;
+        margin-left: 1rem;
+    }
+    
+    .image-container img {
+        max-width: 80%; /* Limit maximum width to prevent very wide images */
+        max-height: 90%; /* Allow most of the container height */
+        min-height: 300px; /* Minimum height to ensure small images appear larger */
+        min-width: 300px; /* Minimum width to ensure small images appear larger */
+        object-fit: contain; /* This will maintain aspect ratio while fitting in container */
+        display: inline-block; /* Allow image to be centered */
+        border-radius: 12px !important; /* Apply rounded corners to the image itself */
+    }
+    
+    .zoomed {
+        cursor: zoom-out;
+        overflow: auto;
+    }
+    
+    .zoomed img {
+        transform: scale(2);
+        max-width: none;
+        max-height: none;
+    }
+    
+    /* Ensure the image has rounded corners */
+    #detectionImage {
+        border-radius: 12px !important;
+    }
+    
+    .image-label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    
+    .detection-details {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    width: 100%; /* أو مثلاً 90% لو مش عايزه full */
+    max-width: 900px; /* اختياري: تحديد أقصى عرض */
+    margin: 0 auto; /* دي اللي بتخليه ف النص */
+}
+
+    
+    .detection-box {
+        border-left: 4px solid #f6f266;
+        padding: 0.75rem 1rem;
+        background-color: rgba(246, 242, 102, 0.05);
+        margin-bottom: 1rem;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .detection-box h5 {
+        margin-bottom: 0.5rem;
+        color: #c4bf3d;
+    }
+    
+    .accuracy-chart-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Removed fracture-types and fracture-type-card styles */
+    
+    .model-info-section {
+        background-color: #f8f9fa;
+        padding: 2rem 0;
+        border-radius: 8px;
+        margin-top: 3rem;
+    }
+    
+    .info-card {
+        height: 100%;
+        transition: transform 0.3s;
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .info-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .info-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .accuracy-chart {
+        height: 250px;
+    }
+    
+    .accuracy-metric {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        margin-bottom: 1rem;
+        transition: transform 0.2s;
+    }
+    
+    .accuracy-metric:hover {
+        transform: translateY(-3px);
+    }
+    
+    .accuracy-value {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0;
+    }
+    
+    .model-limitations {
+        background-color: rgba(255, 243, 205, 0.5);
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        border-radius: 0 8px 8px 0;
+        margin-top: 2rem;
+    }
+    
+    /* Enhanced form-range styling to make sliders more visible */
+    .form-range {
+        height: 8px;
+        background-color: #eaeaea;
+        border-radius: 8px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    
+    .form-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .form-range::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .control-panel {
+        background-color: #ffffff;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .slider-container {
+        margin-bottom: 16px;
+    }
+
+    .detection-table {
+        margin-top: 1.5rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        width: 100%;
+    }
+    
+    .detection-table table {
+        width: 100%;
+        margin-bottom: 0;
+        table-layout: fixed;
+    }
+    
+    .detection-table th {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 500;
+        border: none;
+        text-align: center;
+    }
+    
+    .detection-table td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+        text-align: center;
+    }
+    
+    .detection-table th {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+    
+    .detection-table th:first-child {
+        width: 10%;
+    }
+    
+    .detection-table th:nth-child(2) {
+        width: 20%;
+    }
+    
+    .detection-table th:nth-child(3) {
+        width: 20%;
+    }
+    
+    .detection-table th:nth-child(4) {
+        width: 50%;
+    }
+    
+    .confidence-badge {
+        background-color: rgba(35, 60, 234, 0.2); /* Changed to new blue color */
+        color: #233cea; /* Changed to new blue color */
+        font-weight: 500;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        display: inline-block;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="model-header fracture-header py-5">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1>Bone Fracture Detection</h1>
-                <p class="lead">Upload an X-ray image to detect and locate potential bone fractures.</p>
-            </div>
-            <div class="col-lg-6 text-center">
-                <img src="{{ url_for('static', filename='images/fracture-icon.png') }}" alt="Fracture Detection" class="model-icon">
+            <div class="col-lg-12 text-center">
+                <h1>Fracture Detection</h1>
+                <p class="lead">Upload an X-ray image to detect and locate potential bone fractures using our advanced object detection model.</p>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-5">
+<!-- Section 1: Upload and Analysis -->
+<section class="py-5 bg-light">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="upload-container p-4 rounded shadow-sm">
-                    <h3 class="mb-4">Upload X-ray Image</h3>
-                    <form id="fractureUploadForm" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="fractureFile" class="form-label">Select X-ray Image</label>
-                            <input class="form-control" type="file" id="fractureFile" name="file" accept=".jpg,.jpeg,.png">
-                            <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="analyzeFractureBtn">
-                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            Detect Fractures
-                        </button>
-                    </form>
+            <div class="col-lg-10">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-upload me-2"></i>Upload X-ray Image</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="fractureUploadForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="fractureFile" class="form-label">Select an X-ray image</label>
+                                <input class="form-control" type="file" id="fractureFile" name="file" accept=".jpg,.jpeg,.png">
+                                <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="analyzeFractureBtn">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                Analyze Image
+                            </button>
+                        </form>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                    <!-- In your results section -->
-                    <div class="results-container mt-4 d-none" id="fractureResults">
-                        <h3>Analysis Results</h3>
-                        <div class="alert" id="fractureResultMessage"></div>
-                        
-                        <div class="row">
-                            <!-- Original image column -->
-                            <div class="col-md-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">Original X-ray Image</div>
-                                    <div class="card-body text-center">
-                                        <img id="originalImage" class="img-fluid" alt="Original X-ray">
+<!-- Section 2: Results Analysis -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div id="fractureResults" class="results-container mt-2 d-none">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card mb-4 shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Analysis Results</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Removed the alert message -->
+                            
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4">
+                                    <!-- Control Panel on left side -->
+                                    <div class="control-panel">
+                                        <h5 class="mb-3">Image Controls</h5>
+                                        <div class="slider-container">
+                                            <label for="brightness" class="form-label">Brightness: <span id="brightnessValue">0</span></label>
+                                            <input type="range" class="form-range" min="-100" max="100" value="0" id="brightness">
+                                        </div>
+                                        <div class="slider-container">
+                                            <label for="contrast" class="form-label">Contrast: <span id="contrastValue">100</span>%</label>
+                                            <input type="range" class="form-range" min="0" max="200" value="100" id="contrast">
+                                        </div>
+                                        
+                                        <div class="form-check form-switch mt-3">
+                                            <input class="form-check-input" type="checkbox" id="toggleDetection" checked>
+                                            <label class="form-check-label" for="toggleDetection">Show Fracture Detection</label>
+                                        </div>
+                                        
+                                        <div class="text-center mt-3">
+                                            <button class="btn btn-sm btn-outline-primary" id="resetAdjustments">Reset Adjustments</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-9 col-md-8">
+                                    <!-- Full width image container with professional zoom feature -->
+                                    <div class="image-container zoom-container" style="margin-top: 0; padding-top: 0;">
+                                        <img id="detectionImage" alt="X-ray Analysis" class="img-fluid">
+                                        <div class="zoom-lens" id="zoomLens"></div>
+                                        <div class="zoom-result" id="zoomResult"></div>
+                                    </div>
+                                    
+                                    <!-- Zoom controls -->
+                                    <div class="zoom-tools">
+                                        <button class="btn btn-sm btn-outline-primary" id="toggleZoom">
+                                            <i class="fas fa-search-plus me-1"></i> Toggle Magnifier
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary" id="zoomIn">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary" id="zoomOut">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <span class="zoom-level-indicator" id="zoomLevel">2x</span>
+                                    </div>
+                                    
+                                    <!-- No detection message -->
+                                    <div id="noDetectionMessage" class="alert alert-success text-center mt-3 d-none">
+                                        <i class="fas fa-check-circle me-2"></i> No fractures detected in this image.
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- Processed image column -->
-                            <div class="col-md-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">Detected Fractures</div>
-                                    <div class="card-body text-center">
-                                        <img id="resultImage" class="img-fluid" alt="Detected Fractures">
-                                    </div>
+                            <!-- Detection details table moved outside the column layout to take full width -->
+                            <div id="detectionDetails" class="detection-table mt-4 d-none" style="width: 100%; margin: 0 auto;">
+                                <h4 class="p-3 mb-0">Detection Details</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Type</th>
+                                                <th>Confidence</th>
+                                                <th>Location</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="detectionTableBody">
+                                            <!-- Detection rows will be inserted here -->
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Detection details section -->
-                        <div class="card mt-3 d-none" id="detailsCard">
-                            <div class="card-header">Detection Details</div>
-                            <div class="card-body">
-                                <div id="detectionDetails"></div>
+                                <div class="alert alert-info m-3" role="alert">
+                                    <small><i class="fas fa-info-circle me-2"></i> Our model highlights potential fracture locations with bounding boxes.</small>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <div class="row mt-5">
-            <div class="col-lg-12">
-                <h3>About Fracture Detection</h3>
-                <p>Bone fractures are common injuries that require prompt and accurate diagnosis for proper treatment. X-ray imaging is the primary tool used to diagnose fractures.</p>
-                <p>Our AI model uses object detection technology to identify and locate potential fractures in X-ray images. The model has been trained on thousands of annotated X-rays to detect various types of fractures across different bones.</p>
-                <p>The system highlights detected fractures with bounding boxes, providing medical professionals with a second opinion to aid in diagnosis.</p>
+<!-- Section 3: Educational Information -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-book-medical me-2"></i>Educational Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>About Fracture Detection</h4>
+                        <p>Bone fractures are common injuries that can range from simple hairline fractures to complex open fractures. Early and accurate detection is crucial for proper treatment planning.</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h5>How Our AI Works</h5>
+                                <p>Our fracture detection model uses the YOLO (You Only Look Once) architecture, an advanced object detection algorithm that can identify and localize potential fractures in X-ray images. The model has been trained on thousands of annotated medical images to recognize various types of fractures in different bones.</p>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <!-- Common Fracture Types section removed -->
+                            </div>
+                        </div>
+                        
+                        <div class="model-limitations p-4 mt-4">
+                            <h5><i class="fas fa-exclamation-triangle text-warning me-2"></i>Important Limitations</h5>
+                            <ul class="mt-3">
+                                <li><strong>Not a Replacement for Radiologists:</strong> This tool is designed to assist healthcare professionals, not replace their expertise.</li>
+                                <li><strong>Quality Dependent:</strong> Performance decreases significantly with poor quality X-ray images.</li>
+                                <li><strong>Limited Scope:</strong> The model may not detect all types of fractures, particularly hairline fractures or those in complex anatomical regions.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="alert alert-warning mt-4">
+                            <p class="mb-0"><strong>Disclaimer:</strong> This AI tool is designed to assist healthcare professionals in fracture detection, not replace their clinical judgment. Always consult with a qualified medical professional for diagnosis and treatment planning.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -88,102 +510,246 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    $(document).ready(function() {
-        // File upload preview
-        $('#fractureFile').change(function() {
-            readURL(this, '#imagePreview');
-        });
+$(document).ready(function() {
+    // Store both images when they're loaded
+    let originalImage = '';
+    let detectionImage = '';
+    let zoomEnabled = false;
+    let zoomLevel = 2;
     
-        // Form submission
-        $('#fractureUploadForm').on('submit', function(e) {
-            e.preventDefault();
-            
-            const fileInput = $('#fractureFile')[0];
-            if (fileInput.files.length === 0) {
-                alert('Please select a file to upload');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-            
-            // Show loading spinner
-            $('#analyzeFractureBtn .spinner-border').removeClass('d-none');
-            $('#analyzeFractureBtn').prop('disabled', true);
-            
-            // Clear previous results
-            $('#fractureResults').addClass('d-none');
-            
-            $.ajax({
-                url: '/predict/fracture',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    console.log("Received response:", response);
-                    $('#fractureResults').removeClass('d-none');
+    // Form submission handler
+    $('#fractureUploadForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const fileInput = $('#fractureFile')[0];
+        if (fileInput.files.length === 0) {
+            alert('Please select a file to upload');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        
+        // Show loading spinner
+        $('#analyzeFractureBtn .spinner-border').removeClass('d-none');
+        $('#analyzeFractureBtn').prop('disabled', true);
+        
+        // Clear previous results
+        $('#fractureResults').addClass('d-none');
+        $('#detectionDetails').addClass('d-none');
+        $('#noDetectionMessage').addClass('d-none');
+        $('#detectionList').empty();
+        
+        $.ajax({
+            url: '/predict/fracture',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                // Show the results container
+                $('#fractureResults').removeClass('d-none');
+                
+                if (response.status === 'success') {
+                    // Store both images
+                    originalImage = `data:image/jpeg;base64,${response.original_image}`;
+                    detectionImage = `data:image/jpeg;base64,${response.image}`;
                     
-                    if (response.status === 'success') {
-                        $('#fractureResultMessage').removeClass('alert-danger').addClass('alert-success');
-                        $('#fractureResultMessage').text(response.message || "Processing complete");
+                    // Set initial image (with detection)
+                    $('#detectionImage').attr('src', detectionImage);
+                    
+                    // Handle detection details
+                    if (response.detections && response.detections.length > 0) {
+                        $('#detectionDetails').removeClass('d-none');
                         
-                        // Set original image from response
-                        if (response.original_image) {
-                            console.log("Setting original image");
-                            $('#originalImage').attr('src', 'data:image/jpeg;base64,' + response.original_image);
-                        } else {
-                            console.error("No original image data in response");
-                        }
+                        // Clear previous detections
+                        $('#detectionTableBody').empty();
                         
-                        // Set result image with the processed image
-                        if (response.image) {
-                            console.log("Setting result image");
-                            $('#resultImage').attr('src', 'data:image/jpeg;base64,' + response.image);
-                        } else {
-                            console.error("No processed image data in response");
-                        }
-                        
-                        // Show detection details if any
-                        if (response.detections && response.detections.length > 0) {
-                            $('#detailsCard').removeClass('d-none');
-                            let detailsHtml = '<table class="table table-striped">';
-                            detailsHtml += '<thead><tr><th>Type</th><th>Confidence</th><th>Location</th></tr></thead><tbody>';
+                        // Add detection details to table
+                        response.detections.forEach((detection, index) => {
+                            const confidencePct = (detection.confidence * 100).toFixed(2);
+                            const location = detection.box.join(', ');
                             
-                            response.detections.forEach(function(det, index) {
-                                detailsHtml += `<tr>
-                                    <td>${det.class}</td>
-                                    <td>${(det.confidence * 100).toFixed(2)}%</td>
-                                    <td>X: ${det.box[0]}-${det.box[2]}, Y: ${det.box[1]}-${det.box[3]}</td>
-                                </tr>`;
-                            });
+                            const tableRow = $(`
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${detection.class}</td>
+                                    <td><span class="confidence-badge">${confidencePct}%</span></td>
+                                    <td><small class="text-muted">[${location}]</small></td>
+                                </tr>
+                            `);
                             
-                            detailsHtml += '</tbody></table>';
-                            $('#detectionDetails').html(detailsHtml);
-                        } else {
-                            $('#detailsCard').addClass('d-none');
-                        }
+                            $('#detectionTableBody').append(tableRow);
+                        });
                     } else {
-                        $('#fractureResultMessage').removeClass('alert-success').addClass('alert-danger');
-                        $('#fractureResultMessage').text(response.message || "An error occurred");
+                        // Show no detections message
+                        $('#noDetectionMessage').removeClass('d-none');
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX error:", status, error);
-                    console.error("Response text:", xhr.responseText);
-                    
-                    $('#fractureResults').removeClass('d-none');
-                    $('#fractureResultMessage').removeClass('alert-success').addClass('alert-danger');
-                    $('#fractureResultMessage').text('Error: ' + error);
-                },
-                complete: function() {
-                    // Hide loading spinner
-                    $('#analyzeFractureBtn .spinner-border').addClass('d-none');
-                    $('#analyzeFractureBtn').prop('disabled', false);
+                } else {
+                    // Show error message as an alert instead of using the removed element
+                    alert('Error: ' + (response.message || 'An error occurred during processing'));
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                // Show the results container
+                $('#fractureResults').removeClass('d-none');
+                
+                // Show error message as an alert
+                alert('Error processing image: ' + error);
+            },
+            complete: function() {
+                // Hide loading spinner and re-enable button
+                $('#analyzeFractureBtn .spinner-border').addClass('d-none');
+                $('#analyzeFractureBtn').prop('disabled', false);
+            }
         });
     });
-    </script>
+    
+    // Handle toggle detection overlay
+    $('#toggleDetection').on('change', function() {
+        if (this.checked) {
+            // Show detection image
+            $('#detectionImage').attr('src', detectionImage);
+        } else {
+            // Show original image
+            $('#detectionImage').attr('src', originalImage);
+        }
+    });
+    
+    // Handle brightness and contrast adjustments
+    $('#brightness').on('input', function() {
+        const brightnessValue = $(this).val();
+        $('#brightnessValue').text(brightnessValue);
+        updateImageAdjustments();
+    });
+    
+    $('#contrast').on('input', function() {
+        const contrastValue = $(this).val();
+        $('#contrastValue').text(contrastValue);
+        updateImageAdjustments();
+    });
+    
+    $('#resetAdjustments').on('click', function() {
+        $('#brightness').val(0);
+        $('#contrast').val(100);
+        $('#brightnessValue').text(0);
+        $('#contrastValue').text(100);
+        updateImageAdjustments();
+    });
+    
+    function updateImageAdjustments() {
+        const brightness = parseInt($('#brightness').val()) + 100;
+        const contrast = parseInt($('#contrast').val());
+        $('#detectionImage').css('filter', `brightness(${brightness/100}) contrast(${contrast/100})`);
+    }
+    
+    // Professional Zoom Feature
+    const imageContainer = document.querySelector('.zoom-container');
+    const lens = document.getElementById('zoomLens');
+    const result = document.getElementById('zoomResult');
+    const img = document.getElementById('detectionImage');
+    
+    // Toggle zoom functionality
+    $('#toggleZoom').on('click', function() {
+        zoomEnabled = !zoomEnabled;
+        
+        if (zoomEnabled) {
+            $(this).addClass('active');
+            lens.style.display = 'block';
+            result.style.opacity = '1';
+            
+            // Add mousemove event listener
+            imageContainer.addEventListener('mousemove', moveMagnifier);
+            // Add touch event listeners for mobile
+            imageContainer.addEventListener('touchmove', moveMagnifierTouch);
+            imageContainer.addEventListener('touchstart', moveMagnifierTouch);
+            
+        } else {
+            $(this).removeClass('active');
+            lens.style.display = 'none';
+            result.style.opacity = '0';
+            
+            // Remove event listeners
+            imageContainer.removeEventListener('mousemove', moveMagnifier);
+            imageContainer.removeEventListener('touchmove', moveMagnifierTouch);
+            imageContainer.removeEventListener('touchstart', moveMagnifierTouch);
+        }
+    });
+
+    // Zoom in/out functionality
+    $('#zoomIn').on('click', function() {
+        if (zoomLevel < 5) {
+            zoomLevel += 0.5;
+            $('#zoomLevel').text(zoomLevel.toFixed(1) + 'x');
+            updateZoom();
+        }
+    });
+    
+    $('#zoomOut').on('click', function() {
+        if (zoomLevel > 1.5) {
+            zoomLevel -= 0.5;
+            $('#zoomLevel').text(zoomLevel.toFixed(1) + 'x');
+            updateZoom();
+        }
+    });
+    
+    function updateZoom() {
+        if (zoomEnabled) {
+            const pos = getCursorPos(window.lastEvent);
+            result.style.backgroundSize = (img.width * zoomLevel) + "px " + (img.height * zoomLevel) + "px";
+            moveLens(pos.x, pos.y);
+        }
+    }
+    
+    function moveMagnifier(e) {
+        window.lastEvent = e;
+        e.preventDefault();
+        const pos = getCursorPos(e);
+        moveLens(pos.x, pos.y);
+    }
+    
+    function moveMagnifierTouch(e) {
+        window.lastEvent = e;
+        e.preventDefault();
+        const pos = getCursorPos(e.touches[0]);
+        moveLens(pos.x, pos.y);
+    }
+    
+    function getCursorPos(e) {
+        const rect = img.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+        x = Math.min(Math.max(0, x), rect.width);
+        y = Math.min(Math.max(0, y), rect.height);
+        return {x: x, y: y};
+    }
+    
+    function moveLens(x, y) {
+        // Position the lens
+        lens.style.left = x + "px";
+        lens.style.top = y + "px";
+        
+        // Position the result
+        result.style.left = x + "px";
+        result.style.top = y + "px";
+        
+        // Calculate background position for result
+        const bgX = x * zoomLevel - (result.offsetWidth / 2);
+        const bgY = y * zoomLevel - (result.offsetHeight / 2);
+        
+        // Update the background position
+        result.style.backgroundImage = `url("${$('#detectionImage').attr('src')}")`;
+        result.style.backgroundSize = (img.width * zoomLevel) + "px " + (img.height * zoomLevel) + "px";
+        result.style.backgroundPosition = "-" + (bgX) + "px -" + (bgY) + "px";
+    }
+    
+    // Initialize zoom display when image is loaded
+    $('#detectionImage').on('load', function() {
+        // Add initial setup for magnifier
+        result.style.backgroundImage = `url("${$(this).attr('src')}")`;
+    });
+});
+</script>
 {% endblock %}
