@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  medxpert:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./static:/app/static
+      - ./models:/app/models
+    restart: unless-stopped 

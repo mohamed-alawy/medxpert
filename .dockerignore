@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+venv
+.env
+.venv
+README.md
+prepare_release.ps1
+app.log 
