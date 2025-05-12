@@ -924,6 +924,7 @@ def delete_user(user_id):
                           message="User deleted successfully", 
                           message_type="success")
 
+# If this file is being run directly
 if __name__ == "__main__":
     try:
         # Try default Flask port 5000
@@ -933,7 +934,7 @@ if __name__ == "__main__":
         # Create uploads directory if it doesn't exist
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
         
-        app.run(host="127.0.0.1", port=port, debug=True)
+        app.run(host="0.0.0.0", port=port, debug=True)
     except Exception as e:
         print(f"Error starting Flask application: {str(e)}")
         print("Detailed error:")
