@@ -1,0 +1,1010 @@
+{% extends "layout.html" %}
+
+{% block title %}MedXpert Information - Medical AI Model Guide{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="education-hero">
+    <div class="hero-background">
+        <div class="hero-particles"></div>
+    </div>
+    <div class="content-container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="hero-title">Medical AI Model Information</h1>
+                <p class="hero-subtitle">Comprehensive guide to understanding our advanced medical imaging AI models</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">AI Models</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%+</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">10M+</span>
+                        <span class="stat-label">Training Images</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Navigation Tabs -->
+<section class="nav-tabs-section">
+    <div class="content-container">
+        <div class="model-nav-tabs">
+            <button class="nav-tab active" data-model="brain">
+                <i class="fas fa-brain"></i>
+                <span>Brain Tumor Detection</span>
+            </button>
+            <button class="nav-tab" data-model="chest">
+                <i class="fas fa-lungs"></i>
+                <span>Chest X-ray Analysis</span>
+            </button>
+            <button class="nav-tab" data-model="skin">
+                <i class="fas fa-diagnoses"></i>
+                <span>Skin Cancer Detection</span>
+            </button>
+            <button class="nav-tab" data-model="fracture">
+                <i class="fas fa-bone"></i>
+                <span>Fracture Detection</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Model Content Sections -->
+<div class="model-content-container">
+    <!-- Brain Tumor Detection -->
+    <section class="model-section active" id="brain-section">
+        <div class="content-container">
+            <div class="model-header">
+                <div class="model-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="model-info">
+                    <h2>Brain Tumor Detection</h2>
+                    <p class="model-description">Advanced segmentation model for detecting and analyzing brain tumors from MRI scans</p>
+                    <div class="model-metrics">
+                        <div class="metric">
+                            <span class="metric-value">0.73</span>
+                            <span class="metric-label">Dice Score</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">U-Net</span>
+                            <span class="metric-label">Architecture</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">MRI</span>
+                            <span class="metric-label">Modality</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <!-- Overview -->
+                <div class="content-card">
+                    <h3><i class="fas fa-info-circle"></i> Overview</h3>
+                    <p>Our brain tumor detection model utilizes advanced U-Net architecture to perform precise segmentation of brain tumors from MRI scans. The model can identify various types of brain tumors including gliomas, meningiomas, and pituitary tumors.</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multi-class tumor segmentation</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>3D volume analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Tumor size quantification</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Details -->
+                <div class="content-card">
+                    <h3><i class="fas fa-cogs"></i> Technical Architecture</h3>
+                    <div class="tech-details">
+                        <div class="tech-item">
+                            <strong>Model Type:</strong> U-Net with ResNet backbone
+                        </div>
+                        <div class="tech-item">
+                            <strong>Input Size:</strong> 256x256x3 (RGB)
+                        </div>
+                        <div class="tech-item">
+                            <strong>Output:</strong> Segmentation mask
+                        </div>
+                        <div class="tech-item">
+                            <strong>Training Data:</strong> 2,500+ annotated MRI scans
+                        </div>
+                        <div class="tech-item">
+                            <strong>Validation:</strong> 5-fold cross-validation
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Use Cases -->
+                <div class="content-card">
+                    <h3><i class="fas fa-stethoscope"></i> Clinical Applications</h3>
+                    <div class="use-cases">
+                        <div class="use-case">
+                            <h4>Diagnostic Support</h4>
+                            <p>Assist radiologists in identifying and localizing brain tumors during initial screening</p>
+                        </div>
+                        <div class="use-case">
+                            <h4>Treatment Planning</h4>
+                            <p>Provide precise tumor measurements for surgical planning and radiation therapy</p>
+                        </div>
+                        <div class="use-case">
+                            <h4>Monitoring</h4>
+                            <p>Track tumor progression and treatment response over time</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Limitations -->
+                <div class="content-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Limitations & Considerations</h3>
+                    <ul class="limitations-list">
+                        <li>Requires high-quality MRI scans with proper contrast</li>
+                        <li>May struggle with very small tumors (< 5mm)</li>
+                        <li>Performance varies with tumor type and location</li>
+                        <li>Should be used as a decision support tool, not replacement for expert diagnosis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chest X-ray Analysis -->
+    <section class="model-section" id="chest-section">
+        <div class="content-container">
+            <div class="model-header">
+                <div class="model-icon">
+                    <i class="fas fa-lungs"></i>
+                </div>
+                <div class="model-info">
+                    <h2>Chest X-ray Analysis</h2>
+                    <p class="model-description">Comprehensive analysis of chest X-rays for detecting pulmonary abnormalities and diseases</p>
+                    <div class="model-metrics">
+                        <div class="metric">
+                            <span class="metric-value">95%</span>
+                            <span class="metric-label">Accuracy</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">ResNet-50</span>
+                            <span class="metric-label">Architecture</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">X-ray</span>
+                            <span class="metric-label">Modality</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <!-- Overview -->
+                <div class="content-card">
+                    <h3><i class="fas fa-info-circle"></i> Overview</h3>
+                    <p>Our chest X-ray analysis model uses deep learning to detect various pulmonary conditions including pneumonia, COVID-19, tuberculosis, and other respiratory diseases. The model provides both classification and localization of abnormalities.</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multi-disease classification</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Abnormality localization</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Confidence scoring</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Details -->
+                <div class="content-card">
+                    <h3><i class="fas fa-cogs"></i> Technical Architecture</h3>
+                    <div class="tech-details">
+                        <div class="tech-item">
+                            <strong>Model Type:</strong> ResNet-50 with attention mechanism
+                        </div>
+                        <div class="tech-item">
+                            <strong>Input Size:</strong> 224x224x1 (Grayscale)
+                        </div>
+                        <div class="tech-item">
+                            <strong>Output:</strong> Multi-class probabilities + heatmap
+                        </div>
+                        <div class="tech-item">
+                            <strong>Training Data:</strong> 50,000+ chest X-rays
+                        </div>
+                        <div class="tech-item">
+                            <strong>Classes:</strong> Normal, Pneumonia, COVID-19, Tuberculosis
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Use Cases -->
+                <div class="content-card">
+                    <h3><i class="fas fa-stethoscope"></i> Clinical Applications</h3>
+                    <div class="use-cases">
+                        <div class="use-case">
+                            <h4>Emergency Screening</h4>
+                            <p>Rapid screening for COVID-19 and pneumonia in emergency departments</p>
+                        </div>
+                        <div class="use-case">
+                            <h4>Routine Check-ups</h4>
+                            <p>Automated analysis of routine chest X-rays for early disease detection</p>
+                        </div>
+                        <div class="use-case">
+                            <h4>Resource Optimization</h4>
+                            <p>Prioritize cases requiring immediate attention in high-volume settings</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Limitations -->
+                <div class="content-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Limitations & Considerations</h3>
+                    <ul class="limitations-list">
+                        <li>Requires proper X-ray positioning and exposure</li>
+                        <li>May miss subtle findings in early disease stages</li>
+                        <li>Performance affected by patient positioning and image quality</li>
+                        <li>Should be validated with clinical correlation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skin Cancer Detection -->
+    <section class="model-section" id="skin-section">
+        <div class="content-container">
+            <div class="model-header">
+                <div class="model-icon">
+                    <i class="fas fa-diagnoses"></i>
+                </div>
+                <div class="model-info">
+                    <h2>Skin Cancer Detection</h2>
+                    <p class="model-description">Advanced classification model for detecting malignant skin lesions from dermoscopic images</p>
+                    <div class="model-metrics">
+                        <div class="metric">
+                            <span class="metric-value">93%</span>
+                            <span class="metric-label">Accuracy</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">EfficientNet</span>
+                            <span class="metric-label">Architecture</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">Dermoscopy</span>
+                            <span class="metric-label">Modality</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <!-- Overview -->
+                <div class="content-card">
+                    <h3><i class="fas fa-info-circle"></i> Overview</h3>
+                    <p>Our skin cancer detection model analyzes dermoscopic images to classify skin lesions as benign or malignant. The model can detect various types of skin cancer including melanoma, basal cell carcinoma, and squamous cell carcinoma.</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Binary classification (Benign/Malignant)</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Lesion boundary detection</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Risk stratification</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Details -->
+                <div class="content-card">
+                    <h3><i class="fas fa-cogs"></i> Technical Architecture</h3>
+                    <div class="tech-details">
+                        <div class="tech-item">
+                            <strong>Model Type:</strong> EfficientNet-B4 with custom head
+                        </div>
+                        <div class="tech-item">
+                            <strong>Input Size:</strong> 380x380x3 (RGB)
+                        </div>
+                        <div class="tech-item">
+                            <strong>Output:</strong> Binary classification + confidence
+                        </div>
+                        <div class="tech-item">
+                            <strong>Training Data:</strong> 15,000+ dermoscopic images
+                        </div>
+                        <div class="tech-item">
+                            <strong>Augmentation:</strong> Rotation, flip, color jittering
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Use Cases -->
+                <div class="content-card">
+                    <h3><i class="fas fa-stethoscope"></i> Clinical Applications</h3>
+                    <div class="use-cases">
+                        <div class="use-case">
+                            <h4>Primary Care Screening</h4>
+                            <p>Enable general practitioners to screen suspicious skin lesions</p>
+                        </div>
+                        <div class="use-case">
+                            <h4>Dermatology Triage</h4>
+                            <p>Prioritize high-risk cases for immediate dermatologist review</p>
+                        </div>
+                        <div class="use-case">
+                            <h4>Telemedicine</h4>
+                            <p>Support remote skin cancer screening in underserved areas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Limitations -->
+                <div class="content-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Limitations & Considerations</h3>
+                    <ul class="limitations-list">
+                        <li>Requires high-quality dermoscopic images</li>
+                        <li>May struggle with atypical presentations</li>
+                        <li>Performance varies with skin type and lesion location</li>
+                        <li>Should be followed by biopsy for definitive diagnosis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fracture Detection -->
+    <section class="model-section" id="fracture-section">
+        <div class="content-container">
+            <div class="model-header">
+                <div class="model-icon">
+                    <i class="fas fa-bone"></i>
+                </div>
+                <div class="model-info">
+                    <h2>Fracture Detection</h2>
+                    <p class="model-description">Object detection model for identifying and localizing bone fractures in X-ray images</p>
+                    <div class="model-metrics">
+                        <div class="metric">
+                            <span class="metric-value">0.94</span>
+                            <span class="metric-label">mAP50</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">YOLO v8</span>
+                            <span class="metric-label">Architecture</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value">X-ray</span>
+                            <span class="metric-label">Modality</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <!-- Overview -->
+                <div class="content-card">
+                    <h3><i class="fas fa-info-circle"></i> Overview</h3>
+                    <p>Our fracture detection model uses YOLO (You Only Look Once) architecture to detect and localize bone fractures in X-ray images. The model can identify various types of fractures including stress fractures, complete fractures, and hairline fractures.</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Real-time fracture detection</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Multiple fracture types</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Bounding box localization</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Details -->
+                <div class="content-card">
+                    <h3><i class="fas fa-cogs"></i> Technical Architecture</h3>
+                    <div class="tech-details">
+                        <div class="tech-item">
+                            <strong>Model Type:</strong> YOLO v8 with CSP backbone
+                        </div>
+                        <div class="tech-item">
+                            <strong>Input Size:</strong> 640x640x1 (Grayscale)
+                        </div>
+                        <div class="tech-item">
+                            <strong>Output:</strong> Bounding boxes + confidence scores
+                        </div>
+                        <div class="tech-item">
+                            <strong>Training Data:</strong> 8,000+ annotated X-rays
+                        </div>
+                        <div class="tech-item">
+                            <strong>Inference Speed:</strong> ~30ms per image
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Use Cases -->
+                <div class="content-card">
+                    <h3><i class="fas fa-stethoscope"></i> Clinical Applications</h3>
+                    <div class="use-cases">
+                        <div class="use-case">
+                            <h4>Emergency Radiology</h4>
+                            <p>Rapid fracture detection in emergency departments</p>
+                        </div>
+                        <div class="use-case">
+                            <h4>Sports Medicine</h4>
+                            <p>Quick assessment of sports-related injuries</p>
+                        </div>
+                        <div class="use-case">
+                            <h4>Orthopedic Screening</h4>
+                            <p>Automated screening for fracture patterns</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Limitations -->
+                <div class="content-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Limitations & Considerations</h3>
+                    <ul class="limitations-list">
+                        <li>May miss subtle or hairline fractures</li>
+                        <li>Performance affected by image quality and positioning</li>
+                        <li>Requires proper X-ray technique and exposure</li>
+                        <li>Should be correlated with clinical findings</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Try Models Section -->
+<section class="try-models-section">
+    <div class="content-container">
+        <div class="text-center">
+            <h2>Ready to Experience Our Models?</h2>
+            <p>Test our AI models with your own medical images and see the results in action</p>
+            <div class="model-buttons">
+                <a href="{{ url_for('brain') }}" class="model-btn">
+                    <i class="fas fa-brain"></i>
+                    <span>Try Brain Tumor Detection</span>
+                </a>
+                <a href="{{ url_for('chest') }}" class="model-btn">
+                    <i class="fas fa-lungs"></i>
+                    <span>Try Chest X-ray Analysis</span>
+                </a>
+                <a href="{{ url_for('skin') }}" class="model-btn">
+                    <i class="fas fa-diagnoses"></i>
+                    <span>Try Skin Cancer Detection</span>
+                </a>
+                <a href="{{ url_for('fracture') }}" class="model-btn">
+                    <i class="fas fa-bone"></i>
+                    <span>Try Fracture Detection</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab navigation functionality
+    const tabs = document.querySelectorAll('.nav-tab');
+    const sections = document.querySelectorAll('.model-section');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetModel = this.getAttribute('data-model');
+            
+            // Remove active class from all tabs and sections
+            tabs.forEach(t => t.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding section
+            this.classList.add('active');
+            document.getElementById(targetModel + '-section').classList.add('active');
+            
+            // Smooth scroll to section
+            document.getElementById(targetModel + '-section').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    });
+    
+    // Add scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all content cards
+    document.querySelectorAll('.content-card').forEach(card => {
+        observer.observe(card);
+    });
+});
+</script>
+
+<style>
+/* Hero Section */
+.education-hero {
+    background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+    color: white;
+    padding: 6rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    animation: float 20s infinite alternate ease-in-out;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, 20px); }
+    100% { transform: translate(20px, -20px); }
+}
+
+.education-hero .content-container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #ffffff, #e8ecff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Navigation Tabs */
+.nav-tabs-section {
+    background: white;
+    padding: 2rem 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.model-nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.nav-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.5rem;
+    background: #f8f9ff;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    color: #666;
+}
+
+.nav-tab:hover {
+    background: #e8ecff;
+    color: #233cea;
+    transform: translateY(-2px);
+}
+
+.nav-tab.active {
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    color: white;
+    border-color: #233cea;
+    box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+}
+
+.nav-tab i {
+    font-size: 1.2rem;
+}
+
+/* Model Sections */
+.model-content-container {
+    background: #f8f9ff;
+    min-height: 100vh;
+}
+
+.model-section {
+    display: none;
+    padding: 4rem 0;
+}
+
+.model-section.active {
+    display: block;
+}
+
+.model-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.model-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.model-info h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 1rem;
+}
+
+.model-description {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.model-metrics {
+    display: flex;
+    gap: 2rem;
+}
+
+.metric {
+    text-align: center;
+}
+
+.metric-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #233cea;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Content Grid */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.content-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.content-card.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.content-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+}
+
+.content-card h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.content-card h3 i {
+    color: #233cea;
+}
+
+.content-card p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Feature Lists */
+.feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #555;
+}
+
+.feature-item i {
+    color: #28a745;
+    font-size: 1.1rem;
+}
+
+/* Technical Details */
+.tech-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tech-item {
+    padding: 1rem;
+    background: #f8f9ff;
+    border-radius: 8px;
+    border-left: 4px solid #233cea;
+}
+
+.tech-item strong {
+    color: #1a2cb3;
+}
+
+/* Use Cases */
+.use-cases {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.use-case h4 {
+    color: #1a2cb3;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.use-case p {
+    color: #666;
+    margin: 0;
+}
+
+/* Limitations */
+.limitations-list {
+    list-style: none;
+    padding: 0;
+}
+
+.limitations-list li {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+    color: #666;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.limitations-list li:before {
+    content: '⚠️';
+    position: absolute;
+    left: 0;
+    top: 0.8rem;
+}
+
+.limitations-list li:last-child {
+    border-bottom: none;
+}
+
+/* Try Models Section */
+.try-models-section {
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.try-models-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.try-models-section p {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+}
+
+.model-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.model-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2rem;
+    background: white;
+    color: #233cea;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.model-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    color: #233cea;
+}
+
+.model-btn i {
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .model-nav-tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .nav-tab {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+    
+    .model-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .model-metrics {
+        justify-content: center;
+    }
+    
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .model-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .model-btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .education-hero {
+        padding: 4rem 0 2rem;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .model-info h2 {
+        font-size: 2rem;
+    }
+    
+    .content-card {
+        padding: 1.5rem;
+    }
+}
+</style>
+{% endblock %} 

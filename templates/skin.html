@@ -1,0 +1,356 @@
+{% extends "layout.html" %}
+
+{% block title %}MedXpert - Skin Cancer Detection{% endblock %}
+
+{% block head %}
+<style>
+    :root {
+        --bg-dark: #1a1a1a;
+        --bg-darker: #141414;
+        --bg-lighter: #2a2a2a;
+        --accent-blue: #0066cc;
+        --accent-green: #00cc66;
+        --text-primary: #ffffff;
+        --text-secondary: #b3b3b3;
+        --border-radius: 12px;
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-primary);
+    }
+
+    .model-header {
+        background: linear-gradient(45deg, var(--bg-darker), var(--bg-dark));
+        border-bottom: 2px solid var(--accent-blue);
+        padding: 2rem 0;
+    }
+
+    .model-header h1 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .model-header .lead {
+        color: var(--text-secondary);
+    }
+
+    .card {
+        background: var(--bg-darker);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--border-radius);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+        background: linear-gradient(45deg, var(--accent-blue), #0052a3);
+        color: var(--text-primary);
+        border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+        padding: 1.5rem;
+    }
+
+    .card-body {
+        background: var(--bg-darker);
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+    }
+
+    .form-control {
+        background: var(--bg-lighter);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        border-radius: var(--border-radius);
+        padding: 0.75rem 1rem;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        background: var(--bg-lighter);
+        border-color: var(--accent-blue);
+        color: var(--text-primary);
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.25);
+    }
+
+    .form-text {
+        color: var(--text-secondary);
+    }
+
+    .btn-primary {
+        background: var(--accent-blue);
+        border: none;
+        border-radius: var(--border-radius);
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+        background: #0052a3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    }
+
+    .result-container {
+        background: var(--bg-darker);
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .result-image {
+        border-radius: var(--border-radius);
+        border: 2px solid var(--accent-blue);
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .confidence-meter {
+        background: var(--bg-lighter);
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        margin: 1rem 0;
+    }
+
+    .confidence-value {
+        height: 100%;
+        border-radius: 5px;
+        transition: width 0.6s ease;
+    }
+
+    .confidence-high { background: linear-gradient(45deg, #ff4444, #ff0000); }
+    .confidence-medium { background: linear-gradient(45deg, #ffa726, #fb8c00); }
+    .confidence-low { background: linear-gradient(45deg, #66bb6a, #43a047); }
+
+    .classification-box {
+        background: var(--bg-lighter);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-left: 4px solid;
+        transition: var(--transition);
+    }
+
+    .classification-malignant {
+        border-color: #ff4444;
+        background: rgba(255, 68, 68, 0.1);
+    }
+
+    .classification-benign {
+        border-color: #00cc66;
+        background: rgba(0, 204, 102, 0.1);
+    }
+
+    .feature-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .feature-card {
+        background: var(--bg-lighter);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        transition: var(--transition);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature-icon {
+        color: var(--accent-blue);
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .advice-box {
+        background: var(--bg-lighter);
+        border-left: 4px solid var(--accent-green);
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .advice-box h5 {
+        color: var(--accent-green);
+        margin-bottom: 1rem;
+    }
+
+    .prevention-list li {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        padding-left: 2rem;
+        position: relative;
+    }
+
+    .prevention-list li:before {
+        content: "\f058";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        color: var(--accent-green);
+        position: absolute;
+        left: 0;
+    }
+
+    /* Loading animation */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(26, 26, 26, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid var(--bg-lighter);
+        border-top: 3px solid var(--accent-blue);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Tool tips */
+    [data-tooltip] {
+        position: relative;
+        cursor: help;
+    }
+
+    [data-tooltip]:before {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.5rem 1rem;
+        background: var(--bg-darker);
+        color: var(--text-primary);
+        border-radius: var(--border-radius);
+        font-size: 0.875rem;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+    }
+
+    [data-tooltip]:hover:before {
+        opacity: 1;
+        visibility: visible;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="loading-overlay d-none">
+    <div class="loading-spinner"></div>
+</div>
+
+<section class="model-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 text-center">
+                <h1><i class="fas fa-microscope me-2"></i>Skin Cancer Detection Lab</h1>
+                <p class="lead">Advanced dermoscopic analysis powered by artificial intelligence</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="mb-0">
+                            <i class="fas fa-upload me-2"></i>Upload Specimen Image
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="skinUploadForm" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label for="skinFile" class="form-label">Select dermoscopic image for analysis</label>
+                                <input class="form-control" type="file" id="skinFile" name="file" accept=".jpg,.jpeg,.png" data-tooltip="Supported formats: JPG, JPEG, PNG">
+                                <div class="form-text">For optimal results, ensure the image is well-lit and focused on the lesion area</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="analyzeSkinBtn">
+                                <i class="fas fa-microscope me-2"></i>
+                                <span class="button-text">Begin Analysis</span>
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Results will be dynamically inserted here -->
+                <div id="analysisResults" class="d-none">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('skinUploadForm');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const analysisResults = document.getElementById('analysisResults');
+    const submitButton = document.getElementById('analyzeSkinBtn');
+    const spinner = submitButton.querySelector('.spinner-border');
+    const buttonText = submitButton.querySelector('.button-text');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        loadingOverlay.classList.remove('d-none');
+        spinner.classList.remove('d-none');
+        buttonText.textContent = 'Analyzing...';
+        submitButton.disabled = true;
+
+        try {
+            // Your existing form submission logic here
+            // ...
+
+            // After successful analysis, update UI
+            analysisResults.classList.remove('d-none');
+            
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error appropriately
+        } finally {
+            // Hide loading state
+            loadingOverlay.classList.add('d-none');
+            spinner.classList.add('d-none');
+            buttonText.textContent = 'Begin Analysis';
+            submitButton.disabled = false;
+        }
+    });
+});
+</script>
+{% endblock %}

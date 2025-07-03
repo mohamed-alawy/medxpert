@@ -1,0 +1,445 @@
+{% extends "layout.html" %}
+
+{% block title %}Register - MedXpert{% endblock %}
+
+{% block head %}
+<style>
+    .register-container {
+        min-height: 100vh;
+        background: var(--light-gray);
+        padding-top: 100px;
+        padding-bottom: 5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-wrapper {
+        position: relative;
+        z-index: 10;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+    
+    .card {
+        border: none;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-top: 20px;
+        position: relative;
+        z-index: 10;
+        background: white;
+        transform: translateZ(0) scale(0.98);
+        transition: all 0.5s cubic-bezier(0.17, 0.67, 0.29, 0.99);
+        opacity: 0;
+    }
+    
+    .card:hover {
+        transform: translateY(-10px) scale(1.01);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .card-header {
+        background: var(--primary-color);
+        padding: 40px 30px;
+        text-align: center;
+        border-bottom: none;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-header h2 {
+        margin-bottom: 0;
+        color: white;
+        font-weight: 700;
+        font-size: 2.5rem;
+        letter-spacing: -1px;
+    }
+    
+    .hero-subtitle {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.1rem;
+        margin-top: 15px;
+    }
+    
+    .card-body {
+        padding: 40px;
+    }
+
+    .form-control {
+        border-radius: var(--radius);
+        padding: 12px 20px;
+        height: auto;
+        background-color: var(--light-gray);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: var(--dark-gray);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        font-size: 1rem;
+    }
+    
+    .input-group .form-control {
+        margin-bottom: 0;
+    }
+    
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(35, 60, 234, 0.1);
+        background-color: white;
+        transform: translateY(-2px);
+    }
+    
+    .form-control::placeholder {
+        color: rgba(0, 0, 0, 0.4);
+        font-weight: 400;
+    }
+
+    .btn-primary {
+        border-radius: var(--radius);
+        padding: 14px 24px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        transition: all 0.5s cubic-bezier(0.17, 0.67, 0.29, 0.99);
+        position: relative;
+        overflow: hidden;
+        margin-top: 20px;
+        width: 100%;
+        box-shadow: var(--shadow);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        background: var(--primary-light);
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: var(--dark-gray);
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+    
+    .input-group-text {
+        background-color: var(--light-gray);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-left: none;
+        color: var(--dark-gray);
+        cursor: pointer;
+        border-top-right-radius: var(--radius);
+        border-bottom-right-radius: var(--radius);
+        padding: 0 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .password-toggle {
+        background: none;
+        border: none;
+        color: rgba(0, 0, 0, 0.5);
+        transition: all 0.3s ease;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+    }
+    
+    .password-toggle i {
+        font-size: 14px;
+        line-height: 1;
+    }
+    
+    .password-toggle:hover {
+        color: var(--primary-color);
+    }
+    
+    .form-text {
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 0.9rem;
+    }
+    
+    .link-primary {
+        color: var(--primary-color);
+        text-decoration: none;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .link-primary:hover {
+        color: var(--primary-dark);
+    }
+    
+    .form-footer {
+        margin-top: 30px;
+        text-align: center;
+        color: var(--dark-gray);
+        font-size: 1rem;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+        animation: fadeIn 0.6s forwards;
+        opacity: 0;
+    }
+    
+    .form-row .form-group:nth-child(1) {
+        animation-delay: 0.3s;
+    }
+    
+    .form-row .form-group:nth-child(2) {
+        animation-delay: 0.5s;
+    }
+    
+    .form-group {
+        animation: fadeIn 0.6s forwards;
+        opacity: 0;
+    }
+    
+    .form-group:nth-child(3) {
+        animation-delay: 0.7s;
+    }
+    
+    .form-group:nth-child(4) {
+        animation-delay: 0.9s;
+    }
+    
+    .form-group:nth-child(5) {
+        animation-delay: 1.1s;
+    }
+    
+    .form-check {
+        animation: fadeIn 0.6s forwards;
+        animation-delay: 1.3s;
+        opacity: 0;
+    }
+    
+    .password-strength {
+        height: 5px;
+        border-radius: 10px;
+        margin-top: 8px;
+        transition: all 0.3s ease;
+        background: rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .password-strength-bar {
+        height: 100%;
+        width: 0;
+        transition: all 0.3s ease;
+        border-radius: 10px;
+    }
+    
+    .strength-weak {
+        background: linear-gradient(to right, #ff4d4d, #ff6666);
+        width: 25%;
+    }
+    
+    .strength-medium {
+        background: linear-gradient(to right, #ffaa00, #ffc966);
+        width: 50%;
+    }
+    
+    .strength-strong {
+        background: linear-gradient(to right, #2ecc71, #7ed6a9);
+        width: 75%;
+    }
+    
+    .strength-very-strong {
+        background: linear-gradient(to right, #00c853, #69f0ae);
+        width: 100%;
+    }
+    
+    .strength-label {
+        font-size: 0.8rem;
+        color: var(--dark-gray);
+        margin-top: 5px;
+        text-align: right;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="register-container content-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-6">
+                <div class="card-wrapper">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Create Account</h2>
+                            <p class="hero-subtitle">Join the future of medical imaging analysis</p>
+                        </div>
+                        <div class="card-body">
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    {% for category, message in messages %}
+                                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                            
+                            <form method="POST" action="{{ url_for('register') }}">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="first_name" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="last_name" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username" required>
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Create a password" required onkeyup="checkPasswordStrength()">
+                                        <span class="input-group-text">
+                                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password', 'toggleIcon1')">
+                                                <i class="far fa-eye" id="toggleIcon1"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class="password-strength" id="passwordStrength">
+                                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                                    </div>
+                                    <div class="strength-label" id="strengthLabel"></div>
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                                        <span class="input-group-text">
+                                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm_password', 'toggleIcon2')">
+                                                <i class="far fa-eye" id="toggleIcon2"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4 form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="terms" required>
+                                    <label class="form-check-label" for="terms">
+                                        I agree to the <a href="#" class="link-primary">Terms of Service</a> and <a href="#" class="link-primary">Privacy Policy</a>
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <span>Create Account</span>
+                                </button>
+                            </form>
+                            
+                            <div class="form-footer">
+                                Already have an account? <a href="{{ url_for('login') }}" class="link-primary">Log in</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePasswordVisibility(fieldId, iconId) {
+        const passwordInput = document.getElementById(fieldId);
+        const toggleIcon = document.getElementById(iconId);
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+    
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthLabel = document.getElementById('strengthLabel');
+        
+        // Remove all classes
+        strengthBar.classList.remove('strength-weak', 'strength-medium', 'strength-strong', 'strength-very-strong');
+        
+        // Check password strength
+        let strength = 0;
+        if (password.length >= 8) strength += 1;
+        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 1;
+        if (password.match(/\d/)) strength += 1;
+        if (password.match(/[^a-zA-Z\d]/)) strength += 1;
+        
+        // Update strength bar and label
+        switch (strength) {
+            case 0:
+                strengthBar.style.width = '0';
+                strengthLabel.textContent = '';
+                break;
+            case 1:
+                strengthBar.classList.add('strength-weak');
+                strengthLabel.textContent = 'Weak';
+                break;
+            case 2:
+                strengthBar.classList.add('strength-medium');
+                strengthLabel.textContent = 'Medium';
+                break;
+            case 3:
+                strengthBar.classList.add('strength-strong');
+                strengthLabel.textContent = 'Strong';
+                break;
+            case 4:
+                strengthBar.classList.add('strength-very-strong');
+                strengthLabel.textContent = 'Very Strong';
+                break;
+        }
+    }
+    
+    // Add animation to form elements on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const card = document.querySelector('.card');
+        setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0) scale(1)';
+        }, 200);
+    });
+</script>
+{% endblock %}

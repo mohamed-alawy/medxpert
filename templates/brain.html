@@ -1,0 +1,459 @@
+{% extends "layout.html" %}
+{% block title %}Brain Tumor Detection - MedXpert{% endblock %}
+
+{% block head %}
+<style>
+    .slider-container {
+        margin-bottom: 15px;
+    }
+    .image-container {
+        position: relative;
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: 12px;
+        overflow: hidden;
+        height: 500px; /* Increased height from 400px to 500px to make image bigger */
+    }
+    .image-container img {
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+        display: block;
+        border-radius: 12px;
+        object-fit: contain; /* Maintain aspect ratio */
+    }
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.7;
+        border-radius: 12px;
+    }
+    .control-panel {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    .slice-navigation {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .slice-slider {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .tumor-info-card {
+        background-color: #f8f9fa;
+        border-left: 4px solid #0d6efd;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .upload-container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        max-width: 750px;
+        margin: 0 auto;
+    }
+    .brain-header {
+        background-color: rgba(35, 60, 234, 0.1);
+        border-radius: var(--border-radius);
+    }
+    #segmentationOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block; /* Changed from 'none' to 'block' to show by default */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="model-header brain-header py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 text-center">
+                <h1>Brain Tumor Detection</h1>
+                <p class="lead">Upload an MRI brain scan to detect and segment tumor regions with state-of-the-art accuracy.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 1: Upload and Analysis -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-upload me-2"></i>Upload MRI Scan</h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ url_for('predict_brain') }}" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Select MRI image (NII.GZ format)</label>
+                                <input type="file" class="form-control" id="file" name="file" accept=".nii.gz" required>
+                                <div class="form-text">Supported format: NII.GZ (NIFTI) scan images</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="analyzeBrainBtn">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                Analyze MRI
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 2: Results Analysis -->
+<section class="py-5 bg-white">
+    <div class="container">
+        {% if original_img_b64 %}
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card mb-4 shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>MRI Analysis Results</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Tumor Info Card -->
+                        <div class="tumor-info-card">
+                            <h5><i class="fas fa-info-circle me-2"></i>Tumor Detection Summary</h5>
+                            <p class="mb-1" id="slice-count-info">Detecting tumor information...</p>
+                            <p class="mb-0" id="current-slice-info">Current slice: analyzing...</p>
+                        </div>
+                        
+                        <!-- MRI Image Display with Rearranged Layout -->
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4">
+                                <!-- Control Panel moved to left side -->
+                                <div class="control-panel">
+                                    <h5 class="mb-3">Image Controls</h5>
+                                    <div class="slider-container">
+                                        <label for="brightness" class="form-label">Brightness: <span id="brightnessValue">0</span></label>
+                                        <input type="range" class="form-range" min="-100" max="100" value="0" id="brightness">
+                                    </div>
+                                    <div class="slider-container">
+                                        <label for="contrast" class="form-label">Contrast: <span id="contrastValue">100</span>%</label>
+                                        <input type="range" class="form-range" min="0" max="200" value="100" id="contrast">
+                                    </div>
+                                    
+                                    <div class="form-check form-switch mt-3">
+                                        <input class="form-check-input" type="checkbox" id="toggleSegmentation" checked>
+                                        <label class="form-check-label" for="toggleSegmentation">Show Tumor Segmentation</label>
+                                    </div>
+                                    
+                                    <div class="text-center mt-3">
+                                        <button class="btn btn-sm btn-outline-primary" id="resetAdjustments">Reset Adjustments</button>
+                                    </div>
+                                    
+                                    <!-- MRI Slice Navigation moved under the controls -->
+                                    <div class="slice-navigation mt-4">
+                                        <h5 class="mb-3">Slice Navigation</h5>
+                                        <div class="d-flex align-items-center justify-content-center mb-3">
+                                            <button id="prevSlice" class="btn btn-sm btn-outline-secondary me-3">
+                                                <i class="fas fa-chevron-left"></i>
+                                            </button>
+                                            <span id="sliceCounter">Slice 1 of 64</span>
+                                            <button id="nextSlice" class="btn btn-sm btn-outline-secondary ms-3">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </button>
+                                        </div>
+                                        <input type="range" class="form-range slice-slider" min="0" max="63" value="0" id="sliceSlider">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-8 col-md-8">
+                                <!-- MRI Image moved to right side -->
+                                <div class="image-container">
+                                    <img src="data:image/png;base64,{{ original_img_b64 }}" class="img-fluid rounded" id="baseImage" alt="MRI Slice">
+                                    <img src="data:image/png;base64,{{ segmented_img_b64 }}" class="img-fluid rounded" id="segmentationOverlay" alt="Tumor Segmentation">
+                                </div>
+                                <p class="text-center text-muted mt-2" id="sliceLabel">Slice 1/64</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Section 3: Educational Information -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-book-medical me-2"></i>Educational Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>About Brain Tumor Detection</h4>
+                        <p>Brain tumors are masses or growths of abnormal cells in the brain. They can be benign (non-cancerous) or malignant (cancerous), and early detection is crucial for effective treatment.</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h5>How Our AI Works</h5>
+                                <p>Our brain tumor detection model uses a U-Net architecture trained on the BraTS dataset to segment tumor regions in MRI scans. The model analyzes multiple MRI slices to identify abnormal tissue patterns associated with tumors.</p>
+                                
+                                <h6 class="mt-4">Segmentation Labels:</h6>
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <span class="badge bg-warning text-dark me-2" style="width: 20px; height: 20px;"></span>
+                                        <span>Tumor region - Areas the AI has identified as potential tumor tissue</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h5>Types of Brain Tumors</h5>
+                                <ul>
+                                    <li><strong>Gliomas:</strong> Tumors that occur in the brain and spinal cord, including astrocytomas, oligodendrogliomas, and glioblastomas</li>
+                                    <li><strong>Meningiomas:</strong> Tumors that arise from the membranes surrounding the brain and spinal cord</li>
+                                    <li><strong>Pituitary Adenomas:</strong> Tumors that develop in the pituitary gland</li>
+                                    <li><strong>Schwannomas:</strong> Tumors that develop from the Schwann cells that surround nerves</li>
+                                    <li><strong>Metastatic Brain Tumors:</strong> Cancer that spreads to the brain from another part of the body</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <h5>MRI in Brain Tumor Diagnosis</h5>
+                                <p>Magnetic Resonance Imaging (MRI) is the preferred imaging method for diagnosing brain tumors because it provides detailed images of the brain's soft tissues. Different MRI sequences (T1, T2, FLAIR, etc.) highlight different aspects of brain tissue and tumor characteristics.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-warning mt-4">
+                            <p class="mb-0"><strong>Disclaimer:</strong> This AI tool is designed to assist medical professionals in detecting brain tumors. It should not replace professional medical diagnosis. Always consult with healthcare providers for medical decisions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listener to the brain analysis form to show loading spinner
+        const brainForm = document.querySelector('form');
+        const analyzeBtn = document.getElementById('analyzeBrainBtn');
+        
+        if (brainForm) {
+            brainForm.addEventListener('submit', function() {
+                // Show spinner and disable button
+                const spinner = analyzeBtn.querySelector('.spinner-border');
+                spinner.classList.remove('d-none');
+                analyzeBtn.disabled = true;
+            });
+        }
+    });
+</script>
+
+{% if original_img_b64 %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize variables with data from backend
+        let currentSlice = {{ current_slice_idx if current_slice_idx else 0 }};
+        const totalSlices = {{ total_slices if total_slices else 64 }};
+        let slicesWithTumor = {{ tumor_info.tumor_slice_indices|tojson if tumor_info and tumor_info.tumor_slice_indices else '[]' }};
+        
+        // Store all slice images
+        let allSlices = {
+            original: [],
+            segmented: []
+        };
+        
+        // Initialize with data from the backend if available
+        {% if all_original_slices %}
+            {% for slice in all_original_slices %}
+                allSlices.original.push("{{ slice }}");
+            {% endfor %}
+        {% else %}
+            // If not provided, at least add the current slice
+            allSlices.original.push("{{ original_img_b64 }}");
+        {% endif %}
+        
+        {% if all_segmented_slices %}
+            {% for slice in all_segmented_slices %}
+                allSlices.segmented.push("{{ slice }}");
+            {% endfor %}
+        {% else %}
+            // If not provided, at least add the current slice
+            allSlices.segmented.push("{{ segmented_img_b64 }}");
+        {% endif %}
+        
+        // Get DOM elements
+        const baseImage = document.getElementById('baseImage');
+        const segmentationOverlay = document.getElementById('segmentationOverlay');
+        const toggleSegmentation = document.getElementById('toggleSegmentation');
+        const sliceSlider = document.getElementById('sliceSlider');
+        const sliceCounter = document.getElementById('sliceCounter');
+        const sliceLabel = document.getElementById('sliceLabel');
+        const sliceCountInfo = document.getElementById('slice-count-info');
+        const currentSliceInfo = document.getElementById('current-slice-info');
+        const brightnessSlider = document.getElementById('brightness');
+        const contrastSlider = document.getElementById('contrast');
+        const brightnessValue = document.getElementById('brightnessValue');
+        const contrastValue = document.getElementById('contrastValue');
+        const prevSliceBtn = document.getElementById('prevSlice');
+        const nextSliceBtn = document.getElementById('nextSlice');
+        const resetBtn = document.getElementById('resetAdjustments');
+        
+        // Update tumor info section
+        function updateTumorInfo() {
+            if (slicesWithTumor && slicesWithTumor.length > 0) {
+                sliceCountInfo.textContent = `Tumor detected in ${slicesWithTumor.length} of ${totalSlices} slices`;
+            } else {
+                sliceCountInfo.textContent = `No tumor detected across ${totalSlices} slices`;
+            }
+            updateCurrentSliceInfo();
+        }
+        
+        // Update current slice info
+        function updateCurrentSliceInfo() {
+            currentSliceInfo.textContent = `Current slice: ${currentSlice + 1}/${totalSlices}`;
+            
+            // Highlight if tumor is present in this slice
+            if (slicesWithTumor && slicesWithTumor.includes(currentSlice)) {
+                currentSliceInfo.classList.add('text-danger', 'fw-bold');
+            } else {
+                currentSliceInfo.classList.remove('text-danger', 'fw-bold');
+            }
+        }
+        
+        // Update slice navigation information
+        function updateSliceNavigationInfo() {
+            sliceCounter.textContent = `Slice ${currentSlice + 1} of ${totalSlices}`;
+            sliceLabel.textContent = `Slice ${currentSlice + 1}/${totalSlices}`;
+            sliceSlider.value = currentSlice;
+        }
+        
+        // Apply brightness and contrast filters
+        function applyFilters() {
+            const brightnessVal = parseInt(brightnessSlider.value) + 100;
+            const contrastVal = parseInt(contrastSlider.value);
+            
+            baseImage.style.filter = `brightness(${brightnessVal/100}) contrast(${contrastVal/100})`;
+            segmentationOverlay.style.filter = `brightness(${brightnessVal/100}) contrast(${contrastVal/100})`;
+        }
+        
+        // Navigate to a different slice
+        function goToSlice(index) {
+            if (index < 0) index = 0;
+            if (index >= totalSlices) index = totalSlices - 1;
+            
+            currentSlice = index;
+            
+            // Update the slice counter and slider
+            updateSliceNavigationInfo();
+            updateCurrentSliceInfo();
+            
+            // Update the displayed images if we have the data
+            if (allSlices.original.length > currentSlice) {
+                baseImage.src = `data:image/png;base64,${allSlices.original[currentSlice]}`;
+            }
+            
+            if (allSlices.segmented.length > currentSlice) {
+                segmentationOverlay.src = `data:image/png;base64,${allSlices.segmented[currentSlice]}`;
+            }
+            
+            // Remove visual border indicator code
+        }
+        
+        // Set up event listeners
+        
+        // Toggle segmentation visibility
+        toggleSegmentation.addEventListener('change', function() {
+            segmentationOverlay.style.display = this.checked ? 'block' : 'none';
+        });
+        
+        // Brightness control
+        brightnessSlider.addEventListener('input', function() {
+            brightnessValue.textContent = this.value;
+            applyFilters();
+        });
+        
+        // Contrast control
+        contrastSlider.addEventListener('input', function() {
+            contrastValue.textContent = this.value;
+            applyFilters();
+        });
+        
+        // Reset adjustments
+        resetBtn.addEventListener('click', function() {
+            brightnessSlider.value = 0;
+            contrastSlider.value = 100;
+            brightnessValue.textContent = '0';
+            contrastValue.textContent = '100';
+            toggleSegmentation.checked = true;
+            segmentationOverlay.style.display = 'block';
+            applyFilters();
+        });
+        
+        // Navigation buttons
+        prevSliceBtn.addEventListener('click', function() {
+            goToSlice(currentSlice - 1);
+        });
+        
+        nextSliceBtn.addEventListener('click', function() {
+            goToSlice(currentSlice + 1);
+        });
+        
+        // Slider navigation
+        sliceSlider.addEventListener('input', function() {
+            goToSlice(parseInt(this.value));
+        });
+        
+        // Mouse wheel navigation
+        const imageContainer = document.querySelector('.image-container');
+        if (imageContainer) {
+            imageContainer.addEventListener('wheel', function(event) {
+                event.preventDefault();
+                // Scroll down = next slice, scroll up = previous slice
+                if (event.deltaY > 0) {
+                    goToSlice(currentSlice + 1);
+                } else {
+                    goToSlice(currentSlice - 1);
+                }
+            });
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                goToSlice(currentSlice + 1);
+            } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                goToSlice(currentSlice - 1);
+            }
+        });
+
+        // Initialize the application
+        updateTumorInfo();
+        updateSliceNavigationInfo();
+        updateCurrentSliceInfo();
+        applyFilters();
+        
+        // Remove the initial border indicator code
+    });
+</script>
+{% endif %}
+{% endblock %}
