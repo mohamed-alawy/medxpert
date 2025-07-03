@@ -22,3 +22,4 @@ unstructured[pdf]
 chromadb
 python-docx
 python-dotenv
+docx2txt 
