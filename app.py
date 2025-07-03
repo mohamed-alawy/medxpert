@@ -10,7 +10,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from werkzeug.utils import secure_filename
-from flask import Flask, request, render_template, jsonify, redirect, url_for, flash, session
+from flask import Flask, request, render_template, jsonify, redirect, url_for, flash, session , Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -25,10 +25,15 @@ from monai.transforms import (
     Compose, LoadImaged, EnsureChannelFirstd, Spacingd, Orientationd,
     ScaleIntensityRanged, CropForegroundd, Resized, ToTensord
 )
+from monai.data import Dataset
 from monai.inferers import sliding_window_inference
 from monai.networks.nets import UNet
 from monai.networks.layers import Norm
-from monai.data import Dataset
+from dotenv import load_dotenv
+
+load_dotenv()
+import chatbot_services
+
 
 print("Starting application...")
 
@@ -66,7 +71,15 @@ class User(UserMixin, db.Model):
         
     def is_admin(self):
         return self.role == 'admin'
-
+class Document(db.Model):
+    """Database model for storing user-uploaded documents for the chatbot."""
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    file_name = db.Column(db.String(255), nullable=False)
+    file_path = db.Column(db.String(255), nullable=False)
+    status = db.Column(db.String(20), default='processing', nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user = db.relationship('User', backref=db.backref('documents', lazy=True, cascade="all, delete-orphan"))
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
@@ -114,17 +127,24 @@ with app.app_context():
 # Configure upload folders
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# Around line 132, add this line:
+CHATBOT_UPLOAD_FOLDER = os.path.join(UPLOAD_FOLDER, 'chatbot_docs')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
 
 # Allowed file extensions
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'nii.gz'}
+    # Allowed file extensions for chatbot documents
+ALLOWED_CHATBOT_EXTENSIONS = {'pdf', 'docx', 'txt'}
 
 def allowed_file(filename):
     return '.' in filename and (
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS or
         filename.endswith('.nii.gz')  # Special handling for .nii.gz files
     )
+
+def allowed_chatbot_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_CHATBOT_EXTENSIONS
 
 # Set up device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -271,6 +291,63 @@ def adjust_image(image, brightness=0, contrast=1):
     
     return adjusted
 
+# --- Chatbot API Blueprint ---
+
+chatbot_bp = Blueprint('chatbot_bp', __name__, url_prefix='/api/chatbot')
+
+@chatbot_bp.route('/upload', methods=['POST'])
+@login_required
+def upload_chatbot_document():
+    if 'file' not in request.files:
+        return jsonify({'status': 'error', 'message': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '' or not allowed_chatbot_file(file.filename):
+        return jsonify({'status': 'error', 'message': 'Invalid file type or no file selected'}), 400
+    
+    filename = secure_filename(file.filename)
+    
+    # Create a user-specific directory to prevent filename conflicts
+    user_doc_folder = os.path.join(CHATBOT_UPLOAD_FOLDER, str(current_user.id))
+    os.makedirs(user_doc_folder, exist_ok=True)
+    
+    filepath = os.path.join(user_doc_folder, filename)
+    file.save(filepath)
+
+    # Create a record in the database
+    new_doc = Document(user_id=current_user.id, file_name=filename, file_path=filepath)
+    db.session.add(new_doc)
+    db.session.commit()
+
+    # NOTE: This is synchronous processing for Phase 1. This will be slow for large documents.
+    # In Phase 3, this will be moved to a background task (Celery).
+    success = chatbot_services.process_document(
+        file_path=filepath, user_id=current_user.id, document_id=new_doc.id, file_name=filename
+    )
+
+    if success:
+        new_doc.status = 'ready'
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': f"'{filename}' processed successfully."})
+    else:
+        new_doc.status = 'error'
+        db.session.commit()
+        return jsonify({'status': 'error', 'message': f"Failed to process '{filename}'."}), 500
+
+@chatbot_bp.route('/query', methods=['POST'])
+@login_required
+def query_chatbot():
+    data = request.get_json()
+    if not data or 'question' not in data:
+        return jsonify({'status': 'error', 'message': 'Question not provided'}), 400
+    
+    question = data['question']
+    answer = chatbot_services.get_rag_response(current_user.id, question)
+    
+    return jsonify({'status': 'success', 'answer': answer})
+
+# Register the blueprint with the main Flask app
+app.register_blueprint(chatbot_bp)
+
 # Error handlers
 @app.errorhandler(500)
 def internal_error(error):
@@ -315,6 +392,12 @@ def chest():
 @app.route('/fracture')
 def fracture():
     return render_template('fracture.html')
+
+@app.route('/chatbot')
+@login_required
+def chatbot_page():
+    # In Phase 3, we'll fetch the user's documents here.
+    return render_template('chatbot.html')
 
 @app.route('/predict/brain', methods=['POST'])
 def predict_brain():
@@ -704,6 +787,7 @@ def predict_fracture():
         'message': 'Invalid file format. Please upload a valid image.'
     })
 
+
 # Add security headers middleware with error handling
 @app.after_request
 def add_security_headers(response):
@@ -774,6 +858,8 @@ def profile():
         return redirect(url_for('profile'))
         
     return render_template('profile.html')
+
+
 
 # Add a dashboard route
 @app.route('/dashboard')
@@ -958,6 +1044,8 @@ if __name__ == "__main__":
         os.makedirs('models', exist_ok=True)
         # Create uploads directory if it doesn't exist
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        os.makedirs(CHATBOT_UPLOAD_FOLDER, exist_ok=True)
+        
         
         app.run(host="0.0.0.0", port=port, debug=True)
     except Exception as e:

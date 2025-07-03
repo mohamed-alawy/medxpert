@@ -13,3 +13,11 @@ nibabel
 scikit-image
 monai
 numpy==1.26.4
+langchain
+langchain-google-genai
+langchain_community
+unstructured
+chromadb
+pypdf
+python-docx
+python-dotenv

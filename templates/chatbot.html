@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+
+{% block title %}AI Assistant - MedXpert{% endblock %}
+
+{% block head %}
+<style>
+    /* Custom styles for the chatbot interface */
+    .chatbot-container {
+        display: flex;
+        height: calc(100vh - 120px); /* Full viewport height minus navbar/padding */
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .control-panel {
+        flex: 0 0 350px;
+        background-color: #f8f9fa;
+        border-radius: var(--radius);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .chat-interface {
+        flex-grow: 1;
+        background-color: #ffffff;
+        border-radius: var(--radius);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .conversation {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .chat-bubble {
+        max-width: 75%;
+        padding: 10px 15px;
+        border-radius: 18px;
+        line-height: 1.5;
+    }
+
+    .chat-bubble.user {
+        background-color: var(--primary-color);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+    }
+
+    .chat-bubble.assistant {
+        background-color: #e9ecef;
+        color: #333;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+    }
+    
+    .typing-indicator {
+        align-self: flex-start;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+    .typing-indicator span {
+        width: 8px;
+        height: 8px;
+        background-color: #ccc;
+        border-radius: 50%;
+        animation: bounce 1.4s infinite ease-in-out both;
+    }
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+
+
+    .chat-input-form {
+        padding: 20px;
+        border-top: 1px solid #dee2e6;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chatbot-container">
+    <aside class="control-panel">
+        <h4>Document Library</h4>
+        <p class="text-muted small">Upload documents to create your knowledge base.</p>
+        <hr>
+        
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="file-input" class="form-label">Upload New Document</label>
+                <input class="form-control" type="file" id="file-input" name="file" accept=".pdf,.docx,.txt" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Upload</button>
+        </form>
+        
+        <div id="upload-status" class="mt-3"></div>
+
+        <hr>
+        <div class="mt-2">
+            <h5>My Documents</h5>
+            <ul id="doc-list" class="list-group list-group-flush">
+                <li class="list-group-item">No documents uploaded yet.</li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="chat-interface">
+        <div class="conversation" id="conversation">
+             <div class="chat-bubble assistant">
+                Hello! I'm your AI Medical Assistant. Upload a document or ask a question about your existing library.
+            </div>
+        </div>
+        <div class="chat-input-form">
+            <form id="chat-form" class="d-flex">
+                <input type="text" id="message-input" class="form-control me-2" placeholder="Ask a question based on your documents..." required autocomplete="off">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+{% endblock %}
