@@ -1,3 +1,5 @@
+# Dockerfile
+
 FROM python:3.10.16-slim
 
 WORKDIR /app
@@ -10,6 +12,8 @@ RUN apt-get update && apt-get install -y \
     libxext6 \
     libxrender-dev \
     libgomp1 \
+    poppler-utils \
+    tesseract-ocr \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first to leverage Docker caching
@@ -28,4 +32,4 @@ RUN mkdir -p static/uploads
 EXPOSE 5000
 
 # Command to run the application
-CMD ["python", "app.py"] 
+CMD ["python", "app.py"]
