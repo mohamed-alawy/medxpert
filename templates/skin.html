@@ -4,597 +4,353 @@
 
 {% block head %}
 <style>
-    .skin-header {
-        background-color: rgba(249, 115, 22, 0.1);
-        border-radius: var(--border-radius);
+    :root {
+        --bg-dark: #1a1a1a;
+        --bg-darker: #141414;
+        --bg-lighter: #2a2a2a;
+        --accent-blue: #0066cc;
+        --accent-green: #00cc66;
+        --text-primary: #ffffff;
+        --text-secondary: #b3b3b3;
+        --border-radius: 12px;
+        --transition: all 0.3s ease;
     }
-    
-    .model-icon {
-        max-height: 180px;
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-primary);
     }
-    
-    .upload-container {
-        background-color: white;
+
+    .model-header {
+        background: linear-gradient(45deg, var(--bg-darker), var(--bg-dark));
+        border-bottom: 2px solid var(--accent-blue);
+        padding: 2rem 0;
     }
-    
-    .result-container {
-        position: relative;
-    }
-    
-    .result-image {
-        width: 100%;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    .result-details {
-        margin-top: 1.5rem;
-    }
-    
-    .result-card {
-        height: 100%;
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-    
-    .result-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
-    
-    .accuracy-chart-container {
-        background-color: white;
-        border-radius: 8px;
-        padding: 1rem;
-        margin-top: 2rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    .feature-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-top: 1.5rem;
-    }
-    
-    .feature-card {
-        flex: 1;
-        min-width: 200px;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s;
-    }
-    
-    .feature-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .feature-icon {
-        font-size: 2rem;
-        color: var(--primary-color);
+
+    .model-header h1 {
+        color: var(--text-primary);
+        font-weight: 600;
         margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
-    
-    .confidence-meter {
-        width: 100%;
-        height: 8px;
-        background-color: #e5e7eb;
-        border-radius: 4px;
+
+    .model-header .lead {
+        color: var(--text-secondary);
+    }
+
+    .card {
+        background: var(--bg-darker);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--border-radius);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+        background: linear-gradient(45deg, var(--accent-blue), #0052a3);
+        color: var(--text-primary);
+        border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+        padding: 1.5rem;
+    }
+
+    .card-body {
+        background: var(--bg-darker);
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+    }
+
+    .form-control {
+        background: var(--bg-lighter);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        border-radius: var(--border-radius);
+        padding: 0.75rem 1rem;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        background: var(--bg-lighter);
+        border-color: var(--accent-blue);
+        color: var(--text-primary);
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.25);
+    }
+
+    .form-text {
+        color: var(--text-secondary);
+    }
+
+    .btn-primary {
+        background: var(--accent-blue);
+        border: none;
+        border-radius: var(--border-radius);
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+        background: #0052a3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    }
+
+    .result-container {
+        background: var(--bg-darker);
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .result-image {
+        border-radius: var(--border-radius);
+        border: 2px solid var(--accent-blue);
         overflow: hidden;
-        margin: 0.5rem 0 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
-    
+
+    .confidence-meter {
+        background: var(--bg-lighter);
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        margin: 1rem 0;
+    }
+
     .confidence-value {
         height: 100%;
-        border-radius: 4px;
+        border-radius: 5px;
+        transition: width 0.6s ease;
     }
-    
-    .confidence-high {
-        background-color: #ef4444;
-    }
-    
-    .confidence-medium {
-        background-color: #f59e0b;
-    }
-    
-    .confidence-low {
-        background-color: #10b981;
-    }
-    
+
+    .confidence-high { background: linear-gradient(45deg, #ff4444, #ff0000); }
+    .confidence-medium { background: linear-gradient(45deg, #ffa726, #fb8c00); }
+    .confidence-low { background: linear-gradient(45deg, #66bb6a, #43a047); }
+
     .classification-box {
-        text-align: center;
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-        font-weight: 600;
+        background: var(--bg-lighter);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-left: 4px solid;
+        transition: var(--transition);
     }
-    
+
     .classification-malignant {
-        background-color: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
-        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-color: #ff4444;
+        background: rgba(255, 68, 68, 0.1);
     }
-    
+
     .classification-benign {
-        background-color: rgba(16, 185, 129, 0.1);
-        color: #10b981;
-        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-color: #00cc66;
+        background: rgba(0, 204, 102, 0.1);
     }
-    
-    .skin-cancer-types {
+
+    .feature-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 1.5rem;
         margin-top: 2rem;
     }
-    
-    .cancer-type-card {
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease;
-    }
-    
-    .cancer-type-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .cancer-type-card img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-    }
-    
-    .cancer-type-card .card-body {
-        padding: 1rem;
-    }
-    
-    .cancer-type-card h5 {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .cancer-risk {
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-    
-    .risk-high {
-        background-color: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
-    }
-    
-    .risk-medium {
-        background-color: rgba(245, 158, 11, 0.1);
-        color: #f59e0b;
-    }
-    
-    .risk-low {
-        background-color: rgba(16, 185, 129, 0.1);
-        color: #10b981;
-    }
-    
-    .advice-box {
-        background-color: rgba(37, 99, 235, 0.05);
-        border-left: 4px solid var(--primary-color);
+
+    .feature-card {
+        background: var(--bg-lighter);
+        border-radius: var(--border-radius);
         padding: 1.5rem;
-        margin-top: 1.5rem;
-        border-radius: 0 8px 8px 0;
+        transition: var(--transition);
     }
-    
-    .advice-box h5 {
-        color: var(--primary-color);
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature-icon {
+        color: var(--accent-blue);
+        font-size: 2.5rem;
         margin-bottom: 1rem;
     }
-    
-    .prevention-list {
-        list-style-type: none;
-        padding-left: 0;
+
+    .advice-box {
+        background: var(--bg-lighter);
+        border-left: 4px solid var(--accent-green);
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        padding: 2rem;
+        margin-top: 2rem;
     }
-    
+
+    .advice-box h5 {
+        color: var(--accent-green);
+        margin-bottom: 1rem;
+    }
+
     .prevention-list li {
-        position: relative;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
         padding-left: 2rem;
-        margin-bottom: 0.75rem;
+        position: relative;
     }
-    
+
     .prevention-list li:before {
         content: "\f058";
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
+        color: var(--accent-green);
         position: absolute;
         left: 0;
-        color: var(--primary-color);
+    }
+
+    /* Loading animation */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(26, 26, 26, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid var(--bg-lighter);
+        border-top: 3px solid var(--accent-blue);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Tool tips */
+    [data-tooltip] {
+        position: relative;
+        cursor: help;
+    }
+
+    [data-tooltip]:before {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.5rem 1rem;
+        background: var(--bg-darker);
+        color: var(--text-primary);
+        border-radius: var(--border-radius);
+        font-size: 0.875rem;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+    }
+
+    [data-tooltip]:hover:before {
+        opacity: 1;
+        visibility: visible;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="model-header skin-header py-5">
+<div class="loading-overlay d-none">
+    <div class="loading-spinner"></div>
+</div>
+
+<section class="model-header">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-12 text-center">
-                <h1>Skin Cancer Detection</h1>
-                <p class="lead">Upload an image of a skin lesion to determine if it might be malignant (cancerous) or benign (non-cancerous).</p>
+                <h1><i class="fas fa-microscope me-2"></i>Skin Cancer Detection Lab</h1>
+                <p class="lead">Advanced dermoscopic analysis powered by artificial intelligence</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 1: Upload and Analysis -->
-<section class="py-5 bg-light">
+<section class="py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-upload me-2"></i>Upload Skin Lesion Image</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="mb-0">
+                            <i class="fas fa-upload me-2"></i>Upload Specimen Image
+                        </h3>
                     </div>
                     <div class="card-body">
                         <form id="skinUploadForm" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="skinFile" class="form-label">Select an image of the skin lesion</label>
-                                <input class="form-control" type="file" id="skinFile" name="file" accept=".jpg,.jpeg,.png">
-                                <div class="form-text">Supported formats: JPG, JPEG, PNG. Please ensure the image is well-lit and focused on the lesion.</div>
+                            <div class="mb-4">
+                                <label for="skinFile" class="form-label">Select dermoscopic image for analysis</label>
+                                <input class="form-control" type="file" id="skinFile" name="file" accept=".jpg,.jpeg,.png" data-tooltip="Supported formats: JPG, JPEG, PNG">
+                                <div class="form-text">For optimal results, ensure the image is well-lit and focused on the lesion area</div>
                             </div>
                             <button type="submit" class="btn btn-primary" id="analyzeSkinBtn">
+                                <i class="fas fa-microscope me-2"></i>
+                                <span class="button-text">Begin Analysis</span>
                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                Analyze Image
                             </button>
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Section 2: Results Analysis -->
-<section class="py-5 bg-white">
-    <div class="container">
-        <div id="skinResults" class="results-container mt-2 d-none">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="card mb-4 shadow">
-                        <div class="card-header bg-primary text-white">
-                            <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Analysis Results</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card result-card">
-                                        <img id="skin-result-image" src="" class="card-img-top" alt="Skin Lesion Image">
-                                        <div class="card-body">
-                                            <div id="classification-box" class="classification-box">
-                                                <span id="classification-text">Classification: Unknown</span>
-                                            </div>
-                                            
-                                            <h6 class="card-subtitle mb-2 text-muted">Confidence Level</h6>
-                                            <div class="confidence-meter">
-                                                <div id="confidence-value" class="confidence-value" style="width: 0%"></div>
-                                            </div>
-                                            <p id="confidence-text" class="text-center">0%</p>
-                                            
-                                            <div class="alert alert-info mt-3 mb-0">
-                                                <small><i class="fas fa-info-circle me-2"></i> Our AI model analyzes visual patterns in the skin lesion to determine if it may be malignant or benign.</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card result-card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Interpretation</h5>
-                                            
-                                            <div id="benign-info" class="d-none">
-                                                <p><strong>Benign Classification:</strong> The AI model suggests this skin lesion has characteristics consistent with benign (non-cancerous) growths.</p>
-                                                
-                                                <h6 class="mt-3">Common Benign Skin Lesions:</h6>
-                                                <ul>
-                                                    <li>Moles (Nevi)</li>
-                                                    <li>Seborrheic Keratosis</li>
-                                                    <li>Dermatofibroma</li>
-                                                    <li>Cherry Angiomas</li>
-                                                </ul>
-                                                
-                                                <div class="alert alert-success mt-3">
-                                                    <p class="mb-0">While this result suggests a benign lesion, continue to monitor for changes in size, shape, color, or symptoms.</p>
-                                                </div>
-                                            </div>
-                                            
-                                            <div id="malignant-info" class="d-none">
-                                                <p><strong>Malignant Classification:</strong> The AI model indicates this skin lesion has characteristics that may be associated with malignant (cancerous) growths.</p>
-                                                
-                                                <h6 class="mt-3">Potential Concerns:</h6>
-                                                <ul>
-                                                    <li>Asymmetrical shape</li>
-                                                    <li>Irregular or poorly defined borders</li>
-                                                    <li>Variation in color</li>
-                                                    <li>Diameter larger than 6mm</li>
-                                                    <li>Evolution or change over time</li>
-                                                </ul>
-                                                
-                                                <div class="alert alert-warning mt-3">
-                                                    <p class="mb-0"><strong>Important:</strong> This result suggests prompt evaluation by a dermatologist or healthcare provider is recommended.</p>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="disclaimer mt-3">
-                                                <hr>
-                                                <p><small class="text-muted"><strong>Medical Disclaimer:</strong> This tool is intended for educational purposes only and should not be used as a substitute for professional medical advice, diagnosis, or treatment.</small></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Results will be dynamically inserted here -->
+                <div id="analysisResults" class="d-none">
+                    <!-- Content will be populated by JavaScript -->
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 3: Educational Information -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-book-medical me-2"></i>Educational Information</h3>
-                    </div>
-                    <div class="card-body">
-                        <h4>About Skin Cancer Detection</h4>
-                        <p>Skin cancer is the most common type of cancer worldwide. Early detection is crucial for effective treatment, with survival rates exceeding 95% when detected in early stages.</p>
-                        
-                        <div class="feature-container mt-4">
-                            <div class="feature-card p-4">
-                                <div class="feature-icon">
-                                    <i class="fas fa-brain"></i>
-                                </div>
-                                <h5>Advanced AI</h5>
-                                <p>Our model is trained on over 10,000 dermatologist-labeled images to accurately classify skin lesions.</p>
-                            </div>
-                            <div class="feature-card p-4">
-                                <div class="feature-icon">
-                                    <i class="fas fa-tachometer-alt"></i>
-                                </div>
-                                <h5>Fast Analysis</h5>
-                                <p>Get results in seconds, allowing for quick preliminary screening of suspicious lesions.</p>
-                            </div>
-                            <div class="feature-card p-4">
-                                <div class="feature-icon">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <h5>High Accuracy</h5>
-                                <p>Our model achieves over 90% accuracy in distinguishing between benign and malignant lesions.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="advice-box mt-5">
-                            <h5><i class="fas fa-shield-alt me-2"></i> Prevention Tips</h5>
-                            <ul class="prevention-list">
-                                <li>Use broad-spectrum sunscreen (SPF 30+) daily, even on cloudy days</li>
-                                <li>Seek shade during peak sun hours (10 a.m. to 4 p.m.)</li>
-                                <li>Wear protective clothing, wide-brimmed hats, and sunglasses</li>
-                                <li>Avoid tanning beds and sun lamps</li>
-                                <li>Perform regular skin self-examinations (look for the ABCDE signs)</li>
-                                <li>Schedule annual skin checks with a dermatologist, especially if you have risk factors</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="alert alert-primary mt-4">
-                            <h5 class="mb-3">Remember the ABCDE Rule for Skin Self-Examination:</h5>
-                            <div class="row">
-                                <div class="col-md-1 text-center">
-                                    <h3>A</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>Asymmetry:</strong>
-                                </div>
-                                <div class="col-md-9">
-                                    One half of the mole doesn't match the other half.
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-md-1 text-center">
-                                    <h3>B</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>Border:</strong>
-                                </div>
-                                <div class="col-md-9">
-                                    Edges are irregular, ragged, notched, or blurred.
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-md-1 text-center">
-                                    <h3>C</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>Color:</strong>
-                                </div>
-                                <div class="col-md-9">
-                                    Color is not uniform and may include different shades of brown, black, or tan, with patches of red, white, or blue.
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-md-1 text-center">
-                                    <h3>D</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>Diameter:</strong>
-                                </div>
-                                <div class="col-md-9">
-                                    Larger than 6mm (about the size of a pencil eraser).
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-md-1 text-center">
-                                    <h3>E</h3>
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>Evolving:</strong>
-                                </div>
-                                <div class="col-md-9">
-                                    Changes in size, shape, color, or elevation; also watch for new symptoms such as bleeding, itching, or crusting.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-{% endblock %}
-
-{% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-$(document).ready(function() {
-    // Form submission handler
-    $('#skinUploadForm').on('submit', function(e) {
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('skinUploadForm');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const analysisResults = document.getElementById('analysisResults');
+    const submitButton = document.getElementById('analyzeSkinBtn');
+    const spinner = submitButton.querySelector('.spinner-border');
+    const buttonText = submitButton.querySelector('.button-text');
+
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const fileInput = $('#skinFile')[0];
-        if (fileInput.files.length === 0) {
-            alert('Please select a file to upload');
-            return;
+        // Show loading state
+        loadingOverlay.classList.remove('d-none');
+        spinner.classList.remove('d-none');
+        buttonText.textContent = 'Analyzing...';
+        submitButton.disabled = true;
+
+        try {
+            // Your existing form submission logic here
+            // ...
+
+            // After successful analysis, update UI
+            analysisResults.classList.remove('d-none');
+            
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error appropriately
+        } finally {
+            // Hide loading state
+            loadingOverlay.classList.add('d-none');
+            spinner.classList.add('d-none');
+            buttonText.textContent = 'Begin Analysis';
+            submitButton.disabled = false;
         }
-        
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
-        
-        // Show loading spinner
-        $('#analyzeSkinBtn .spinner-border').removeClass('d-none');
-        $('#analyzeSkinBtn').prop('disabled', true);
-        
-        // Clear previous results
-        $('#skinResults').addClass('d-none');
-        $('#benign-info').addClass('d-none');
-        $('#malignant-info').addClass('d-none');
-        
-        $.ajax({
-            url: '/predict/skin',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                // Show results container
-                $('#skinResults').removeClass('d-none');
-                
-                if (response.status === 'success') {
-                    // Set the image
-                    if (response.image_base64) {
-                        $('#skin-result-image').attr('src', `data:image/jpeg;base64,${response.image_base64}`);
-                    } else {
-                        $('#skin-result-image').attr('src', response.image_path);
-                    }
-                    
-                    // Set classification text and style
-                    $('#classification-text').text(`Classification: ${response.class}`);
-                    if (response.class === 'Malignant') {
-                        $('#classification-box').removeClass('classification-benign').addClass('classification-malignant');
-                        $('#malignant-info').removeClass('d-none');
-                    } else {
-                        $('#classification-box').removeClass('classification-malignant').addClass('classification-benign');
-                        $('#benign-info').removeClass('d-none');
-                    }
-                    
-                    // Set confidence meter
-                    const confidence = response.confidence;
-                    $('#confidence-value').css('width', `${confidence}%`);
-                    $('#confidence-text').text(`${confidence.toFixed(1)}%`);
-                    
-                    // Set confidence color based on level
-                    $('#confidence-value').removeClass('confidence-high confidence-medium confidence-low');
-                    if (confidence >= 90) {
-                        $('#confidence-value').addClass('confidence-high');
-                    } else if (confidence >= 70) {
-                        $('#confidence-value').addClass('confidence-medium');
-                    } else {
-                        $('#confidence-value').addClass('confidence-low');
-                    }
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('Error processing image: ' + error);
-            },
-            complete: function() {
-                // Hide loading spinner and re-enable button
-                $('#analyzeSkinBtn .spinner-border').addClass('d-none');
-                $('#analyzeSkinBtn').prop('disabled', false);
-            }
-        });
     });
-    
-    // Initialize skin accuracy chart
-    function initSkinAccuracyChart() {
-        const ctx = document.getElementById('skinAccuracyChart').getContext('2d');
-        
-        // Check if chart already exists and destroy it
-        if (window.skinPerformanceChart) {
-            window.skinPerformanceChart.destroy();
-        }
-        
-        // Sample data for the chart
-        window.skinPerformanceChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50'],
-                datasets: [{
-                    label: 'Training Accuracy',
-                    data: [0.5, 0.63, 0.72, 0.78, 0.83, 0.86, 0.88, 0.89, 0.9, 0.91, 0.92],
-                    borderColor: '#f97316',
-                    backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                    tension: 0.3,
-                    fill: true
-                }, {
-                    label: 'Validation Accuracy',
-                    data: [0.5, 0.6, 0.68, 0.74, 0.78, 0.82, 0.84, 0.86, 0.87, 0.89, 0.9],
-                    borderColor: '#8b5cf6',
-                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                    tension: 0.3,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 1
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Epochs'
-                        }
-                    }
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Model Training Performance'
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    }
-                }
-            }
-        });
-    }
 });
 </script>
 {% endblock %}

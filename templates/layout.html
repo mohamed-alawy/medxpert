@@ -1094,7 +1094,6 @@
         }
 
         .team-img-container {
-            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1104,14 +1103,14 @@
         
         /* Style for team member photos */
         .team-member-photo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: auto;
+            height: auto;
+            max-width: 100%;
             transition: transform 0.5s ease;
         }
         
         .team-card:hover .team-member-photo {
-            transform: scale(1.05);
+            transform: none;
         }
     </style>
     
@@ -1198,7 +1197,6 @@
         }
         
         .team-img-container {
-            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1329,6 +1327,7 @@
                             <li><a class="dropdown-item" href="{{ url_for('fracture') }}">Fracture Detection</a></li>
                         </ul>
                     </li>
+
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin() %}
                         <li class="nav-item {% if request.path == url_for('admin') %}active{% endif %}">

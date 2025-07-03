@@ -287,6 +287,15 @@ def not_found_error(error):
 def home():
     return render_template('index.html')
 
+@app.route('/explore-models')
+def explore_models():
+    return redirect(url_for('home'))
+
+# Keep compatibility with old route
+@app.route('/information')
+def information():
+    return redirect(url_for('home'))
+
 @app.route('/brain', methods=['GET', 'POST'])
 def brain():
     if request.method == 'POST':
@@ -923,6 +932,22 @@ def delete_user(user_id):
                           users=User.query.all(),
                           message="User deleted successfully", 
                           message_type="success")
+
+@app.route('/brain-example')
+def brain_example():
+    return render_template('brain_example.html')
+
+@app.route('/chest-example')
+def chest_example():
+    return render_template('chest_example.html')
+
+@app.route('/skin-example')
+def skin_example():
+    return render_template('skin_example.html')
+
+@app.route('/fracture-example')
+def fracture_example():
+    return render_template('fracture_example.html')
 
 # If this file is being run directly
 if __name__ == "__main__":

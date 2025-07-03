@@ -1,0 +1,215 @@
+{% extends "layout.html" %}
+
+{% block title %}Fracture Detection Example - MedXpert{% endblock %}
+
+{% block content %}
+<style>
+.example-hero {
+    background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+    color: white;
+    padding: 120px 0 100px;
+    margin-top: 0;
+    text-align: center;
+}
+
+.example-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.example-hero p {
+    font-size: 1.4rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.example-section {
+    padding: 100px 0;
+    background: #f8f9fa;
+}
+
+.model-stats {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.stat-item {
+    background: rgba(26, 44, 179, 0.1);
+    padding: 20px 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: #1a2cb3;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a2cb3;
+}
+
+.example-showcase {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(26, 44, 179, 0.08);
+}
+
+.example-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a2cb3;
+    margin-bottom: 30px;
+}
+
+.before-after-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.image-container {
+    text-align: center;
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.image-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+
+.image-label {
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.arrow-icon {
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.try-model-btn {
+    display: block;
+    width: fit-content;
+    margin: 50px auto 0;
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    color: white;
+    padding: 15px 40px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(26, 44, 179, 0.2);
+}
+
+.try-model-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(26, 44, 179, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .before-after-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .arrow-icon {
+        transform: rotate(90deg);
+        margin: 0 auto;
+    }
+    
+    .image-container {
+        padding: 25px;
+    }
+}
+</style>
+
+<!-- Hero Section -->
+<section class="example-hero">
+    <div class="container">
+        <h1>Fracture Detection</h1>
+        <p>X-ray analysis for bone fracture identification using advanced AI technology</p>
+    </div>
+</section>
+
+<!-- Example Section -->
+<section class="example-section">
+    <div class="container">
+        <!-- Model Stats -->
+        <div class="model-stats">
+            <div class="stat-item">
+                <div class="stat-label">mAP50</div>
+                <div class="stat-value">0.94</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Architecture</div>
+                <div class="stat-value">YOLO</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Detection</div>
+                <div class="stat-value">Object</div>
+            </div>
+        </div>
+
+        <!-- Example Showcase -->
+        <div class="example-showcase">
+            <h4 class="example-title">Wrist Fracture Detection</h4>
+            <div class="before-after-container">
+                <div class="image-container">
+                    <div class="image-label">X-ray Image</div>
+                    <img src="{{ url_for('static', filename='images/bone.jpg') }}" alt="Wrist X-ray Original" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                    <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">Wrist radiograph following trauma</div>
+                </div>
+                
+                <div class="arrow-icon">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <div class="image-container">
+                    <div class="image-label">Fracture Detected</div>
+                    <img src="{{ url_for('static', filename='images/result_bone.jpg') }}" alt="Wrist X-ray with Fracture Detection" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                    <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">AI detected distal radius fracture with precise localization</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Try Model Button -->
+        <a href="{{ url_for('fracture') }}" class="try-model-btn">
+            <i class="fas fa-play"></i>
+            Try This Model
+        </a>
+    </div>
+</section>
+{% endblock %} 

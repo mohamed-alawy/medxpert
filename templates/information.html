@@ -1,0 +1,834 @@
+{% extends "layout.html" %}
+
+{% block title %}Explore Our AI Models - MedXpert{% endblock %}
+
+{% block content %}
+<style>
+.info-hero {
+    background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+    color: white;
+    padding: 120px 0 100px;
+    margin-top: 0;
+    text-align: center;
+}
+
+.info-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.info-hero p {
+    font-size: 1.4rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.models-section {
+    padding: 100px 0;
+    background: #f8f9fa;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.section-header h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 1rem;
+}
+
+.model-detail-card {
+    background: white;
+    border-radius: 24px;
+    margin-bottom: 60px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(26, 44, 179, 0.08);
+    transition: all 0.4s ease;
+}
+
+.model-header {
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    color: white;
+    padding: 40px;
+    position: relative;
+}
+
+.model-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.model-icon-large {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.model-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.model-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.model-stats {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.try-now-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.try-now-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    text-decoration: none;
+}
+
+.model-content {
+    padding: 50px;
+}
+
+.content-tabs {
+    display: flex;
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 40px;
+    gap: 40px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 15px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: #1a2cb3;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.feature-item {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 16px;
+    border-left: 4px solid #1a2cb3;
+}
+
+.feature-item h4 {
+    color: #1a2cb3;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.example-showcase {
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 40px;
+    margin-top: 30px;
+}
+
+.example-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a2cb3;
+    margin-bottom: 30px;
+}
+
+.before-after-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.image-container {
+    text-align: center;
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.image-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+
+.image-label {
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sample-image {
+    width: 100%;
+    height: 450px;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a2cb3;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border: 3px solid rgba(26, 44, 179, 0.15);
+    font-size: 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1);
+}
+
+.sample-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 35px rgba(26, 44, 179, 0.2);
+}
+
+.arrow-icon {
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* Model Navigation Styles */
+.model-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 50px;
+    padding: 30px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.nav-btn {
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    min-width: 50px;
+}
+
+.nav-btn:hover {
+    background: linear-gradient(135deg, #233cea, #3346e8);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(26, 44, 179, 0.3);
+}
+
+.nav-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.model-indicator {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.indicator-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator-dot.active {
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    transform: scale(1.3);
+}
+
+.model-info-nav {
+    text-align: center;
+    color: #1a2cb3;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.model-detail-card {
+    display: none;
+}
+
+.model-detail-card.active {
+    display: block;
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.technical-specs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.spec-item {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.spec-label {
+    font-weight: 600;
+    color: #1a2cb3;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+    .model-header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+    
+    .before-after-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        max-width: 90%;
+    }
+    
+    .arrow-icon {
+        transform: rotate(90deg);
+    }
+    
+    .sample-image {
+        aspect-ratio: 1/1;
+        font-size: 1.1rem;
+    }
+    
+    .image-container {
+        padding: 25px;
+    }
+    
+    .image-label {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sample-image {
+        aspect-ratio: 1/1;
+        font-size: 1rem;
+    }
+    
+    .image-container {
+        padding: 20px;
+    }
+    
+    .before-after-container {
+        gap: 20px;
+    }
+    
+    .model-navigation {
+        padding: 20px;
+        gap: 15px;
+    }
+    
+    .model-info-nav {
+        font-size: 0.9rem;
+    }
+    
+    .nav-btn {
+        padding: 10px 15px;
+        min-width: 40px;
+    }
+}
+</style>
+
+<!-- Hero Section -->
+<section class="info-hero">
+    <div class="container">
+        <h1>Our AI Medical Models</h1>
+        <p>Explore our advanced artificial intelligence models designed to assist healthcare professionals with accurate medical image analysis.</p>
+    </div>
+</section>
+
+<!-- Models Section -->
+<section class="models-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Advanced Medical AI Technology</h2>
+            <p>Discover the detailed capabilities and real-world applications of our medical imaging models.</p>
+        </div>
+
+        <!-- Model Navigation -->
+        <div class="model-navigation">
+            <button class="nav-btn" onclick="previousModel()" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="model-indicator">
+                <span class="indicator-dot active" onclick="showModel(0)"></span>
+                <span class="indicator-dot" onclick="showModel(1)"></span>
+                <span class="indicator-dot" onclick="showModel(2)"></span>
+                <span class="indicator-dot" onclick="showModel(3)"></span>
+            </div>
+            
+            <div class="model-info-nav">
+                <span id="currentModelInfo">Brain Tumor Detection (1 of 4)</span>
+            </div>
+            
+            <button class="nav-btn" onclick="nextModel()" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Brain MRI Model -->
+        <div class="model-detail-card active" data-model="0">
+            <div class="model-header">
+                <div class="model-header-content">
+                    <div class="model-info">
+                        <div class="model-icon-large">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="model-title">Brain Tumor Detection</h3>
+                        <p class="model-subtitle">Advanced MRI analysis for tumor segmentation</p>
+                        <div class="model-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Dice Score</div>
+                                <div class="stat-value">0.73</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Architecture</div>
+                                <div class="stat-value">U-Net</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Input Type</div>
+                                <div class="stat-value">MRI DICOM</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="model-cta">
+                        <a href="{{ url_for('brain') }}" class="try-now-btn">
+                            <i class="fas fa-play"></i>
+                            <span>Try Model</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="model-content">
+                <div id="brain-example" class="tab-content active">
+                    <div class="example-showcase">
+                        <h4 class="example-title">Clinical Case Example</h4>
+                        <div class="before-after-container">
+                            <div class="image-container">
+                                <div class="image-label">Original MRI Scan</div>
+                                <img src="{{ url_for('static', filename='images/brain.png') }}" alt="Brain MRI Original" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                                <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">Original brain MRI showing suspected tumor region</div>
+                            </div>
+                            
+                            <div class="arrow-icon">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            
+                            <div class="image-container">
+                                <div class="image-label">AI Analysis Result</div>
+                                <img src="{{ url_for('static', filename='images/result_brain.png') }}" alt="Brain MRI with Tumor Detection" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                                <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">AI-highlighted tumor boundaries with confidence metrics</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chest X-ray Model -->
+        <div class="model-detail-card" data-model="1">
+            <div class="model-header">
+                <div class="model-header-content">
+                    <div class="model-info">
+                        <div class="model-icon-large">
+                            <i class="fas fa-lungs"></i>
+                        </div>
+                        <h3 class="model-title">Chest X-ray Analysis</h3>
+                        <p class="model-subtitle">Multi-class classification for lung pathology detection</p>
+                        <div class="model-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Accuracy</div>
+                                <div class="stat-value">95%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Architecture</div>
+                                <div class="stat-value">CNN</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Classes</div>
+                                <div class="stat-value">14 Conditions</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="model-cta">
+                        <a href="{{ url_for('chest') }}" class="try-now-btn">
+                            <i class="fas fa-play"></i>
+                            <span>Try Model</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="model-content">
+                <div id="chest-example" class="tab-content active">
+                    <div class="example-showcase">
+                        <h4 class="example-title">COVID-19 Detection Example</h4>
+                        <div class="before-after-container">
+                            <div class="image-container">
+                                <div class="image-label">Chest X-ray</div>
+                                <img src="{{ url_for('static', filename='images/COVID.png') }}" alt="Chest X-ray Original" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                                <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">Standard chest radiograph showing possible lung opacity</div>
+                            </div>
+                            
+                            <div class="arrow-icon">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            
+                            <div class="image-container">
+                                <div class="image-label">AI Analysis</div>
+                                <div style="position: relative;">
+                                    <img src="{{ url_for('static', filename='images/gradcam_COVID.png') }}" alt="Chest X-ray with COVID-19 Detection" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                                    <div style="position: absolute; top: 20px; right: 20px; background: rgba(220, 53, 69, 0.9); color: white; padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 1.1rem; backdrop-filter: blur(10px);">
+                                        COVID-19
+                                    </div>
+                                    <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(220, 53, 69, 0.9); color: white; padding: 5px 12px; border-radius: 15px; font-weight: 600; backdrop-filter: blur(10px);">
+                                        100% Confidence
+                                    </div>
+                                </div>
+                                <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">AI highlighted COVID-19 patterns with heatmap visualization</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skin Cancer Model -->
+        <div class="model-detail-card" data-model="2">
+            <div class="model-header">
+                <div class="model-header-content">
+                    <div class="model-info">
+                        <div class="model-icon-large">
+                            <i class="fas fa-diagnoses"></i>
+                        </div>
+                        <h3 class="model-title">Skin Cancer Detection</h3>
+                        <p class="model-subtitle">Dermoscopic image analysis for melanoma screening</p>
+                        <div class="model-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Accuracy</div>
+                                <div class="stat-value">93%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Architecture</div>
+                                <div class="stat-value">ResNet</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Classification</div>
+                                <div class="stat-value">Binary</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="model-cta">
+                        <a href="{{ url_for('skin') }}" class="try-now-btn">
+                            <i class="fas fa-play"></i>
+                            <span>Try Model</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="model-content">
+                <div id="skin-example" class="tab-content">
+                    <div class="example-showcase">
+                        <h4 class="example-title">Melanoma Screening Example</h4>
+                        <div class="before-after-container">
+                            <div class="image-container">
+                                <div class="image-label">Dermoscopic Image</div>
+                                <img src="{{ url_for('static', filename='images/skin.png') }}" alt="Skin Lesion Original" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                                <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">High-resolution dermoscopic image for analysis</div>
+                            </div>
+                            
+                            <div class="arrow-icon">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            
+                            <div class="image-container">
+                                <div class="image-label">Risk Assessment</div>
+                                <div style="position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer; overflow: hidden;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                                    <img src="{{ url_for('static', filename='images/skin.png') }}" alt="Skin Lesion with Malignant Detection" style="width: 100%; height: 100%; object-fit: contain;">
+                                    <div style="position: absolute; top: 20px; right: 20px; background: rgba(220, 53, 69, 0.9); color: white; padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 1.1rem; backdrop-filter: blur(10px);">
+                                        MALIGNANT
+                                    </div>
+                                                                         <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(220, 53, 69, 0.9); color: white; padding: 5px 12px; border-radius: 15px; font-weight: 600; backdrop-filter: blur(10px);">
+                                        100% Confidence
+                                    </div>
+                                </div>
+                                <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">AI risk assessment indicating 100% malignancy probability</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fracture Detection Model -->
+        <div class="model-detail-card" data-model="3">
+            <div class="model-header">
+                <div class="model-header-content">
+                    <div class="model-info">
+                        <div class="model-icon-large">
+                            <i class="fas fa-bone"></i>
+                        </div>
+                        <h3 class="model-title">Fracture Detection</h3>
+                        <p class="model-subtitle">X-ray analysis for bone fracture identification</p>
+                        <div class="model-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">mAP50</div>
+                                <div class="stat-value">0.94</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Architecture</div>
+                                <div class="stat-value">YOLO</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Detection</div>
+                                <div class="stat-value">Object</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="model-cta">
+                        <a href="{{ url_for('fracture') }}" class="try-now-btn">
+                            <i class="fas fa-play"></i>
+                            <span>Try Model</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="model-content">
+                <div id="fracture-example" class="tab-content">
+                    <div class="example-showcase">
+                        <h4 class="example-title">Wrist Fracture Detection</h4>
+                        <div class="before-after-container">
+                            <div class="image-container">
+                                <div class="image-label">X-ray Image</div>
+                                <img src="{{ url_for('static', filename='images/bone.jpg') }}" alt="Wrist X-ray Original" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                                <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">Wrist radiograph following trauma</div>
+                            </div>
+                            
+                            <div class="arrow-icon">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            
+                            <div class="image-container">
+                                <div class="image-label">Fracture Detected</div>
+                                <img src="{{ url_for('static', filename='images/result_bone.jpg') }}" alt="Wrist X-ray with Fracture Detection" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                                <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">AI detected distal radius fracture with precise localization</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+let currentModel = 0;
+const modelNames = [
+    "Brain Tumor Detection",
+    "Chest X-ray Analysis", 
+    "Skin Cancer Detection",
+    "Fracture Detection"
+];
+
+function showModel(index) {
+    // Hide all models and their content
+    document.querySelectorAll('.model-detail-card').forEach(card => {
+        card.style.display = 'none';
+        card.classList.remove('active');
+    });
+    
+    // Show and activate selected model
+    const selectedModel = document.querySelector(`[data-model="${index}"]`);
+    if (selectedModel) {
+        selectedModel.style.display = 'block';
+        selectedModel.classList.add('active');
+        
+        // Ensure the tab content is visible
+        const tabContent = selectedModel.querySelector('.tab-content');
+        if (tabContent) {
+            tabContent.classList.add('active');
+        }
+    }
+    
+    // Update indicators
+    document.querySelectorAll('.indicator-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+    
+    // Update info text
+    const infoText = document.getElementById('currentModelInfo');
+    if (infoText) {
+        infoText.textContent = `${modelNames[index]} (${index + 1} of 4)`;
+    }
+    
+    // Update navigation buttons
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    if (prevBtn) prevBtn.disabled = index === 0;
+    if (nextBtn) nextBtn.disabled = index === 3;
+    
+    currentModel = index;
+}
+
+function nextModel() {
+    if (currentModel < modelNames.length - 1) {
+        showModel(currentModel + 1);
+    }
+}
+
+function previousModel() {
+    if (currentModel > 0) {
+        showModel(currentModel - 1);
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Show first model
+    showModel(0);
+    
+    // Add click handlers to dots
+    document.querySelectorAll('.indicator-dot').forEach((dot, index) => {
+        dot.addEventListener('click', () => showModel(index));
+    });
+});
+
+function switchTab(event, tabId) {
+    const modelCard = event.target.closest('.model-detail-card');
+    
+    const tabContents = modelCard.querySelectorAll('.tab-content');
+    tabContents.forEach(content => content.classList.remove('active'));
+    
+    const tabButtons = modelCard.querySelectorAll('.tab-btn');
+    tabButtons.forEach(btn => btn.classList.remove('active'));
+    
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+
+{% endblock %}

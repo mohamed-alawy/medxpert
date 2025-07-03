@@ -887,3 +887,301 @@ body {
         height: 38px;
     }
 }
+
+/* Horizontal Workflow Styles */
+.workflow-horizontal {
+    margin: 3rem 0;
+}
+
+.workflow-step-horizontal {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 24px;
+    border: 2px solid rgba(35, 60, 234, 0.1);
+    box-shadow: 
+        0 8px 32px rgba(35, 60, 234, 0.08),
+        0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.workflow-step-horizontal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.workflow-step-horizontal:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 16px 48px rgba(35, 60, 234, 0.15),
+        0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: rgba(35, 60, 234, 0.2);
+}
+
+.workflow-step-horizontal:hover::before {
+    transform: scaleX(1);
+}
+
+.step-number-horizontal {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 24px rgba(35, 60, 234, 0.25);
+    transition: all 0.4s ease;
+}
+
+.workflow-step-horizontal:hover .step-number-horizontal {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 12px 32px rgba(35, 60, 234, 0.35);
+}
+
+.step-icon-horizontal {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    transition: all 0.4s ease;
+}
+
+.workflow-step-horizontal:hover .step-icon-horizontal {
+    transform: scale(1.1);
+    color: var(--primary-light);
+}
+
+.step-title-horizontal {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+.workflow-step-horizontal:hover .step-title-horizontal {
+    color: var(--primary-color);
+}
+
+.step-description-horizontal {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Demo Preview Styles */
+.demo-preview {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    border-radius: 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.demo-preview::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+    50% { transform: scale(1.1) rotate(180deg); opacity: 0.1; }
+}
+
+.demo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.demo-badge i {
+    font-size: 1.3rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.demo-text {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+    position: relative;
+    z-index: 2;
+}
+
+.demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.demo-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.demo-btn i {
+    transition: transform 0.3s ease;
+}
+
+.demo-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .workflow-step-horizontal {
+        padding: 2.5rem 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .step-number-horizontal {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    .step-icon-horizontal {
+        font-size: 2.5rem;
+    }
+    
+    .step-title-horizontal {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .workflow-horizontal {
+        margin: 2rem 0;
+    }
+    
+    .workflow-step-horizontal {
+        padding: 2rem 1rem;
+    }
+    
+    .demo-preview {
+        margin-top: 3rem;
+        padding: 2rem 1rem;
+    }
+    
+    .demo-btn {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+/* Demo Preview Minimal Styles */
+.demo-preview-minimal {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+}
+
+.demo-btn-round {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1.2rem 3rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 8px 24px rgba(35, 60, 234, 0.25);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.demo-btn-round::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.demo-btn-round:hover {
+    background: linear-gradient(135deg, var(--primary-light), #4a90e2);
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 32px rgba(35, 60, 234, 0.35);
+}
+
+.demo-btn-round:hover::before {
+    left: 100%;
+}
+
+.demo-btn-round i {
+    transition: transform 0.3s ease;
+}
+
+.demo-btn-round:hover i {
+    transform: rotate(360deg) scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .demo-preview-minimal {
+        margin-top: 2rem;
+        padding: 1rem;
+    }
+    
+    .demo-btn-round {
+        padding: 1rem 2.5rem;
+        font-size: 1rem;
+    }
+}

@@ -3,40 +3,101 @@
 {% block title %}MedXpert - Advanced Medical Imaging Analysis{% endblock %}
 
 {% block content %}
+<script>
+// Set loading state immediately before any content loads
+document.documentElement.classList.add('loading');
+document.documentElement.style.overflow = 'hidden';
+document.body.classList.add('loading');
+</script>
+
+<style>
+    /* Critical loading screen styles - loaded immediately */
+    #loading-screen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 999999 !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+    body.loading {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+    body:not(.loading) {
+        overflow: auto !important;
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        top: auto !important;
+        left: auto !important;
+    }
+    html.loading {
+        overflow: hidden !important;
+    }
+    html:not(.loading) {
+        overflow: auto !important;
+    }
+</style>
+<!-- Loading Screen with inline styles to prevent layout shift -->
+<div id="loading-screen" style="position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8) !important; display: flex !important; align-items: center !important; justify-content: center !important; z-index: 99999 !important; margin: 0 !important; padding: 0 !important; box-sizing: border-box !important; transition: opacity 0.5s ease, visibility 0.5s ease;">
+    <div style="text-align: center !important; color: white !important; position: relative !important; z-index: 100000 !important;">
+        <div style="margin-bottom: 2rem !important;">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="MedXpert" style="width: 120px !important; height: auto !important; filter: brightness(0) invert(1) !important; display: block !important; margin: 0 auto !important;">
+        </div>
+        <div style="margin: 2rem 0 !important;">
+            <div style="width: 50px !important; height: 50px !important; border: 4px solid rgba(255, 255, 255, 0.3) !important; border-top: 4px solid white !important; border-radius: 50% !important; margin: 0 auto !important; animation: spin 1s linear infinite !important;"></div>
+        </div>
+        <div style="font-size: 1.1rem !important; font-weight: 500 !important; margin-top: 1rem !important; opacity: 0.9 !important;">Loading MedXpert...</div>
+    </div>
+</div>
 <!-- Unified Hero Section with all content -->
 <section class="unified-hero-section" style="margin-top: 0; padding-top: 0;">
     <div class="bg-circle bg-circle-1"></div>
     <div class="bg-circle bg-circle-2"></div>
     <div class="content-container py-5">
-        <!-- Main Hero Text -->
-        <div class="row justify-content-center" style="padding-top: 140px;">
-            <div class="col-lg-10 hero-content text-center">
-                <h1 class="hero-title" style="font-size: 6.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 4rem; color: white; line-height: 1.2;">
-                    <span class="animate-word" style="visibility: hidden; opacity: 0; transform: scale(0);">See</span>
-                    <span class="animate-word" style="visibility: hidden; opacity: 0; transform: scale(0);">beyond</span>
-                    <br>
-                    <span class="animate-word" style="visibility: hidden; opacity: 0; transform: scale(0); margin-top: 20px; display: inline-block;">with</span>
-                    <span class="animate-word" style="visibility: hidden; opacity: 0; transform: scale(0);">AI</span>
-                </h1>
+        <!-- Hero Section with Side Image -->
+        <div class="row align-items-center hero-row" style="min-height: 80vh; padding: 2rem 0;">
+            <!-- Text Content -->
+            <div class="col-lg-6 text-content">
+                <div class="hero-text-wrapper">
+                    <h1 class="main-title">
+                        <span class="title-main">Smart Medical</span>
+                        <span class="title-highlight">Diagnosis</span>
+                    </h1>
+                    
+                    <div class="hero-description">
+                        <p class="lead-text">Advanced AI technology for fast and accurate medical image analysis.</p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <a href="#models" class="primary-btn-clean">
+                            <i class="fas fa-microscope"></i>
+                            <span>Explore Models</span>
+                        </a>
+
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <!-- Spacer -->
-        <div class="row">
-            <div class="col">
-                <div style="height: 40px;"></div>
-    </div>
-        </div>
-        
-        <!-- Subtitle Text -->
-        <div class="row justify-content-center mt-5 pt-5">
-            <div class="col-lg-8">
-                <h2 id="subtitle-text" class="tech-title-modern text-center" style="opacity: 0; transform: scale(0.9);">AI-powered medical imaging for precise diagnostics</h2>
-                <div id="explore-button" class="d-flex justify-content-center gap-3 mt-5 pt-3" style="opacity: 0; visibility: hidden; transform: scale(0.5);">
-                    <a href="#models" class="tech-btn-modern">
-                        <span>Explore Models</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+            
+            <!-- Image Content -->
+            <div class="col-lg-6 image-content">
+                <div class="hero-image-container">
+                    <div class="floating-shapes">
+                        <div class="shape shape-1"></div>
+                        <div class="shape shape-2"></div>
+                        <div class="shape shape-3"></div>
+                    </div>
+                    <img src="{{ url_for('static', filename='hero-image.png') }}" alt="Smart Medical Diagnosis" class="hero-main-image" width="450" height="auto" loading="eager" style="max-width: 450px; width: 100%; height: auto; display: block; margin: 0 auto;">
+                    <div class="image-backdrop"></div>
                 </div>
             </div>
         </div>
@@ -44,81 +105,59 @@
         <!-- Spacer div for additional space -->
         <div class="row">
             <div class="col">
-                <div style="height: 100px;"></div>
-    </div>
-        </div>
-        
-        <!-- Stats Section -->
-        <div class="row justify-content-center mt-5 pt-5">
-            <div class="col-lg-10">
-                <div class="text-center mb-5">
-                    <h2 class="tech-title-modern">Advanced Medical Imaging Analytics</h2>
-                </div>
-        
-                <div class="row tech-grid">
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="tech-card-modern">
-                            <div class="tech-card-body">
-                                <div class="tech-metric">
-                                    <div class="tech-metric-value">97%</div>
-                                    <div class="tech-metric-label">Detection Accuracy</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="tech-card-modern">
-                            <div class="tech-card-body">
-                                <div class="tech-metric">
-                                    <div class="tech-metric-value">4</div>
-                                    <div class="tech-metric-label">Medical Models</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="tech-card-modern">
-                            <div class="tech-card-body">
-                                <div class="tech-metric">
-                                    <div class="tech-metric-value">5,000+</div>
-                                    <div class="tech-metric-label">Analyses Performed</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="tech-card-modern">
-                            <div class="tech-card-body">
-                                <div class="tech-metric">
-                                    <div class="tech-metric-value">3s</div>
-                                    <div class="tech-metric-label">Average Processing</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-                <!-- Spacer div for additional space -->
-        <div class="row">
-            <div class="col">
-                <div style="height: 100px;"></div>
+                <div style="height: 50px;"></div>
             </div>
         </div>
     </div>
 </section>
 
+
+
 <!-- Combined Models and How It Works Section -->
 <section class="content-section" id="models" style="padding-top: 150px;">
     <div class="content-container">
-        <!-- Models Section Title -->
-        <div class="row justify-content-center mb-5">
+        <!-- Stats Section -->
+        <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="text-center" data-aos="fade-up">
-                    <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; padding-bottom: 5px; line-height: 1.3;">Our Medical Imaging Models</h2>
+                    <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; padding-bottom: 5px; line-height: 1.3;">Advanced Medical Diagnosis Statistics</h2>
+                </div>
+                
+                <div class="analytics-bar mb-5">
+                    <div class="analytics-item">
+                        <div class="analytics-value">97<span>%</span></div>
+                        <div class="analytics-label">Detection<br>Accuracy</div>
+                    </div>
+                    
+                    <div class="analytics-divider"></div>
+                    
+                    <div class="analytics-item">
+                        <div class="analytics-value">4</div>
+                        <div class="analytics-label">Medical<br>Models</div>
+                    </div>
+                    
+                    <div class="analytics-divider"></div>
+                    
+                    <div class="analytics-item">
+                        <div class="analytics-value">5,000<span>+</span></div>
+                        <div class="analytics-label">Completed<br>Analysis</div>
+                    </div>
+                    
+                    <div class="analytics-divider"></div>
+                    
+                    <div class="analytics-item">
+                        <div class="analytics-value">3<span>s</span></div>
+                        <div class="analytics-label">Average<br>Processing Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Models Section Title -->
+        <div class="row justify-content-center mb-5" style="margin-top: 3.5rem;">
+            <div class="col-lg-10">
+                <div class="text-center" data-aos="fade-up">
+                    <h2 style="position: relative; margin-bottom: 2.5rem; font-weight: 700; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; padding-bottom: 5px; line-height: 1.3;">Our Medical Imaging Models</h2>
                     <span class="team-subtitle">Advanced neural networks trained on thousands of medical images to assist healthcare professionals in diagnosis</span>
                 </div>
             </div>
@@ -145,6 +184,10 @@
                                 <a href="{{ url_for('brain') }}" class="model-card-btn">
                                     <span class="btn-text">Try Model</span>
                                     <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+                                </a>
+                                <a href="{{ url_for('brain_example') }}" class="model-card-btn model-card-btn-secondary" style="margin-left: 0.5rem;">
+                                    <span class="btn-text">Explore Example</span>
+                                    <span class="btn-icon"><i class="fas fa-search"></i></span>
                                 </a>
                             </div>
                         </div>
@@ -173,6 +216,10 @@
                                     <span class="btn-text">Try Model</span>
                                     <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
                                 </a>
+                                <a href="{{ url_for('chest_example') }}" class="model-card-btn model-card-btn-secondary" style="margin-left: 0.5rem;">
+                                    <span class="btn-text">Explore Example</span>
+                                    <span class="btn-icon"><i class="fas fa-search"></i></span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -200,6 +247,10 @@
                                     <span class="btn-text">Try Model</span>
                                     <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
                                 </a>
+                                <a href="{{ url_for('skin_example') }}" class="model-card-btn model-card-btn-secondary" style="margin-left: 0.5rem;">
+                                    <span class="btn-text">Explore Example</span>
+                                    <span class="btn-icon"><i class="fas fa-search"></i></span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -226,163 +277,384 @@
                                 <a href="{{ url_for('fracture') }}" class="model-card-btn">
                                     <span class="btn-text">Try Model</span>
                                     <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+                                </a>
+                                <a href="{{ url_for('fracture_example') }}" class="model-card-btn model-card-btn-secondary" style="margin-left: 0.5rem;">
+                                    <span class="btn-text">Explore Example</span>
+                                    <span class="btn-icon"><i class="fas fa-search"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- How It Works Section - Now inside the same section -->
+        <div class="row justify-content-center mt-5 pt-4">
+            <div class="col-lg-12">
+                <div class="text-center mb-5">
+                    <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; color: #1a2cb3;">How It Works</h2>
+                    <span class="team-subtitle">Get instant AI-powered medical image analysis in just 3 simple steps</span>
+                </div>
+                <!-- Horizontal Workflow Steps -->
+                <div class="row workflow-horizontal mb-5">
+                    <!-- Step 1: Choose Model -->
+                    <div class="col-lg-4 col-md-4 mb-4">
+                        <div class="workflow-step-horizontal">
+                            <div class="step-number-horizontal">1</div>
+                            <div class="step-icon-horizontal">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4 class="step-title-horizontal">Choose AI Model</h4>
+                            <p class="step-description-horizontal">Select from our specialized models: Brain MRI, Chest X-Ray, Skin Analysis, or Fracture Detection.</p>
+                        </div>
+                    </div>
+                    <!-- Step 2: Upload -->
+                    <div class="col-lg-4 col-md-4 mb-4">
+                        <div class="workflow-step-horizontal">
+                            <div class="step-number-horizontal">2</div>
+                            <div class="step-icon-horizontal">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h4 class="step-title-horizontal">Upload Your Image</h4>
+                            <p class="step-description-horizontal">Simply drag and drop or select your medical image. We support DICOM, JPG, PNG formats.</p>
+                        </div>
+                    </div>
+                    <!-- Step 3: Get Results -->
+                    <div class="col-lg-4 col-md-4 mb-4">
+                        <div class="workflow-step-horizontal">
+                            <div class="step-number-horizontal">3</div>
+                            <div class="step-icon-horizontal">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h4 class="step-title-horizontal">Get Instant Results</h4>
+                            <p class="step-description-horizontal">Receive detailed analysis with confidence scores, visual highlights, and clear medical insights within seconds.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose MedXpert Section -->
+<section class="content-section features-section-modern">
+    <div class="content-container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center mb-5">
+                <h2 class="features-title-modern">Why Choose MedXpert?</h2>
+                <p class="features-subtitle-modern">Experience the future of medical image analysis with our cutting-edge AI platform designed for healthcare professionals.</p>
+            </div>
+        </div>
+                
+        <div class="row features-grid">
+            <div class="col-lg-6 col-md-6 mb-4">
+                <div class="feature-card-modern">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-card-content">
+                        <h3>Privacy & Security First</h3>
+                        <p>Your medical data is processed securely with end-to-end encryption. Images are analyzed locally and never stored permanently.</p>
+                        <div class="feature-highlight">
+                            <i class="fas fa-check-circle" style="color: white;"></i>
+                            <span>HIPAA Compliant Processing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-6 mb-4">
+                <div class="feature-card-modern">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="feature-card-content">
+                        <h3>Instant Analysis</h3>
+                        <p>Get comprehensive AI analysis results in seconds, not hours. Perfect for time-sensitive medical decisions.</p>
+                        <div class="feature-highlight">
+                            <i class="fas fa-stopwatch" style="color: white;"></i>
+                            <span>Under 5 seconds average</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-6 mb-4">
+                <div class="feature-card-modern">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="feature-card-content">
+                        <h3>Clinical Grade Accuracy</h3>
+                        <p>Our AI models are trained on diverse medical datasets and validated by healthcare professionals for reliable results.</p>
+                        <div class="feature-highlight">
+                            <i class="fas fa-medal" style="color: white;"></i>
+                            <span>Clinically Validated</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-lg-6 col-md-6 mb-4">
+                <div class="feature-card-modern">
+                    <div class="feature-card-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="feature-card-content">
+                        <h3>Accessible Anywhere</h3>
+                        <p>Web-based platform works on any device with internet connection. No software installation required.</p>
+                        <div class="feature-highlight">
+                            <i class="fas fa-laptop-medical" style="color: white;"></i>
+                            <span>Cross-platform Compatible</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="row">
+            <div class="col-12 text-center mt-4">
+                <div class="cta-container">
+                    <h4>Ready to Transform Your Medical Workflow?</h4>
+                    <p>Join healthcare professionals who trust MedXpert for accurate AI-powered medical image analysis.</p>
+                    <div class="cta-buttons">
+                        <a href="javascript:void(0)" onclick="smoothScrollTo('#models')" class="cta-btn-primary" style="background: white; color: #1a2cb3; border: none; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
+                            <span>Try Our Models</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="javascript:void(0)" onclick="smoothScrollTo('#our-team')" class="cta-btn-secondary">
+                            <span>Meet Our Team</span>
+                            <i class="fas fa-users"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-        </div>
-        
-        <!-- How It Works Section - Inside the same container -->
-        <div class="row justify-content-center mt-5 pt-4">
-            <div class="col-lg-10">
-        <div class="text-center mb-5">
-                    <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; padding-bottom: 5px; line-height: 1.3;">How It Works</h2>
-                    <span class="team-subtitle">Our platform provides advanced AI analysis for medical imaging in just a few simple steps</span>
-        </div>
-        
-                <div class="row">
-                    <div class="col-12">
-                        <div class="workflow-container">
-                            <div class="workflow-step" data-step="1">
-                                <div class="workflow-number">1</div>
-                                <div class="workflow-content">
-                                    <div class="workflow-icon">
-                                <i class="fas fa-upload"></i>
-                            </div>
-                                    <h5>Upload</h5>
-                            <p>Upload your medical image to our secure, HIPAA-compliant platform</p>
-                        </div>
-                    </div>
-                            
-                            <div class="workflow-path"></div>
-                            
-                            <div class="workflow-step" data-step="2">
-                                <div class="workflow-number">2</div>
-                                <div class="workflow-content">
-                                    <div class="workflow-icon">
-                                <i class="fas fa-cogs"></i>
-                            </div>
-                                    <h5>Process</h5>
-                            <p>Our AI models analyze the image with state-of-the-art algorithms</p>
-                        </div>
-                    </div>
-                            
-                            <div class="workflow-path"></div>
-                            
-                            <div class="workflow-step" data-step="3">
-                                <div class="workflow-number">3</div>
-                                <div class="workflow-content">
-                                    <div class="workflow-icon">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                                    <h5>Analyze</h5>
-                            <p>Get detailed results with visual annotations and confidence scores</p>
-                        </div>
-                    </div>
-                            
-                            <div class="workflow-path"></div>
-                            
-                            <div class="workflow-step" data-step="4">
-                                <div class="workflow-number">4</div>
-                                <div class="workflow-content">
-                                    <div class="workflow-icon">
-                                <i class="fas fa-file-medical-alt"></i>
-                            </div>
-                                    <h5>Report</h5>
-                            <p>Download or share analysis reports securely with your team</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Technology Section - Blue section -->
-<section class="content-section tech-section-modern">
-    <div class="content-container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center mb-5">
-                <h2 class="tech-title-modern">Powered by Advanced AI Technology</h2>
-                <p class="tech-subtitle-modern">MedXpert utilizes the latest advancements in deep learning and computer vision to analyze medical images with exceptional accuracy.</p>
-            </div>
-        </div>
-                
-        <div class="row tech-grid">
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="tech-card-modern">
-                    <div class="tech-card-header">
-                        <i class="fas fa-brain"></i>
-                        <h3>Convolutional Neural Networks</h3>
-                    </div>
-                    <div class="tech-card-body">
-                    <p>Specialized deep learning architectures designed for image processing and feature extraction.</p>
-                        <div class="tech-metric">
-                            <div class="tech-metric-value">99.7%</div>
-                            <div class="tech-metric-label">Feature Detection</div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="tech-card-modern">
-                    <div class="tech-card-header">
-                        <i class="fas fa-network-wired"></i>
-                        <h3>Transfer Learning</h3>
-                    </div>
-                    <div class="tech-card-body">
-                    <p>Models pre-trained on millions of images and fine-tuned on specialized medical datasets.</p>
-                        <div class="tech-metric">
-                            <div class="tech-metric-value">10M+</div>
-                            <div class="tech-metric-label">Training Images</div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="tech-card-modern">
-                    <div class="tech-card-header">
-                        <i class="fas fa-bolt"></i>
-                        <h3>Real-time Processing</h3>
-                    </div>
-                    <div class="tech-card-body">
-                    <p>Optimized inference algorithms provide analysis results in seconds, not minutes.</p>
-                        <div class="tech-metric">
-                            <div class="tech-metric-value">3s</div>
-                            <div class="tech-metric-label">Average Analysis Time</div>
-                </div>
-            </div>
-                </div>
-            </div>
-        </div>
-                
-        <div class="row">
-            <div class="col-12 text-center mt-4">
-                <a href="#models" class="tech-btn-modern">
-                    <span>Explore Our Models</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-    </div>
 </section>
 
 <style>
-    /* Modern Technology Section Redesign */
-    .tech-section-modern {
+    /* Modern How It Works Section */
+    .modern-workflow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin: 3rem 0;
+        flex-wrap: wrap;
+    }
+    
+    .workflow-step-modern {
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border: 2px solid #e9ecef;
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        max-width: 280px;
+        min-height: 320px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .workflow-step-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #1a2cb3, #233cea, #3346e8);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .workflow-step-modern:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(26, 44, 179, 0.15);
+        border-color: #233cea;
+    }
+    
+    .workflow-step-modern:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .step-number {
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 16px rgba(26, 44, 179, 0.3);
+    }
+    
+    .step-icon {
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        color: #1a2cb3;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .step-icon i {
+        font-size: 2rem;
+    }
+    
+    .workflow-step-modern:hover .step-icon {
+        transform: scale(1.1);
+        background: linear-gradient(135deg, #233cea, #3346e8);
+        color: white;
+    }
+    
+    .step-content h4 {
+        color: #1a2cb3;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .step-content p {
+        color: #6c757d;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+    
+    .model-icons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .mini-icon {
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .mini-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(26, 44, 179, 0.3);
+        background: linear-gradient(135deg, #3346e8, #4a90e2);
+    }
+    
+    .mini-icon[data-model="brain"]:hover { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+    .mini-icon[data-model="chest"]:hover { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+    .mini-icon[data-model="skin"]:hover { background: linear-gradient(135deg, #f39c12, #e67e22); }
+    .mini-icon[data-model="fracture"]:hover { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    
+    .workflow-arrow {
+        color: #233cea;
+        font-size: 1.5rem;
+        margin: 0 1rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
+    }
+    
+    /* Demo Preview Section */
+    .demo-preview {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 16px;
+        padding: 2.5rem;
+        text-align: center;
+        margin-top: 4rem;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 8px 25px rgba(26, 44, 179, 0.08);
+        transition: all 0.3s ease;
+    }
+    
+    .demo-preview:hover {
+        box-shadow: 0 15px 35px rgba(26, 44, 179, 0.12);
+        transform: translateY(-3px);
+    }
+    
+    .demo-badge {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 8px rgba(26, 44, 179, 0.3);
+    }
+    
+    .demo-badge i {
+        margin-right: 0.5rem;
+        font-size: 1rem;
+    }
+    
+    .demo-text {
+        color: #495057;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .demo-btn {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(26, 44, 179, 0.3);
+    }
+    
+    .demo-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(26, 44, 179, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .demo-btn span {
+        margin-right: 0.5rem;
+    }
+    
+    /* Why Choose MedXpert Section */
+    .features-section-modern {
         background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
         padding: 5rem 0;
         position: relative;
         overflow: hidden;
     }
     
-    .tech-section-modern::before {
+    .features-section-modern::before {
         content: '';
         position: absolute;
         top: 0;
@@ -396,323 +668,441 @@
         z-index: 1;
     }
     
-    .tech-title-modern {
+    .features-title-modern {
         color: white;
         font-weight: 700;
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         margin-bottom: 1rem;
         position: relative;
     }
     
-    .tech-subtitle-modern {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 1.1rem;
+    .features-subtitle-modern {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.2rem;
         margin-bottom: 3rem;
-        max-width: 700px;
+        max-width: 800px;
         margin-left: auto;
         margin-right: auto;
-    }
-    
-    .tech-grid {
-        position: relative;
-        z-index: 2;
-    }
-    
-    .tech-card-modern {
-        background-color: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        overflow: hidden;
-        height: 100%;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-        z-index: 2;
-    }
-    
-    .tech-card-modern:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .tech-card-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        align-items: center;
-    }
-    
-    .tech-card-header i {
-        font-size: 1.5rem;
-        color: white;
-        margin-right: 1rem;
-        background: rgba(255, 255, 255, 0.1);
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-    }
-    
-    .tech-card-modern:hover .tech-card-header i {
-        background: rgba(255, 255, 255, 0.2);
-        transform: rotate(5deg);
-    }
-    
-    .tech-card-header h3 {
-        color: white;
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin: 0;
-    }
-    
-    .tech-card-body {
-        padding: 1.5rem;
-    }
-    
-    .tech-card-body p {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.95rem;
-        margin-bottom: 1.5rem;
         line-height: 1.6;
     }
     
-    .tech-metric {
-        background: linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-        padding: 1rem;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+    .features-grid {
+        position: relative;
+        z-index: 2;
     }
     
-    .tech-metric-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: white;
-        margin-bottom: 0.2rem;
-    }
-    
-    .tech-metric-label {
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.6);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .tech-btn-modern {
-        display: inline-flex;
-        align-items: center;
-        background-color: white;
-        color: #233cea;
-        font-weight: 600;
-        padding: 0.8rem 2rem;
-        border-radius: 8px;
-        text-decoration: none;
+    .feature-card-modern {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        height: 100%;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
-        z-index: 2;
     }
     
-    .tech-btn-modern span {
-        position: relative;
-        z-index: 2;
-        margin-right: 0.5rem;
-    }
-    
-    .tech-btn-modern i {
-        position: relative;
-        z-index: 2;
-        transition: transform 0.3s ease;
-    }
-    
-    .tech-btn-modern:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        color: #233cea;
-    }
-    
-    .tech-btn-modern:hover i {
-        transform: translateX(5px);
-    }
-    
-    .tech-btn-modern::before {
+    .feature-card-modern::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.5));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .feature-card-modern:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        border-color: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .feature-card-modern:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .feature-card-icon {
+        background: rgba(255, 255, 255, 0.1);
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card-icon i {
+        font-size: 1.8rem;
+        color: white;
+    }
+    
+    .feature-card-modern:hover .feature-card-icon {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(5deg) scale(1.1);
+    }
+    
+    .feature-card-content h3 {
+        color: white;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .feature-card-content p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+    
+    .feature-highlight {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.7rem 1rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .feature-highlight i {
+        color: #1a2cb3;
+        margin-right: 0.7rem;
+        font-size: 1rem;
+    }
+    
+    .feature-highlight span {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    /* Call to Action */
+    .cta-container {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .cta-container h4 {
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .cta-container p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .cta-btn-primary {
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        padding: 1.2rem 3rem;
+        border-radius: 60px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 10px 30px rgba(26, 44, 179, 0.3);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .cta-btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
         height: 100%;
-        background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(233, 233, 255, 0.2), rgba(255, 255, 255, 0));
-        transform: translateX(-100%);
-        transition: transform 0.5s ease;
-        z-index: 1;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s;
     }
     
-    .tech-btn-modern:hover::before {
-        transform: translateX(100%);
+    .cta-btn-primary::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+        border-radius: 60px;
+        pointer-events: none;
     }
     
+    .cta-btn-primary:hover {
+        background: linear-gradient(135deg, #0f1f9e, #1a2cb3);
+        transform: translateY(-5px) scale(1.08);
+        box-shadow: 0 15px 40px rgba(26, 44, 179, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .cta-btn-primary:hover::before {
+        left: 100%;
+    }
+    
+    .cta-btn-secondary {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+        color: white;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-btn-secondary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .cta-btn-secondary:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.2));
+        transform: translateY(-3px) scale(1.05);
+        border-color: rgba(255, 255, 255, 0.5);
+        color: white;
+        text-decoration: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    
+    .cta-btn-secondary:hover::before {
+        left: 100%;
+    }
+    
+    .cta-btn-primary i,
+    .cta-btn-secondary i {
+        transition: transform 0.3s ease;
+    }
+    
+    .cta-btn-primary:hover i,
+    .cta-btn-secondary:hover i {
+        transform: translateX(5px);
+    }
+    
+    /* Responsive Design */
     @media (max-width: 768px) {
-        .tech-title-modern {
-            font-size: 2rem;
+        .modern-workflow {
+            flex-direction: column;
+            gap: 2rem;
         }
         
-        .tech-subtitle-modern {
-            font-size: 1rem;
+        .workflow-arrow {
+            transform: rotate(90deg);
+            margin: 1rem 0;
         }
         
-        .tech-card-header {
-            padding: 1.2rem;
+        .workflow-step-modern {
+            max-width: 100%;
+            min-height: auto;
         }
         
-        .tech-card-header i {
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
+        .features-title-modern {
+            font-size: 2.2rem;
         }
         
-        .tech-card-header h3 {
+        .features-subtitle-modern {
             font-size: 1.1rem;
         }
         
-        .tech-card-body {
-            padding: 1.2rem;
+        .feature-card-modern {
+            padding: 1.5rem;
         }
         
-        .tech-metric-value {
-            font-size: 1.7rem;
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .cta-btn-primary,
+        .cta-btn-secondary {
+            width: 100%;
+            max-width: 320px;
+            justify-content: center;
+        }
+        
+        .cta-btn-primary {
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+        }
+        
+        .cta-btn-secondary {
+            padding: 1rem 2rem;
+            font-size: 1rem;
         }
     }
 </style>
 
 <!-- Team Section - Modern Slider Design -->
-<section class="team-section">
+<section class="team-section" id="our-team">
     <div class="team-container">
         <div class="team-header">
             <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; padding-bottom: 5px; line-height: 1.3;">Our Team</h2>
             <span class="team-subtitle">The experts behind MedXpert</span>
         </div>
-        
-        <div class="team-slider-container">
-            <div class="team-slider">
+
+        <!-- Advanced Team Carousel -->
+        <div class="team-carousel-container">
+            <div class="team-carousel-track">
                 <!-- Team Member: Mohamed -->
-                <div class="member-slide">
-                    <div class="member-card">
-                        <div class="member-image-wrapper">
-                            <img src="{{ url_for('static', filename='Mohamed-Alawy.png') }}" alt="Mohamed Alawy">
+                <div class="team-card" data-position="prev">
+                    <div class="team-social">
+                        <a href="https://www.linkedin.com/in/mohamed-alawy/" class="team-social-icon linkedin" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
                     </div>
-                        <div class="member-content">
-                            <h3>Mohamed Alawy</h3>
-                            <span class="member-role">ML & CV Engineer</span>
-                            <div class="member-socials">
-                                <a href="https://www.linkedin.com/in/mohamed-alawy/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    <div class="team-img-container">
+                        <img src="{{ url_for('static', filename='Mohamed-Alawy.png') }}" alt="Mohamed Alawy" class="team-member-photo">
                     </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Team Member: Sara -->
-                <div class="member-slide">
-                    <div class="member-card featured">
-                        <div class="member-image-wrapper">
-                            <div class="member-badge">Lead</div>
-                            <img src="{{ url_for('static', filename='Osama-Khalil.png') }}" alt="Sara Johnson">
-                    </div>
-                        <div class="member-content"> 
-                            <h3>Osama Khalil</h3>
-                            <span class="member-role">Project Lead & ML Engineer</span>
-                            <div class="member-socials">
-                                <a href="https://www.linkedin.com/in/osama-khalil-bb3873231/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                        </div>
+                    <div class="team-info">
+                        <h3>Mohamed Alawy</h3>
+                        <p class="team-role">ML & CV Engineer</p>
+                        <p class="team-description">Specialized in computer vision and machine learning model development for medical imaging applications.</p>
                     </div>
                 </div>
-                
-                <!-- Team Member: Raj -->
-                <div class="member-slide">
-                    <div class="member-card">
-                        <div class="member-image-wrapper">
-                            <img src="{{ url_for('static', filename='Sherif-Serag.png') }}" alt="Raj Kumar">
+
+                <!-- Team Member: Osama (Lead) -->
+                <div class="team-card" data-position="active">
+                    <div class="team-role-badge">Team Lead</div>
+                    <div class="team-social">
+                        <a href="https://www.linkedin.com/in/osama-khalil-bb3873231/" class="team-social-icon linkedin" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
                     </div>
-                        <div class="member-content">
-                            <h3>Sherif Serag</h3>
-                            <span class="member-role">ML Engineer</span>
-                            <div class="member-socials">
-                                <a href="https://www.linkedin.com/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    <div class="team-img-container">
+                        <img src="{{ url_for('static', filename='Osama-Khalil.png') }}" alt="Osama Khalil" class="team-member-photo">
                     </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Team Member: Emily -->
-                <div class="member-slide">
-                    <div class="member-card">
-                        <div class="member-image-wrapper">
-                            <img src="{{ url_for('static', filename='Ibrahim-Khaled.png') }}" alt="Emily Parker">
-                    </div>
-                        <div class="member-content">
-                            <h3>Ibrahim Khaled</h3>
-                            <span class="member-role">Frontend Developer</span>
-                            <div class="member-socials">
-                                <a href="https://www.linkedin.com/in/ibrahim-khaled-17b178236/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                    </div>
+                    <div class="team-info">
+                        <h3>Osama Khalil</h3>
+                        <p class="team-role">Project Lead & ML Engineer</p>
+                        <p class="team-description">Leading the development of advanced AI solutions for medical diagnosis and healthcare innovation.</p>
                     </div>
                 </div>
-                
-                <!-- Team Member: David -->
-                <div class="member-slide">
-                    <div class="member-card">
-                        <div class="member-image-wrapper">
-                            <img src="{{ url_for('static', filename='Karim.png') }}" alt="David Torres">
+
+                <!-- Team Member: Sherif -->
+                <div class="team-card" data-position="next">
+                    <div class="team-social">
+                        <a href="#" class="team-social-icon linkedin" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
                     </div>
-                        <div class="member-content">
-                            <h3>Karim Elwaraky</h3>
-                            <span class="member-role">Cloud Engineer</span>
-                            <div class="member-socials">
-                                <a href="https://www.linkedin.com/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                    <div class="team-img-container">
+                        <img src="{{ url_for('static', filename='Sherif-Serag.png') }}" alt="Sherif Serag" class="team-member-photo">
                     </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Team Member: Li -->
-                <div class="member-slide">
-                    <div class="member-card">
-                        <div class="member-image-wrapper">
-                            <img src="{{ url_for('static', filename='to.png') }}" alt="Li Zhang">
-                    </div>
-                        <div class="member-content">
-                            <h3>Abdelrahman Eltoukhy</h3>
-                            <span class="member-role">Data Analyst</span>
-                            <div class="member-socials">
-                                <a href="https://www.linkedin.com/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
+                    <div class="team-info">
+                        <h3>Sherif Serag</h3>
+                        <p class="team-role">ML Engineer</p>
+                        <p class="team-description">Expert in developing and optimizing machine learning algorithms for enhanced diagnostic accuracy.</p>
                     </div>
                 </div>
+
+                <!-- Team Member: Ibrahim -->
+                <div class="team-card" data-position="far-next">
+                    <div class="team-social">
+                        <a href="https://www.linkedin.com/in/ibrahim-khaled-17b178236/" class="team-social-icon linkedin" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                    <div class="team-img-container">
+                        <img src="{{ url_for('static', filename='Ibrahim-Khaled.png') }}" alt="Ibrahim Khaled" class="team-member-photo">
+                    </div>
+                    <div class="team-info">
+                        <h3>Ibrahim Khaled</h3>
+                        <p class="team-role">Frontend Developer</p>
+                        <p class="team-description">Creating intuitive and responsive user interfaces for seamless medical imaging analysis experiences.</p>
+                    </div>
+                </div>
+
+                <!-- Team Member: Karim -->
+                <div class="team-card" data-position="hidden">
+                    <div class="team-social">
+                        <a href="#" class="team-social-icon linkedin" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                    <div class="team-img-container">
+                        <img src="{{ url_for('static', filename='Karim.png') }}" alt="Karim Elwaraky" class="team-member-photo">
+                    </div>
+                    <div class="team-info">
+                        <h3>Karim Elwaraky</h3>
+                        <p class="team-role">Cloud Engineer</p>
+                        <p class="team-description">Architecting scalable cloud infrastructure for robust and reliable medical AI applications.</p>
+                    </div>
+                </div>
+
+                <!-- Team Member: Abdelrahman -->
+                <div class="team-card" data-position="hidden">
+                    <div class="team-social">
+                        <a href="#" class="team-social-icon linkedin" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                    <div class="team-img-container">
+                        <img src="{{ url_for('static', filename='to.png') }}" alt="Abdelrahman Eltokhy" class="team-member-photo">
+                    </div>
+                    <div class="team-info">
+                        <h3>Abdelrahman Eltokhy</h3>
+                        <p class="team-role">Data Analyst</p>
+                        <p class="team-description">Analyzing medical data patterns and insights to improve model performance and diagnostic accuracy.</p>
+                    </div>
                 </div>
             </div>
-            
-            <!-- Slider navigation -->
-            <div class="slider-nav">
-                <button class="slider-prev" aria-label="Previous team member">
+
+            <!-- Enhanced Carousel Controls -->
+            <div class="team-carousel-controls">
+                <button class="team-nav-btn team-prev-btn" aria-label="Previous team member">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <div class="slider-dots">
-                    <span class="slider-dot active" data-index="0"></span>
-                    <span class="slider-dot" data-index="1"></span>
-                    <span class="slider-dot" data-index="2"></span>
-                    <span class="slider-dot" data-index="3"></span>
-                    <span class="slider-dot" data-index="4"></span>
-                    <span class="slider-dot" data-index="5"></span>
+                
+                <div class="team-indicators">
+                    <span class="team-indicator" data-index="0"></span>
+                    <span class="team-indicator active" data-index="1"></span>
+                    <span class="team-indicator" data-index="2"></span>
+                    <span class="team-indicator" data-index="3"></span>
+                    <span class="team-indicator" data-index="4"></span>
+                    <span class="team-indicator" data-index="5"></span>
                 </div>
-                <button class="slider-next" aria-label="Next team member">
+                
+                <button class="team-nav-btn team-next-btn" aria-label="Next team member">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
@@ -725,14 +1115,14 @@
     <div class="content-container">
         {% if current_user.is_authenticated %}
         <h2 class="mb-4">Welcome back to MedXpert!</h2>
-        <p class="lead mb-4 content-narrow mx-auto">Continue your medical imaging analysis with our advanced AI models.</p>
+        <p class="lead mb-4 content-narrow mx-auto">Continue analyzing your medical images using advanced AI models.</p>
         <div class="d-flex justify-content-center gap-3">
             <a href="#models" class="btn btn-light btn-lg">Explore Models</a>
             <a href="{{ url_for('profile') }}" class="btn btn-outline-light btn-lg">View Profile</a>
         </div>
         {% else %}
         <h2 style="position: relative; margin-bottom: 2rem; font-weight: 700; color: white; display: inline-block; padding-bottom: 5px; line-height: 1.3;">Ready to enhance your diagnostic capabilities?</h2>
-        <p class="lead mb-4 content-narrow mx-auto">Join thousands of healthcare professionals using MedXpert to improve their diagnostic accuracy.</p>
+        <p class="lead mb-4 content-narrow mx-auto">Join thousands of healthcare professionals who use MedXpert to improve their diagnostic accuracy.</p>
         <div class="d-flex justify-content-center gap-3 stagger-item">
             <a href="{{ url_for('register') }}" class="btn btn-light btn-lg" style="color: #000 !important; font-weight: 900;">Create Free Account</a>
             <a href="#models" class="btn btn-outline-light btn-lg">Explore Models</a>
@@ -752,7 +1142,10 @@
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize team slider
+        // Hide loading screen after everything is loaded
+        hideLoadingScreen();
+        
+        // Initialize advanced team carousel
         initTeamSlider();
         
         // Animate hero text
@@ -760,7 +1153,32 @@
         
         // Back to top button functionality
         initBackToTop();
+        
+        // Add smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     });
+    
+    // Smooth scroll function
+    function smoothScrollTo(target) {
+        const element = document.querySelector(target);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
     
     // Back to top button
     function initBackToTop() {
@@ -786,78 +1204,144 @@
     }
     
     function animateHeroText() {
-        const words = document.querySelectorAll('.hero-title .animate-word');
+        // No animations to prevent layout shift
+    }
+    
+    function hideLoadingScreen() {
+        const loadingScreen = document.getElementById('loading-screen');
+        let hasFinished = false;
         
-        words.forEach((word, index) => {
+        function finishLoading() {
+            if (hasFinished) return;
+            hasFinished = true;
+            
             setTimeout(() => {
-                word.style.visibility = 'visible';
-                word.style.opacity = '1';
-                word.style.transform = 'scale(1)';
-                word.style.transition = 'opacity 0.6s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-            }, 300 * (index + 1)); // Staggered delay for each word
+                if (loadingScreen) {
+                    loadingScreen.classList.add('hidden');
+                }
+                document.body.classList.remove('loading');
+                document.documentElement.classList.remove('loading');
+                
+                // Force enable scrolling with important values
+                document.body.style.setProperty('overflow', 'auto', 'important');
+                document.body.style.setProperty('position', 'relative', 'important');
+                document.body.style.setProperty('width', 'auto', 'important');
+                document.body.style.setProperty('height', 'auto', 'important');
+                document.body.style.setProperty('top', 'auto', 'important');
+                document.body.style.setProperty('left', 'auto', 'important');
+                document.documentElement.style.setProperty('overflow', 'auto', 'important');
+                
+                // Remove scroll prevention
+                if (typeof preventScroll === 'function') {
+                    window.removeEventListener('scroll', preventScroll);
+                    window.removeEventListener('touchmove', preventScroll);
+                }
+                
+                setTimeout(() => {
+                    if (loadingScreen && loadingScreen.parentNode) {
+                        loadingScreen.remove();
+                    }
+                }, 500);
+            }, 300);
+        }
+        
+        // Wait for all images to load
+        const allImages = document.querySelectorAll('img');
+        let loadedImages = 0;
+        const totalImages = allImages.length;
+        
+        if (totalImages === 0) {
+            finishLoading();
+            return;
+        }
+        
+        allImages.forEach(img => {
+            if (img.complete) {
+                loadedImages++;
+            } else {
+                img.addEventListener('load', () => {
+                    loadedImages++;
+                    if (loadedImages === totalImages) {
+                        finishLoading();
+                    }
+                });
+                img.addEventListener('error', () => {
+                    loadedImages++;
+                    if (loadedImages === totalImages) {
+                        finishLoading();
+                    }
+                });
+            }
         });
         
-        // Animate subtitle text as a single element
-        setTimeout(() => {
-            const subtitleText = document.getElementById('subtitle-text');
-            if (subtitleText) {
-                subtitleText.style.opacity = '1';
-                subtitleText.style.transform = 'scale(1)';
-                subtitleText.style.transition = 'opacity 0.8s ease, transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-            }
-        }, 1800);
+        if (loadedImages === totalImages) {
+            finishLoading();
+        }
         
-        // Animate explore button
+        // Fallback: hide loading screen after maximum 2 seconds
         setTimeout(() => {
-            const exploreButton = document.getElementById('explore-button');
-            if (exploreButton) {
-                exploreButton.style.visibility = 'visible';
-                exploreButton.style.opacity = '1';
-                exploreButton.style.transform = 'scale(1)';
-                exploreButton.style.transition = 'opacity 0.6s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            if (!hasFinished) {
+                console.log('Loading timeout reached, forcing scroll restoration');
+                document.body.style.setProperty('overflow', 'auto', 'important');
+                document.documentElement.style.setProperty('overflow', 'auto', 'important');
             }
-        }, 2500);
+            finishLoading();
+        }, 2000);
+    }
+    
+    // Add loading class to body initially and prevent any movement
+    document.body.classList.add('loading');
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+    document.body.style.top = '0';
+    document.body.style.left = '0';
+    
+    // Prevent any scrolling during load
+    window.addEventListener('scroll', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    
+    function preventScroll(e) {
+        if (document.body.classList.contains('loading')) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
     }
     
     function initTeamSlider() {
-        const slider = document.querySelector('.team-slider');
-        const slides = Array.from(document.querySelectorAll('.member-slide'));
-        const prevBtn = document.querySelector('.slider-prev');
-        const nextBtn = document.querySelector('.slider-next');
-        const dots = Array.from(document.querySelectorAll('.slider-dot'));
+        const teamCards = Array.from(document.querySelectorAll('.team-card'));
+        const prevBtn = document.querySelector('.team-prev-btn');
+        const nextBtn = document.querySelector('.team-next-btn');
+        const indicators = Array.from(document.querySelectorAll('.team-indicator'));
         
-        if (!slider || !slides.length || !prevBtn || !nextBtn) return;
+        if (!teamCards.length || !prevBtn || !nextBtn) return;
         
-        let currentIndex = 0;
-        let slidesToShow = getSlidesToShow();
-        let slideWidth = 100 / slidesToShow;
+        let currentIndex = 1; // Start with second card as active (Osama as lead)
+        
+        // Position mapping
+        const positions = ['far-prev', 'prev', 'active', 'next', 'far-next', 'hidden'];
         
         // Initial setup
-        updateSlider();
-        
-        // Update on window resize
-        window.addEventListener('resize', function() {
-            slidesToShow = getSlidesToShow();
-            slideWidth = 100 / slidesToShow;
-            updateSlider();
-        });
+        updateTeamCarousel();
         
         // Navigation buttons
         prevBtn.addEventListener('click', function() {
-            currentIndex = Math.max(0, currentIndex - 1);
-            updateSlider();
+            currentIndex = currentIndex > 0 ? currentIndex - 1 : teamCards.length - 1;
+            updateTeamCarousel();
         });
         
         nextBtn.addEventListener('click', function() {
-            currentIndex = Math.min(slides.length - slidesToShow, currentIndex + 1);
-            updateSlider();
+            currentIndex = currentIndex < teamCards.length - 1 ? currentIndex + 1 : 0;
+            updateTeamCarousel();
         });
         
-        // Dot navigation
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', function() {
-                currentIndex = Math.min(index, slides.length - slidesToShow);
-                updateSlider();
+        // Indicator navigation
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', function() {
+                currentIndex = index;
+                updateTeamCarousel();
             });
         });
         
@@ -865,85 +1349,154 @@
         let touchStartX = 0;
         let touchEndX = 0;
         
-        slider.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].clientX;
-        });
-        
-        slider.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].clientX;
-            handleSwipe();
-        });
+        const carousel = document.querySelector('.team-carousel-track');
+        if (carousel) {
+            carousel.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].clientX;
+            });
+            
+            carousel.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].clientX;
+                handleSwipe();
+            });
+        }
         
         function handleSwipe() {
             const swipeThreshold = 50;
             if (touchStartX - touchEndX > swipeThreshold) {
                 // Swipe left - next slide
-                currentIndex = Math.min(slides.length - slidesToShow, currentIndex + 1);
-                updateSlider();
+                currentIndex = currentIndex < teamCards.length - 1 ? currentIndex + 1 : 0;
+                updateTeamCarousel();
             } else if (touchEndX - touchStartX > swipeThreshold) {
                 // Swipe right - previous slide
-                currentIndex = Math.max(0, currentIndex - 1);
-                updateSlider();
+                currentIndex = currentIndex > 0 ? currentIndex - 1 : teamCards.length - 1;
+                updateTeamCarousel();
             }
         }
         
-        // Update slider position and state
-        function updateSlider() {
-            // Calculate the actual transform value with overlap adjustment
-            const transformValue = currentIndex * (slideWidth - 10);
-            
-            // Update transform with overlap adjustment
-            slider.style.transform = `translateX(-${transformValue}%)`;
-            
-            // Update dots
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentIndex);
-            });
-            
-            // Update button states
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex >= slides.length - slidesToShow;
-            
-            // Apply visual states to slides
-            slides.forEach((slide, index) => {
-                const position = index - currentIndex;
+        // Update carousel positions with smooth z-index transitions
+        function updateTeamCarousel() {
+            // Phase 1: Add transition classes to cards that will move
+            teamCards.forEach((card, index) => {
+                const currentPos = card.getAttribute('data-position');
+                const newPos = getCardPosition(index, currentIndex, teamCards.length);
                 
-                if (position >= 0 && position < slidesToShow) {
-                    slide.classList.add('active');
-                    slide.classList.remove('inactive');
-                    
-                    // Add special effects for center slide
-                    if (slidesToShow % 2 !== 0 && position === Math.floor(slidesToShow / 2)) {
-                        slide.classList.add('center-slide');
-                } else {
-                        slide.classList.remove('center-slide');
-                    }
-                    
-                    // Apply z-index based on position for proper stacking
-                    slide.style.zIndex = 10 - Math.abs(position);
-                    
-                } else {
-                    slide.classList.remove('active', 'center-slide');
-                    slide.classList.add('inactive');
-                    slide.style.zIndex = 1;
+                // Add transition classes for cards moving to/from active position
+                if ((currentPos === 'active' && newPos !== 'active') || 
+                    (currentPos !== 'active' && newPos === 'active')) {
+                    card.classList.add('transitioning');
+                    // Give transitioning cards middle z-index
+                    card.style.zIndex = '75';
                 }
             });
+            
+            // Phase 2: Apply new positions after short delay
+            setTimeout(() => {
+                teamCards.forEach((card, index) => {
+                    const position = getCardPosition(index, currentIndex, teamCards.length);
+                    card.setAttribute('data-position', position);
+                });
+                
+                // Phase 3: Clean up transition classes after animation completes
+                setTimeout(() => {
+                    teamCards.forEach(card => {
+                        card.classList.remove('transitioning');
+                        card.style.zIndex = ''; // Reset to CSS values
+                    });
+                }, 600); // Match CSS transition duration
+                
+            }, 50);
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
         }
         
-        // Function to determine number of slides to show based on screen width
-        function getSlidesToShow() {
-            if (window.innerWidth >= 1200) {
-                return 3; // Large desktop
-            } else if (window.innerWidth >= 768) {
-                return 2; // Small desktop & tablet
-            } else {
-                return 1; // Mobile
-            }
+        // Calculate card position relative to active card
+        function getCardPosition(cardIndex, activeIndex, totalCards) {
+            const diff = cardIndex - activeIndex;
+            
+            if (diff === 0) return 'active';
+            if (diff === 1 || diff === -(totalCards - 1)) return 'next';
+            if (diff === -1 || diff === totalCards - 1) return 'prev';
+            if (diff === 2 || diff === -(totalCards - 2)) return 'far-next';
+            if (diff === -2 || diff === totalCards - 2) return 'far-prev';
+            
+            return 'hidden';
+        }
+        
+        // Auto-rotation (optional)
+        let autoRotate = setInterval(() => {
+            currentIndex = currentIndex < teamCards.length - 1 ? currentIndex + 1 : 0;
+            updateTeamCarousel();
+        }, 7000); // Rotate every 7 seconds
+        
+        // Pause auto-rotation on hover
+        const container = document.querySelector('.team-carousel-container');
+        if (container) {
+            container.addEventListener('mouseenter', () => clearInterval(autoRotate));
+            container.addEventListener('mouseleave', () => {
+                autoRotate = setInterval(() => {
+                    currentIndex = currentIndex < teamCards.length - 1 ? currentIndex + 1 : 0;
+                    updateTeamCarousel();
+                }, 7000);
+            });
         }
     }
 </script>
 
 <style>
+    /* Loading Screen */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    #loading-screen.hidden {
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+    
+    /* Prevent layout shift for all images */
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    /* Prevent scrolling during loading - but restore after */
+    body.loading {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+    
+    body:not(.loading) {
+        overflow: auto !important;
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        top: auto !important;
+        left: auto !important;
+    }
+    
+    /* Additional loading screen protection */
+    #loading-screen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 999999 !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
     /* Unified Hero Section */
     .unified-hero-section {
         background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
@@ -993,6 +1546,303 @@
         100% { transform: translate(20px, -20px); }
     }
     
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Side-by-Side Hero Design */
+    .hero-row {
+        position: relative;
+        z-index: 10;
+    }
+    
+    .text-content {
+        padding: 2rem;
+    }
+    
+    .hero-text-wrapper {
+        max-width: 500px;
+    }
+    
+    /* Clean Title Styling */
+    .main-title {
+        font-size: 4.2rem;
+        font-weight: 700;
+        margin: 0 0 2rem 0;
+        line-height: 1.1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        text-align: left;
+    }
+    
+    .title-main {
+        color: #ffffff;
+        display: block;
+    }
+    
+    .title-highlight {
+        color: #ffffff;
+        display: block;
+        font-weight: 800;
+    }
+    
+    /* Clean Hero Description */
+    .hero-description {
+        margin: 0 0 3rem 0;
+        max-width: 500px;
+    }
+    
+    .lead-text {
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        margin: 0;
+        font-weight: 400;
+    }
+    
+    /* Clean Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 0;
+        align-items: center;
+    }
+    
+    .primary-btn-clean {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 32px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1a2cb3;
+        background: linear-gradient(135deg, #ffffff, #f8f9ff);
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .primary-btn-clean:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(255, 255, 255, 0.3);
+        color: #1a2cb3;
+    }
+    
+    .secondary-btn-clean {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 32px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+    
+    .secondary-btn-clean:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Clean Responsive Design */
+    @media (max-width: 768px) {
+        .main-title {
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-description {
+            margin-bottom: 2.5rem;
+        }
+        
+        .lead-text {
+            font-size: 1.2rem;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+        
+        .primary-btn-clean, .secondary-btn-clean {
+            justify-content: center;
+            width: 100%;
+            padding: 16px 28px;
+            font-size: 1.1rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .main-title {
+            font-size: 2.8rem;
+        }
+        
+        .lead-text {
+            font-size: 1.1rem;
+        }
+    }
+    
+    /* Image Section */
+    .image-content {
+        padding: 2rem;
+        position: relative;
+    }
+    
+    .hero-image-container {
+        position: relative;
+        text-align: center;
+    }
+    
+    .hero-main-image {
+        width: 100%;
+        max-width: 450px;
+        height: auto;
+        border-radius: 25px;
+        position: relative;
+        z-index: 3;
+        transition: all 0.6s ease;
+        box-shadow: 0 20px 60px rgba(26, 44, 179, 0.3);
+        display: block;
+        margin: 0 auto;
+    }
+    
+    .hero-main-image:hover {
+        transform: translateY(-5px) rotateY(5deg);
+        box-shadow: 0 30px 80px rgba(26, 44, 179, 0.4);
+    }
+    
+    /* Enhanced Floating Shapes */
+    .floating-shapes {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+    
+    .shape {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(2px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: floatShape 15s infinite ease-in-out;
+        box-shadow: 0 4px 20px rgba(26, 44, 179, 0.1);
+    }
+    
+    .shape-1 {
+        width: 100px;
+        height: 100px;
+        top: 15%;
+        right: 8%;
+        animation-delay: 0s;
+        background: linear-gradient(135deg, rgba(26, 44, 179, 0.15), rgba(255, 255, 255, 0.1));
+    }
+    
+    .shape-2 {
+        width: 80px;
+        height: 80px;
+        top: 65%;
+        right: 25%;
+        animation-delay: 5s;
+        background: linear-gradient(135deg, rgba(35, 60, 234, 0.12), rgba(255, 255, 255, 0.08));
+    }
+    
+    .shape-3 {
+        width: 90px;
+        height: 90px;
+        top: 35%;
+        right: 55%;
+        animation-delay: 10s;
+        background: linear-gradient(135deg, rgba(51, 70, 232, 0.1), rgba(255, 255, 255, 0.05));
+    }
+    
+    /* Image Backdrop */
+    .image-backdrop {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 80%;
+        height: 80%;
+        background: radial-gradient(
+            circle,
+            rgba(35, 60, 234, 0.2) 0%,
+            transparent 70%
+        );
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        z-index: 1;
+        animation: pulseBackdrop 4s ease-in-out infinite;
+    }
+    
+    /* Clean Animations */
+    @keyframes floatShape {
+        0%, 100% { 
+            transform: translateY(0px); 
+            opacity: 0.7; 
+        }
+        50% { 
+            transform: translateY(-20px); 
+            opacity: 1; 
+        }
+    }
+    
+    @keyframes pulseBackdrop {
+        0%, 100% {
+            opacity: 0.3;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+            opacity: 0.5;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+    }
+    
+    /* Enhanced Responsive Design */
+    @media (max-width: 992px) {
+        .hero-row {
+            flex-direction: column-reverse;
+            text-align: center;
+        }
+        
+        .text-content, .image-content {
+            padding: 1rem;
+        }
+        
+        .hero-text-wrapper {
+            max-width: 100%;
+        }
+        
+        .hero-main-image {
+            max-width: 400px;
+        }
+        
+        .main-title {
+            font-size: 3.5rem;
+        }
+    }
+    
     /* Title and subtitle styles */
     .hero-title {
         position: relative;
@@ -1002,17 +1852,15 @@
     .hero-title .animate-word {
         margin-right: 16px;
         display: inline-block;
-        visibility: hidden;
-        opacity: 0;
-        transform: scale(0);
+        opacity: 1;
+        transform: scale(1);
     }
     
     .subtitle-text .animate-subtitle-word {
         display: inline-block;
         margin-right: 6px;
-        visibility: hidden;
-        opacity: 0;
-        transform: scale(0);
+        opacity: 1;
+        transform: scale(1);
     }
     
     /* Button styling */
@@ -1944,200 +2792,40 @@
         transform: translateY(-3px);
     }
 
-    /* New Modern How It Works Section */
-    .workflow-container {
-        display: flex;
-        flex-direction: column;
-        margin: 20px 0 60px;
-        position: relative;
-    }
-    
-    .workflow-step {
-        display: flex;
-        align-items: flex-start;
-        background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
-        padding: 25px;
-        margin-bottom: 20px;
-        position: relative;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0, 0, 0, 0.03);
-        z-index: 2;
-    }
-    
-    .workflow-step:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(35, 60, 234, 0.08);
-        background-color: #fafafa;
-        border-color: rgba(35, 60, 234, 0.1);
-    }
-    
-    .workflow-number {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 1.2rem;
-        margin-right: 20px;
-        flex-shrink: 0;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(35, 60, 234, 0.2);
-    }
-    
-    .workflow-step:hover .workflow-number {
-        transform: scale(1.1);
-        box-shadow: 0 8px 20px rgba(35, 60, 234, 0.3);
-    }
-    
-    .workflow-content {
-        display: flex;
-        align-items: center;
-        flex-grow: 1;
-    }
-    
-    .workflow-icon {
-        width: 60px;
-        height: 60px;
-        background-color: rgba(35, 60, 234, 0.08);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: #233cea;
-        margin-right: 20px;
-        flex-shrink: 0;
-        transition: all 0.3s ease;
-    }
-    
-    .workflow-step:hover .workflow-icon {
-        background-color: rgba(35, 60, 234, 0.12);
-        transform: rotate(5deg);
-    }
-    
-    .workflow-content h5 {
-        font-weight: 700;
-        font-size: 1.3rem;
-        margin-bottom: 5px;
-        transition: all 0.3s ease;
-    }
-    
-    .workflow-content p {
-        font-weight: 500;
-        font-size: 1rem;
-        color: #555;
-        margin: 0;
-        line-height: 1.5;
-    }
-    
-    .workflow-step:hover h5 {
-        color: #233cea;
-    }
-    
-    .workflow-path {
-        height: 20px;
-        width: 2px;
-        background: linear-gradient(to bottom, rgba(35, 60, 234, 0.3), rgba(35, 60, 234, 0.1));
-        margin-left: 20px;
-        margin-bottom: 20px;
-        position: relative;
-        z-index: 1;
-    }
-    
-    .workflow-path::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -4px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: rgba(35, 60, 234, 0.2);
-    }
-    
-    /* Responsive adjustments */
-    @media (min-width: 768px) {
-        .workflow-container {
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .workflow-step {
-            flex-direction: column;
-            width: 22%;
-            margin-bottom: 0;
-            padding: 25px 20px;
-            align-items: center;
-            text-align: center;
-        }
-        
-        .workflow-number {
-            margin-right: 0;
-            margin-bottom: 15px;
-        }
-        
-        .workflow-content {
-            flex-direction: column;
-        }
-        
-        .workflow-icon {
-            margin-right: 0;
-            margin-bottom: 15px;
-            width: 70px;
-            height: 70px;
-            font-size: 1.8rem;
-        }
-        
-        .workflow-path {
-            flex-grow: 1;
-            height: 2px;
-            width: auto;
-            margin: 0 -10px;
-            align-self: center;
-            background: linear-gradient(to right, rgba(35, 60, 234, 0.3), rgba(35, 60, 234, 0.1));
-        }
-        
-        .workflow-path::before {
-            top: -4px;
-            left: auto;
-            right: 0;
-        }
-    }
-    
-    @media (max-width: 767px) {
-        .workflow-step {
-            padding: 20px;
-        }
-        
-        .workflow-icon {
-            width: 50px;
-            height: 50px;
-            font-size: 1.3rem;
-        }
-        
-        .workflow-content h5 {
-            font-size: 1.1rem;
-        }
-        
-        .workflow-content p {
-            font-size: 0.9rem;
-        }
-    }
+
 </style>
 
 <style>
     /* Modern Analytics Section */
+    .stats-section {
+        background: linear-gradient(135deg, #f8f9ff, #e8ecff);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stats-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 20% 20%, rgba(35, 60, 234, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(35, 60, 234, 0.03) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    .stats-section .content-container {
+        position: relative;
+        z-index: 2;
+    }
+    
     .analytics-title {
         font-size: 2rem;
         font-weight: 700;
-        color: white;
+        color: #1a2cb3;
         margin-bottom: 3rem;
         letter-spacing: -0.5px;
     }
@@ -2146,12 +2834,12 @@
         display: flex;
         align-items: center;
         justify-content: space-around;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
+        background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
         border-radius: 16px;
         padding: 2rem;
         margin-bottom: 3rem;
         border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 30px rgba(35, 60, 234, 0.15);
     }
     
     .analytics-item {
@@ -2204,6 +2892,537 @@
             width: 50%;
             height: 1px;
             background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+        }
+    }
+</style>
+
+<style>
+    /* Advanced Team Carousel Styles */
+    .team-carousel-container {
+        position: relative;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 200px 80px;
+        overflow: visible;
+        min-height: 520px;
+    }
+    
+    .team-carousel-track {
+        display: flex;
+        justify-content: center;
+        transition: transform 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        min-height: 450px;
+        position: relative;
+        width: 100%;
+        align-items: center;
+    }
+    
+    .team-card {
+        position: absolute;
+        width: 280px;
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        opacity: 0;
+        transform: translateX(1000px) scale(0.5);
+        pointer-events: none;
+        backface-visibility: hidden;
+        left: 50%;
+        margin-left: -140px;
+    }
+    
+    .team-card[data-position="active"] {
+        transform: translateX(0) scale(1.05) translateY(-10px);
+        opacity: 1;
+        z-index: 100;
+        pointer-events: auto;
+        box-shadow: 0 25px 50px rgba(35, 60, 234, 0.25);
+    }
+    
+    .team-card[data-position="prev"] {
+        transform: translateX(-250px) scale(0.9) rotateY(8deg);
+        opacity: 0.85;
+        z-index: 50;
+        pointer-events: auto;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .team-card[data-position="next"] {
+        transform: translateX(250px) scale(0.9) rotateY(-8deg);
+        opacity: 0.85;
+        z-index: 50;
+        pointer-events: auto;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .team-card[data-position="far-prev"] {
+        transform: translateX(-450px) scale(0.75) rotateY(12deg);
+        opacity: 0.5;
+        z-index: 25;
+        pointer-events: none;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .team-card[data-position="far-next"] {
+        transform: translateX(450px) scale(0.75) rotateY(-12deg);
+        opacity: 0.5;
+        z-index: 25;
+        pointer-events: none;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .team-card[data-position="hidden"] {
+        transform: translateX(600px) scale(0.6);
+        opacity: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* إضافة حالات انتقالية للحركة السلسة */
+    .team-card.transitioning {
+        z-index: 75 !important;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .team-img-container {
+        height: 240px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        background: linear-gradient(135deg, #f8faff, #e8f1ff);
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 30px;
+        /* تحسين عرض الصور داخل الكونتينر بدون نويز */
+        transform: translateZ(0);
+        will-change: transform;
+    }
+    
+    .team-img-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(35, 60, 234, 0.1), transparent);
+        z-index: 1;
+    }
+    
+    .team-member-photo {
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center top;
+        border: 4px solid white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: all 0.4s ease-out;
+        position: relative;
+        z-index: 2;
+        /* تحسين جودة الصورة وإزالة النويز بشكل أفضل */
+        image-rendering: crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        /* منع التشويش أثناء التحويلات */
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
+        /* تنعيم وتحسين الألوان */
+        filter: contrast(1.01) saturate(1.02);
+        -webkit-filter: contrast(1.01) saturate(1.02);
+    }
+    
+    .team-card:hover .team-member-photo {
+        transform: scale(1.06) translate3d(0, 0, 0);
+        -webkit-transform: scale(1.06) translate3d(0, 0, 0);
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.3);
+        /* منع التشويش أثناء الـ hover مع تحسين أفضل */
+        image-rendering: crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        filter: contrast(1.02) saturate(1.03);
+        -webkit-filter: contrast(1.02) saturate(1.03);
+    }
+    
+    .team-info {
+        padding: 2rem 1.5rem;
+        text-align: center;
+        background: white;
+        position: relative;
+    }
+    
+    .team-info h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .team-role {
+        color: #666;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+    }
+    
+    .team-description {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #777;
+        margin-bottom: 0;
+        max-width: 250px;
+        margin: 0 auto;
+    }
+    
+    .team-social {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        transform: translateX(30px);
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        z-index: 5;
+    }
+    
+    .team-card:hover .team-social {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .team-social-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+        color: #0077b5;
+        text-decoration: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    .team-social-icon:hover {
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 8px 25px rgba(0, 119, 181, 0.3);
+        background: #0077b5;
+        color: white;
+    }
+    
+    .team-role-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(26, 44, 179, 0.4);
+        z-index: 10;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    /* Enhanced Carousel Controls */
+    .team-carousel-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 60px;
+        gap: 30px;
+    }
+    
+    .team-nav-btn {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        color: white;
+        font-size: 1.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.25);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .team-nav-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
+    }
+    
+    .team-nav-btn:hover::before {
+        left: 100%;
+    }
+    
+    .team-nav-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+        box-shadow: 0 15px 35px rgba(35, 60, 234, 0.4);
+    }
+    
+    .team-nav-btn:active {
+        transform: translateY(-2px) scale(1.05);
+    }
+    
+    .team-indicators {
+        display: flex;
+        gap: 12px;
+        margin: 0 25px;
+    }
+    
+    .team-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #d1d5db;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        position: relative;
+    }
+    
+    .team-indicator.active {
+        width: 32px;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #1a2cb3, #233cea);
+        box-shadow: 0 4px 12px rgba(35, 60, 234, 0.4);
+    }
+    
+    .team-indicator:hover:not(.active) {
+        background: #9ca3af;
+        transform: scale(1.2);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1400px) {
+        .team-carousel-container {
+            max-width: 1200px;
+            padding: 40px 150px 70px;
+        }
+        
+        .team-carousel-controls {
+            margin-top: 50px;
+        }
+        
+        .team-card[data-position="prev"] {
+            transform: translateX(-200px) scale(0.9) rotateY(8deg);
+        }
+        
+        .team-card[data-position="next"] {
+            transform: translateX(200px) scale(0.9) rotateY(-8deg);
+        }
+        
+        .team-card[data-position="far-prev"] {
+            transform: translateX(-350px) scale(0.75) rotateY(12deg);
+            opacity: 0.4;
+        }
+        
+        .team-card[data-position="far-next"] {
+            transform: translateX(350px) scale(0.75) rotateY(-12deg);
+            opacity: 0.4;
+        }
+    }
+    
+    @media (max-width: 1200px) {
+        .team-carousel-container {
+            padding: 40px 100px 60px;
+        }
+        
+        .team-carousel-controls {
+            margin-top: 45px;
+        }
+        
+        .team-card[data-position="prev"] {
+            transform: translateX(-180px) scale(0.85) rotateY(6deg);
+        }
+        
+        .team-card[data-position="next"] {
+            transform: translateX(180px) scale(0.85) rotateY(-6deg);
+        }
+        
+        .team-card[data-position="far-prev"] {
+            transform: translateX(-300px) scale(0.7) rotateY(10deg);
+            opacity: 0.3;
+        }
+        
+        .team-card[data-position="far-next"] {
+            transform: translateX(300px) scale(0.7) rotateY(-10deg);
+            opacity: 0.3;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .team-carousel-container {
+            padding: 20px 50px 50px;
+            min-height: 400px;
+            max-width: 100%;
+        }
+        
+        .team-carousel-controls {
+            margin-top: 35px;
+        }
+        
+        .team-card {
+            width: 260px;
+        }
+        
+        .team-card[data-position="prev"] {
+            transform: translateX(-150px) scale(0.8) rotateY(4deg);
+            opacity: 0.6;
+        }
+        
+        .team-card[data-position="next"] {
+            transform: translateX(150px) scale(0.8) rotateY(-4deg);
+            opacity: 0.6;
+        }
+        
+        .team-card[data-position="far-prev"],
+        .team-card[data-position="far-next"] {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-9999px);
+        }
+        
+        .team-img-container {
+            height: 180px;
+            padding-bottom: 15px;
+        }
+        
+        .team-member-photo {
+            width: 130px;
+            height: 130px;
+            /* تحسين إضافي للأجهزة الصغيرة لمنع النويز */
+            image-rendering: auto;
+            -webkit-image-rendering: -webkit-optimize-contrast;
+        }
+        
+        .team-info {
+            padding: 1.5rem 1rem;
+        }
+        
+        .team-nav-btn {
+            width: 45px;
+            height: 45px;
+            font-size: 1.1rem;
+        }
+        
+        .team-indicators {
+            margin: 0 15px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .team-carousel-container {
+            padding: 20px 20px 40px;
+        }
+        
+        .team-card[data-position="prev"],
+        .team-card[data-position="next"] {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .team-card[data-position="active"] {
+            transform: translateX(0) scale(0.95) translateY(0);
+        }
+        
+        .team-card {
+            width: 240px;
+        }
+        
+        .team-carousel-controls {
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .team-indicators {
+            gap: 8px;
+        }
+        
+        .team-nav-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+        
+        /* Add swipe hint for mobile */
+        .team-carousel-container::after {
+            content: "← swipe →";
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #999;
+            opacity: 0.7;
+        }
+    }
+
+    /* تحسينات إضافية لمنع النويز والتشويش في الصور */
+    .team-member-photo {
+        /* تحسين عرض الصور بدقة عالية */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        /* منع الحدود المنطقة وتحسين الحواف */
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        /* ضمان أفضل جودة للصور */
+        image-orientation: from-image;
+        /* تحسين التحويلات ثلاثية الأبعاد */
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        /* منع التشويش في المتصفحات المختلفة */
+        -ms-interpolation-mode: bicubic;
+        /* تحسين الألوان والحدة */
+        -webkit-filter-backdrop: blur(0);
+    }
+
+    /* تحسين خاص للمتصفحات الحديثة */
+    @supports (image-rendering: pixelated) {
+        .team-member-photo {
+            image-rendering: auto;
+        }
+    }
+
+    /* تحسين للدقة العالية (Retina displays) */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        .team-member-photo {
+            image-rendering: -webkit-optimize-contrast;
+            filter: none;
+            -webkit-filter: none;
         }
     }
 </style>
