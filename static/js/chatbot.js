@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatForm = document.getElementById('chat-form');
     const messageInput = document.getElementById('message-input');
     const conversation = document.getElementById('conversation');
+    const clearHistoryBtn = document.getElementById('clear-history-btn');
+
 
     // --- File Upload Logic ---
     uploadForm.addEventListener('submit', async (e) => {
@@ -78,13 +80,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function addMessageToChat(sender, text) {
+        function addMessageToChat(sender, text) {
         const bubble = document.createElement('div');
         bubble.classList.add('chat-bubble', sender);
+        
+        // Handle system messages differently
+        if (sender === 'system') {
+            bubble.classList.add('system-message');
+            bubble.style.backgroundColor = '#e9ecef';
+            bubble.style.color = '#495057';
+            bubble.style.fontStyle = 'italic';
+            bubble.style.textAlign = 'center';
+            bubble.style.border = '1px solid #dee2e6';
+        }
+        
         bubble.textContent = text;
         conversation.appendChild(bubble);
         conversation.scrollTop = conversation.scrollHeight; // Auto-scroll to the bottom
     }
+
     
     let typingIndicator;
     function showTypingIndicator() {
@@ -100,4 +114,34 @@ document.addEventListener('DOMContentLoaded', () => {
             conversation.removeChild(typingIndicator);
         }
     }
+
+        // --- Clear History Logic ---
+    if (clearHistoryBtn) {
+        clearHistoryBtn.addEventListener('click', async () => {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+                try {
+                    const response = await fetch('/api/chatbot/clear-history', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        // Clear the conversation display
+                        conversation.innerHTML = '';
+                        // Show success message
+                        addMessageToChat('system', 'Chat history cleared. You can start a new conversation.');
+                    } else {
+                        throw new Error(result.message || 'Failed to clear history');
+                    }
+                } catch (error) {
+                    addMessageToChat('system', `Error clearing history: ${error.message}`);
+                }
+            }
+        });
+    }
+
 });

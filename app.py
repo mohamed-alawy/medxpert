@@ -40,6 +40,7 @@ print("Starting application...")
 # Flask application setup
 app = Flask(__name__)
 app.secret_key = 'medxpert_secret_key'
+app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours in seconds
 
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -339,11 +340,37 @@ def query_chatbot():
     data = request.get_json()
     if not data or 'question' not in data:
         return jsonify({'status': 'error', 'message': 'Question not provided'}), 400
-    
+
     question = data['question']
-    answer = chatbot_services.get_rag_response(current_user.id, question)
+    
+    # Get chat history from session
+    session_key = f"chat_history_{current_user.id}"
+    chat_history = session.get(session_key, [])
+    
+    # Get response from chatbot with history
+    answer = chatbot_services.get_rag_response(current_user.id, question, chat_history)
+    
+    # Update chat history in session
+    chat_history.append({"role": "user", "content": question})
+    chat_history.append({"role": "assistant", "content": answer})
+    
+    # Keep only last 20 messages (10 exchanges) to prevent session from growing too large
+    if len(chat_history) > 20:
+        chat_history = chat_history[-20:]
+    
+    session[session_key] = chat_history
+    session.permanent = True  # Make session persistent
     
     return jsonify({'status': 'success', 'answer': answer})
+
+@chatbot_bp.route('/clear-history', methods=['POST'])
+@login_required
+def clear_chat_history():
+    """Clear the chat history for the current user."""
+    session_key = f"chat_history_{current_user.id}"
+    session.pop(session_key, None)
+    return jsonify({'status': 'success', 'message': 'Chat history cleared'})
+# --- End of Chatbot API Blueprint ---
 
 # Register the blueprint with the main Flask app
 app.register_blueprint(chatbot_bp)
