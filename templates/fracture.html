@@ -4,752 +4,1547 @@
 
 {% block head %}
 <style>
-    .fracture-header {
-        background-color: rgba(35, 60, 234, 0.1);
-        border-radius: var(--border-radius);
-    }
-    
-    .model-icon {
-        max-height: 180px;
-    }
-    
-    .upload-container {
-        background-color: white;
-    }
-    
-    .image-comparison {
+    /* Simple Medical Hero Section */
+    .skin-hero {
+        background: #ffffff;
+        min-height: 60vh;
         display: flex;
-        flex-direction: column;
-        gap: 1rem;
+        align-items: center;
+        padding: 2rem 0;
     }
     
-    @media (min-width: 768px) {
-        .image-comparison {
-            flex-direction: row;
-        }
+    .hero-content {
+        text-align: center;
+    }
+    
+    /* Clean Professional Title */
+    .hero-title {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 2rem;
+        font-weight: 400;
+    }
+    
+    /* Clean Simple Card */
+    .glass-card {
+        background: white;
+        border-radius: 20px;
+        border: 2px solid rgba(35, 60, 234, 0.1);
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+        padding: 2.5rem;
+        margin-top: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        border-radius: 20px 20px 0 0;
+    }
+    
+    /* Clean Simple Drop Zone */
+    .drop-zone {
+        border: 2px dashed var(--primary-color);
+        border-radius: 15px;
+        padding: 3rem;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(35, 60, 234, 0.05), rgba(89, 96, 238, 0.03));
+        transition: all 0.3s ease;
+        color: var(--primary-color);
+        position: relative;
+    }
+    
+    .drop-zone:hover {
+        border-color: var(--primary-light);
+        background: linear-gradient(135deg, rgba(35, 60, 234, 0.08), rgba(89, 96, 238, 0.05));
+        transform: translateY(-2px);
+    }
+    
+    .drop-zone-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
+    }
+    
+    .drop-zone h4, .drop-zone p {
+        color: var(--primary-color);
+    }
+    
+    /* Upload Button */
+    label[for="fractureFile"] {
+        cursor: pointer !important;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+    
+    label[for="fractureFile"]:hover {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+        color: white !important;
+    }
+    
+    label[for="fractureFile"]:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(35, 60, 234, 0.2);
+    }
+    
+    /* Clean Professional Button */
+    .analyze-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        border: none;
+        border-radius: 25px;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .analyze-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(35, 60, 234, 0.4);
+        color: white;
+    }
+    
+    /* New Analysis Button */
+    .new-analysis-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        border: none;
+        border-radius: 25px;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .new-analysis-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(35, 60, 234, 0.4);
+        color: white;
+    }
+    
+    /* Medical Disclaimer Card */
+    .disclaimer-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+        padding: 2.5rem;
+        margin-top: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Clean Result Cards */
+    .result-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2.5rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(35, 60, 234, 0.1);
+        border: 1px solid rgba(35, 60, 234, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .result-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+    }
+    
+    /* Simple Loading Overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        flex-direction: column;
+    }
+    
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(35, 60, 234, 0.2);
+        border-top: 4px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    .loading-text {
+        margin-top: 1rem;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Image Viewer Lab Controls */
+    .image-lab-viewer {
+        position: relative;
+        background: #000;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 3px solid var(--primary-color);
     }
     
     .image-container {
         position: relative;
-        height: 400px; /* Fixed height for consistency */
-        margin-bottom: 20px;
-        text-align: center; /* Center the image horizontally */
+        width: 100%;
+        height: 500px;
+        overflow: hidden;
+        cursor: grab;
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow: hidden;
+        background: #000;
+        will-change: transform;
     }
     
-    /* Professional zoom styles */
-    .zoom-container {
-        position: relative;
-        overflow: hidden; /* Hide overflow when zooming */
-        border-radius: 12px;
-        cursor: crosshair;
+    .image-container:active {
+        cursor: grabbing;
     }
     
-    .zoom-result {
-        position: absolute;
-        border: 2px solid #233cea;
-        background-color: white;
-        border-radius: 100%;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-        height: 150px;
-        width: 150px;
-        top: 0;
-        left: 0;
-        z-index: 100;
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        background-repeat: no-repeat;
-    }
-    
-    .zoom-lens {
-        position: absolute;
-        border: 2px solid #233cea;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        pointer-events: none;
-        transform: translate(-50%, -50%);
-        display: none;
-    }
-    
-    /* Zoom tools */
-    .zoom-tools {
-        margin-top: 1rem;
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-    }
-    
-    .zoom-level-indicator {
-        padding: 0.25rem 0.5rem;
-        background-color: rgba(35, 60, 234, 0.1);
-        border-radius: 4px;
-        color: #233cea;
-        font-weight: 600;
-        margin-left: 1rem;
-    }
-    
-    .image-container img {
-        max-width: 80%; /* Limit maximum width to prevent very wide images */
-        max-height: 90%; /* Allow most of the container height */
-        min-height: 300px; /* Minimum height to ensure small images appear larger */
-        min-width: 300px; /* Minimum width to ensure small images appear larger */
-        object-fit: contain; /* This will maintain aspect ratio while fitting in container */
-        display: inline-block; /* Allow image to be centered */
-        border-radius: 12px !important; /* Apply rounded corners to the image itself */
-    }
-    
-    .zoomed {
-        cursor: zoom-out;
-        overflow: auto;
-    }
-    
-    .zoomed img {
-        transform: scale(2);
+    .analyzed-image {
         max-width: none;
         max-height: none;
+        transform-origin: center center;
+        will-change: transform, filter;
+        user-select: none;
+        pointer-events: none;
     }
     
-    /* Ensure the image has rounded corners */
-    #detectionImage {
-        border-radius: 12px !important;
-    }
-    
-    .image-label {
+    .image-controls {
         position: absolute;
-        top: 10px;
-        left: 10px;
-        background-color: rgba(0, 0, 0, 0.6);
+        top: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 10;
+        padding: 8px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        backdrop-filter: blur(15px);
+    }
+    
+    .control-group {
+        display: flex;
+        gap: 10px;
+        padding: 2px;
+    }
+    
+    .image-control-btn {
+        background: rgba(0, 0, 0, 0.9);
         color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 16px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .image-control-btn:hover {
+        background: var(--primary-color);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(35, 60, 234, 0.4);
+    }
+    
+    .zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: rgba(0, 0, 0, 0.9);
+        padding: 12px 22px;
+        border-radius: 30px;
+        z-index: 10;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .zoom-btn {
+        background: transparent;
+        color: white;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
         font-size: 14px;
     }
     
-    .detection-details {
-    background-color: white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    height: 100%;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-
-    width: 100%; /* أو مثلاً 90% لو مش عايزه full */
-    max-width: 900px; /* اختياري: تحديد أقصى عرض */
-    margin: 0 auto; /* دي اللي بتخليه ف النص */
-}
-
-    
-    .detection-box {
-        border-left: 4px solid #f6f266;
-        padding: 0.75rem 1rem;
-        background-color: rgba(246, 242, 102, 0.05);
-        margin-bottom: 1rem;
-        border-radius: 0 8px 8px 0;
+    .zoom-btn:hover {
+        background: var(--primary-color);
+        transform: scale(1.1);
     }
     
-    .detection-box h5 {
-        margin-bottom: 0.5rem;
-        color: #c4bf3d;
-    }
-    
-    .accuracy-chart-container {
-        background-color: white;
-        border-radius: 8px;
-        padding: 1rem;
-        margin-top: 2rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Removed fracture-types and fracture-type-card styles */
-    
-    .model-info-section {
-        background-color: #f8f9fa;
-        padding: 2rem 0;
-        border-radius: 8px;
-        margin-top: 3rem;
-    }
-    
-    .info-card {
-        height: 100%;
-        transition: transform 0.3s;
-        border-left: 4px solid var(--primary-color);
-    }
-    
-    .info-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .info-icon {
-        font-size: 2.5rem;
-        color: var(--primary-color);
-        margin-bottom: 1rem;
-    }
-    
-    .accuracy-chart {
-        height: 250px;
-    }
-    
-    .accuracy-metric {
-        text-align: center;
-        padding: 1rem;
-        border-radius: 8px;
-        background-color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        margin-bottom: 1rem;
-        transition: transform 0.2s;
-    }
-    
-    .accuracy-metric:hover {
-        transform: translateY(-3px);
-    }
-    
-    .accuracy-value {
-        font-size: 2rem;
-        font-weight: 600;
-        color: var(--primary-color);
-        margin-bottom: 0;
-    }
-    
-    .model-limitations {
-        background-color: rgba(255, 243, 205, 0.5);
-        border-left: 4px solid #ffc107;
-        padding: 1.5rem;
-        border-radius: 0 8px 8px 0;
-        margin-top: 2rem;
-    }
-    
-    /* Enhanced form-range styling to make sliders more visible */
-    .form-range {
-        height: 8px;
-        background-color: #eaeaea;
-        border-radius: 8px;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-        -webkit-appearance: none;
+    .zoom-slider {
+        width: 140px;
+        height: 5px;
+        background: #333;
+        border-radius: 3px;
+        outline: none;
         appearance: none;
+        -webkit-appearance: none;
     }
     
-    .form-range::-webkit-slider-thumb {
-        -webkit-appearance: none;
+    .zoom-slider::-webkit-slider-thumb {
         appearance: none;
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         background: var(--primary-color);
         cursor: pointer;
-        border: 2px solid white;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
     
-    .form-range::-moz-range-thumb {
-        width: 18px;
-        height: 18px;
+    .zoom-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         background: var(--primary-color);
         cursor: pointer;
-        border: 2px solid white;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-    
-    .control-panel {
-        background-color: #ffffff;
-        padding: 16px;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    
-    .slider-container {
-        margin-bottom: 16px;
-    }
-
-    .detection-table {
-        margin-top: 1.5rem;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        width: 100%;
-    }
-    
-    .detection-table table {
-        width: 100%;
-        margin-bottom: 0;
-        table-layout: fixed;
-    }
-    
-    .detection-table th {
-        background-color: var(--primary-color);
-        color: white;
-        font-weight: 500;
         border: none;
+    }
+    
+    .zoom-percentage {
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+        min-width: 35px;
         text-align: center;
     }
     
-    .detection-table td {
-        padding: 0.75rem 1rem;
-        vertical-align: middle;
-        text-align: center;
+    .adjustment-controls {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.9);
+        padding: 18px;
+        border-radius: 15px;
+        z-index: 10;
+        min-width: 240px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
-    .detection-table th {
-        padding: 1rem;
-        vertical-align: middle;
-    }
-    
-    .detection-table th:first-child {
-        width: 10%;
-    }
-    
-    .detection-table th:nth-child(2) {
-        width: 20%;
-    }
-    
-    .detection-table th:nth-child(3) {
-        width: 20%;
-    }
-    
-    .detection-table th:nth-child(4) {
-        width: 50%;
-    }
-    
-    .confidence-badge {
-        background-color: rgba(35, 60, 234, 0.2); /* Changed to new blue color */
-        color: #233cea; /* Changed to new blue color */
+    .adjustment-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        color: white;
+        font-size: 13px;
         font-weight: 500;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        display: inline-block;
+    }
+    
+    .adjustment-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .adjustment-slider {
+        width: 120px;
+        height: 4px;
+        background: #333;
+        border-radius: 2px;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+        margin-left: 12px;
+    }
+    
+    .adjustment-slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+    }
+    
+    .adjustment-slider::-moz-range-thumb {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: none;
+    }
+    
+    /* Detection Toggle Controls */
+    .detection-controls {
+        position: absolute;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 10;
+    }
+    
+    .detection-toggle {
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 12px;
+        font-weight: 600;
+        backdrop-filter: blur(15px);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .detection-toggle:hover {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .detection-toggle.active {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    /* Fullscreen viewer styles (Copied from skin.html for consistency) */
+    .fullscreen-viewer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        display: none; /* Initially hidden */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .fullscreen-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* When in fullscreen, the lab viewer should not have a border and should be flexible */
+    .fullscreen-content .image-lab-viewer {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 0;
+    }
+
+    .fullscreen-content .image-container {
+        height: 100% !important; /* Make container fill the lab viewer */
+    }
+
+    .close-fullscreen {
+        position: absolute;
+        top: 25px; /* A bit more space */
+        right: 25px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 20px;
+        z-index: 10001;
+        transition: all 0.2s ease;
+    }
+
+    .close-fullscreen:hover {
+        background: var(--primary-color);
+        transform: scale(1.1);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.2rem;
+        }
+        
+        .glass-card {
+            padding: 2rem;
+        }
+        
+        .drop-zone {
+            padding: 2rem;
+        }
+        
+        .image-controls,
+        .adjustment-controls {
+            position: relative;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .zoom-controls,
+        .detection-controls {
+            position: relative;
+            margin-top: 15px;
+            transform: none;
+            left: auto;
+            bottom: auto;
+            justify-content: center;
+        }
+        
+        .image-container {
+            height: 400px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 1.8rem;
+        }
+        
+        .glass-card {
+            padding: 1.5rem;
+        }
+        
+        .drop-zone {
+            padding: 1.5rem;
+        }
+        
+        .adjustment-controls {
+            min-width: auto;
+            width: 100%;
+        }
+        
+        .adjustment-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        
+        .adjustment-slider {
+            margin-left: 0;
+            width: 100%;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="model-header py-5" style="background-color: rgba(35, 60, 234, 0.1);">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-12 text-center">
-                <h1>Fracture Detection</h1>
-                <p class="lead">Upload an X-ray image to detect and locate bone fractures with high precision.</p>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="loading-overlay d-none">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Analyzing X-ray...</div>
+</div>
 
-<!-- Section 1: Upload and Analysis -->
-<section class="py-5 bg-light">
+<!-- Hero Section -->
+<section class="skin-hero">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-upload me-2"></i>Upload X-ray Image</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="fractureUploadForm" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="fractureFile" class="form-label">Select an X-ray image</label>
-                                <input class="form-control" type="file" id="fractureFile" name="file" accept=".jpg,.jpeg,.png">
-                                <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
+            <div class="col-lg-10 hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-bone me-3"></i>Fracture Detection
+                </h1>
+                <p class="hero-subtitle">AI-Powered X-ray Analysis</p>
+                
+                <!-- Upload Card -->
+                <div class="glass-card">
+                    <form id="fractureUploadForm" enctype="multipart/form-data">
+                        <div class="drop-zone" id="dropZone">
+                            <div class="drop-zone-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
                             </div>
-                            <button type="submit" class="btn btn-primary" id="analyzeFractureBtn">
-                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                Analyze Image
+                            <h4 class="mb-3" style="color: var(--primary-color); font-weight: 600;">Upload X-ray for Analysis</h4>
+                            <p class="mb-4" style="color: #666;">Click the button below to select your X-ray image</p>
+                            
+                            <!-- Hidden file input -->
+                            <input type="file" id="fractureFile" name="file" accept="image/*,.jpg,.jpeg,.png" 
+                                   required style="display: none;">
+                            
+                            <!-- Single upload button -->
+                            <label for="fractureFile" class="btn" 
+                                   style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+                                          color: white; border: none; border-radius: 20px; 
+                                          padding: 0.8rem 1.5rem; font-weight: 600;
+                                          cursor: pointer; display: inline-block;">
+                                <i class="fas fa-folder-open me-2"></i>Select X-ray
+                            </label>
+                            
+                            <div class="mt-3">
+                                <small class="text-muted">Supported formats: JPG, PNG</small>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4" id="analyzeButtonContainer" style="display: none;">
+                            <button type="submit" class="analyze-btn" id="analyzeFractureBtn">
+                                <i class="fas fa-search me-2"></i>
+                                <span class="button-text">Start Analysis</span>
+                                <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
                             </button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 2: Results Analysis -->
-<section class="py-5 bg-white">
-    <div class="container">
-        <div id="fractureResults" class="results-container mt-2 d-none">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="card mb-4 shadow">
-                        <div class="card-header bg-primary text-white">
-                            <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Analysis Results</h3>
-                        </div>
-                        <div class="card-body">
-                            <!-- Removed the alert message -->
-                            
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4">
-                                    <!-- Control Panel on left side -->
-                                    <div class="control-panel">
-                                        <h5 class="mb-3">Image Controls</h5>
-                                        <div class="slider-container">
-                                            <label for="brightness" class="form-label">Brightness: <span id="brightnessValue">0</span></label>
-                                            <input type="range" class="form-range" min="-100" max="100" value="0" id="brightness">
-                                        </div>
-                                        <div class="slider-container">
-                                            <label for="contrast" class="form-label">Contrast: <span id="contrastValue">100</span>%</label>
-                                            <input type="range" class="form-range" min="0" max="200" value="100" id="contrast">
-                                        </div>
-                                        
-                                        <div class="form-check form-switch mt-3">
-                                            <input class="form-check-input" type="checkbox" id="toggleDetection" checked>
-                                            <label class="form-check-label" for="toggleDetection">Show Fracture Detection</label>
-                                        </div>
-                                        
-                                        <div class="text-center mt-3">
-                                            <button class="btn btn-sm btn-outline-primary" id="resetAdjustments">Reset Adjustments</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-9 col-md-8">
-                                    <!-- Full width image container with professional zoom feature -->
-                                    <div class="image-container zoom-container" style="margin-top: 0; padding-top: 0;">
-                                        <img id="detectionImage" alt="X-ray Analysis" class="img-fluid">
-                                        <div class="zoom-lens" id="zoomLens"></div>
-                                        <div class="zoom-result" id="zoomResult"></div>
-                                    </div>
-                                    
-                                    <!-- Zoom controls -->
-                                    <div class="zoom-tools">
-                                        <button class="btn btn-sm btn-outline-primary" id="toggleZoom">
-                                            <i class="fas fa-search-plus me-1"></i> Toggle Magnifier
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-primary" id="zoomIn">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-primary" id="zoomOut">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                        <span class="zoom-level-indicator" id="zoomLevel">2x</span>
-                                    </div>
-                                    
-                                    <!-- No detection message -->
-                                    <div id="noDetectionMessage" class="alert alert-success text-center mt-3 d-none">
-                                        <i class="fas fa-check-circle me-2"></i> No fractures detected in this image.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Detection details table moved outside the column layout to take full width -->
-                            <div id="detectionDetails" class="detection-table mt-4 d-none" style="width: 100%; margin: 0 auto;">
-                                <h4 class="p-3 mb-0">Detection Details</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Type</th>
-                                                <th>Confidence</th>
-                                                <th>Location</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="detectionTableBody">
-                                            <!-- Detection rows will be inserted here -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="alert alert-info m-3" role="alert">
-                                    <small><i class="fas fa-info-circle me-2"></i> Our model highlights potential fracture locations with bounding boxes.</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Section 3: Educational Information -->
-<section class="py-5 bg-light">
+<!-- Results Section -->
+<section class="py-5" id="resultsSection" style="display: none; background: #ffffff;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-book-medical me-2"></i>Educational Information</h3>
-                    </div>
-                    <div class="card-body">
-                        <h4>About Fracture Detection</h4>
-                        <p>Bone fractures are common injuries that can range from simple hairline fractures to complex open fractures. Early and accurate detection is crucial for proper treatment planning.</p>
-                        
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <h5>How Our AI Works</h5>
-                                <p>Our fracture detection model uses the YOLO (You Only Look Once) architecture, an advanced object detection algorithm that can identify and localize potential fractures in X-ray images. The model has been trained on thousands of annotated medical images to recognize various types of fractures in different bones.</p>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <!-- Common Fracture Types section removed -->
-                            </div>
-                        </div>
-                        
-                        <div class="model-limitations p-4 mt-4">
-                            <h5><i class="fas fa-exclamation-triangle text-warning me-2"></i>Important Limitations</h5>
-                            <ul class="mt-3">
-                                <li><strong>Not a Replacement for Radiologists:</strong> This tool is designed to assist healthcare professionals, not replace their expertise.</li>
-                                <li><strong>Quality Dependent:</strong> Performance decreases significantly with poor quality X-ray images.</li>
-                                <li><strong>Limited Scope:</strong> The model may not detect all types of fractures, particularly hairline fractures or those in complex anatomical regions.</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="alert alert-warning mt-4">
-                            <p class="mb-0"><strong>Disclaimer:</strong> This AI tool is designed to assist healthcare professionals in fracture detection, not replace their clinical judgment. Always consult with a qualified medical professional for diagnosis and treatment planning.</p>
-                        </div>
-                    </div>
+                <div id="analysisResults">
+                    <!-- Results will be populated by JavaScript -->
                 </div>
             </div>
         </div>
     </div>
 </section>
-{% endblock %}
 
-{% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Fullscreen Viewer -->
+<div class="fullscreen-viewer" id="fullscreenViewer">
+    <div class="fullscreen-content">
+        <!-- The image lab viewer will be moved here when going fullscreen -->
+    </div>
+    <button class="close-fullscreen" id="closeFullscreenBtn"><i class="fas fa-times"></i></button>
+</div>
+
 <script>
-$(document).ready(function() {
-    // Store both images when they're loaded
-    let originalImage = '';
-    let detectionImage = '';
-    let zoomEnabled = false;
-    let zoomLevel = 2;
+console.log('🚀 Fracture detection page loading...');
+
+// Global reference to file input and selected file
+let globalFileInput = null;
+let selectedFile = null;
+
+// Simple file selection handler
+function handleFileSelection() {
+    console.log('📁 File selection event triggered');
     
-    // Form submission handler
-    $('#fractureUploadForm').on('submit', function(e) {
-        e.preventDefault();
+    let fileInput = globalFileInput;
+    if (!fileInput) {
+        fileInput = document.getElementById('fractureFile');
+        if (!fileInput) {
+            fileInput = document.querySelector('input[type="file"]');
+        }
+        globalFileInput = fileInput;
+    }
+    
+    if (!fileInput) {
+        console.error('❌ No file input found in DOM');
+        alert('Error: File input not found. Please refresh the page.');
+        return;
+    }
+    
+    if (!fileInput.files || fileInput.files.length === 0) {
+        console.log('⚠️ No file selected');
+        selectedFile = null;
+        return;
+    }
+    
+    const file = fileInput.files[0];
+    selectedFile = file;
+    console.log('✅ File selected:', file.name, '(' + Math.round(file.size/1024) + 'KB)');
+    
+    // Update UI
+    const dropZone = document.getElementById('dropZone');
+    if (dropZone) {
+        dropZone.innerHTML = `
+            <div class="drop-zone-icon" style="color: #28a745;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h4 style="color: #28a745; font-weight: 600; margin-bottom: 1rem;">
+                ${file.name}
+            </h4>
+            <p style="color: #666; margin-bottom: 1.5rem;">
+                File size: ${Math.round(file.size/1024)}KB | Ready for analysis
+            </p>
+            <div style="background: rgba(40, 167, 69, 0.1); border: 2px solid rgba(40, 167, 69, 0.3); 
+                        border-radius: 15px; padding: 1.2rem; display: inline-block;">
+                <div style="color: #28a745; font-weight: 600; font-size: 1.1rem;">
+                    <i class="fas fa-check-double me-2"></i>Ready for Analysis
+                </div>
+            </div>
+        `;
+    }
+    
+    // Show analyze button
+    const analyzeContainer = document.getElementById('analyzeButtonContainer');
+    if (analyzeContainer) {
+        analyzeContainer.style.display = 'block';
+    }
+}
+
+// Analysis submission
+function submitAnalysis() {
+    console.log('🔬 Starting analysis...');
+    
+    let file = selectedFile;
+    let fileInput = null;
+    
+    if (!file) {
+        fileInput = globalFileInput;
+        if (!fileInput || !document.body.contains(fileInput)) {
+            fileInput = document.getElementById('fractureFile');
+            if (!fileInput) fileInput = document.querySelector('input[type="file"]');
+            globalFileInput = fileInput;
+        }
         
-        const fileInput = $('#fractureFile')[0];
-        if (fileInput.files.length === 0) {
-            alert('Please select a file to upload');
+        if (!fileInput) {
+            console.error('❌ File input not found for analysis');
+            alert('Error: File input not found. Please refresh the page.');
             return;
         }
         
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
-        
-        // Show loading spinner
-        $('#analyzeFractureBtn .spinner-border').removeClass('d-none');
-        $('#analyzeFractureBtn').prop('disabled', true);
-        
-        // Clear previous results
-        $('#fractureResults').addClass('d-none');
-        $('#detectionDetails').addClass('d-none');
-        $('#noDetectionMessage').addClass('d-none');
-        $('#detectionList').empty();
-        
-        $.ajax({
-            url: '/predict/fracture',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                // Show the results container
-                $('#fractureResults').removeClass('d-none');
-                
-                if (response.status === 'success') {
-                    // Store both images
-                    originalImage = `data:image/jpeg;base64,${response.original_image}`;
-                    detectionImage = `data:image/jpeg;base64,${response.image}`;
-                    
-                    // Set initial image (with detection)
-                    $('#detectionImage').attr('src', detectionImage);
-                    
-                    // Handle detection details
-                    if (response.detections && response.detections.length > 0) {
-                        $('#detectionDetails').removeClass('d-none');
-                        
-                        // Clear previous detections
-                        $('#detectionTableBody').empty();
-                        
-                        // Add detection details to table
-                        response.detections.forEach((detection, index) => {
-                            const confidencePct = (detection.confidence * 100).toFixed(2);
-                            const location = detection.box.join(', ');
-                            
-                            const tableRow = $(`
-                                <tr>
-                                    <td>${index + 1}</td>
-                                    <td>${detection.class}</td>
-                                    <td><span class="confidence-badge">${confidencePct}%</span></td>
-                                    <td><small class="text-muted">[${location}]</small></td>
-                                </tr>
-                            `);
-                            
-                            $('#detectionTableBody').append(tableRow);
-                        });
-                    } else {
-                        // Show no detections message
-                        $('#noDetectionMessage').removeClass('d-none');
-                    }
-                } else {
-                    // Show error message as an alert instead of using the removed element
-                    alert('Error: ' + (response.message || 'An error occurred during processing'));
-                }
-            },
-            error: function(xhr, status, error) {
-                // Show the results container
-                $('#fractureResults').removeClass('d-none');
-                
-                // Show error message as an alert
-                alert('Error processing image: ' + error);
-            },
-            complete: function() {
-                // Hide loading spinner and re-enable button
-                $('#analyzeFractureBtn .spinner-border').addClass('d-none');
-                $('#analyzeFractureBtn').prop('disabled', false);
-            }
-        });
-    });
-    
-    // Handle toggle detection overlay
-    $('#toggleDetection').on('change', function() {
-        if (this.checked) {
-            // Show detection image
-            $('#detectionImage').attr('src', detectionImage);
-        } else {
-            // Show original image
-            $('#detectionImage').attr('src', originalImage);
+        if (!fileInput.files || fileInput.files.length === 0) {
+            console.error('❌ No file selected');
+            alert('Please select an X-ray image file first!');
+            return;
         }
-    });
-    
-    // Handle brightness and contrast adjustments
-    $('#brightness').on('input', function() {
-        const brightnessValue = $(this).val();
-        $('#brightnessValue').text(brightnessValue);
-        updateImageAdjustments();
-    });
-    
-    $('#contrast').on('input', function() {
-        const contrastValue = $(this).val();
-        $('#contrastValue').text(contrastValue);
-        updateImageAdjustments();
-    });
-    
-    $('#resetAdjustments').on('click', function() {
-        $('#brightness').val(0);
-        $('#contrast').val(100);
-        $('#brightnessValue').text(0);
-        $('#contrastValue').text(100);
-        updateImageAdjustments();
-    });
-    
-    function updateImageAdjustments() {
-        const brightness = parseInt($('#brightness').val()) + 100;
-        const contrast = parseInt($('#contrast').val());
-        $('#detectionImage').css('filter', `brightness(${brightness/100}) contrast(${contrast/100})`);
+        
+        file = fileInput.files[0];
+        selectedFile = file;
     }
     
-    // Professional Zoom Feature
-    const imageContainer = document.querySelector('.zoom-container');
-    const lens = document.getElementById('zoomLens');
-    const result = document.getElementById('zoomResult');
-    const img = document.getElementById('detectionImage');
+    console.log('📤 Submitting:', file.name, '(' + Math.round(file.size/1024) + 'KB)');
     
-    // Toggle zoom functionality
-    $('#toggleZoom').on('click', function() {
-        zoomEnabled = !zoomEnabled;
-        
-        if (zoomEnabled) {
-            $(this).addClass('active');
-            lens.style.display = 'block';
-            result.style.opacity = '1';
-            
-            // Add mousemove event listener
-            imageContainer.addEventListener('mousemove', moveMagnifier);
-            // Add touch event listeners for mobile
-            imageContainer.addEventListener('touchmove', moveMagnifierTouch);
-            imageContainer.addEventListener('touchstart', moveMagnifierTouch);
-            
-        } else {
-            $(this).removeClass('active');
-            lens.style.display = 'none';
-            result.style.opacity = '0';
-            
-            // Remove event listeners
-            imageContainer.removeEventListener('mousemove', moveMagnifier);
-            imageContainer.removeEventListener('touchmove', moveMagnifierTouch);
-            imageContainer.removeEventListener('touchstart', moveMagnifierTouch);
+    // Validate file
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!validTypes.includes(file.type) && !file.name.match(/\.(jpg|jpeg|png)$/i)) {
+        alert('Please select a valid image file (JPG, PNG)');
+        return;
+    }
+    
+    // Show loading
+    const loading = document.querySelector('.loading-overlay');
+    if (loading) loading.classList.remove('d-none');
+    
+    const analyzeBtn = document.getElementById('analyzeFractureBtn');
+    if (analyzeBtn) {
+        analyzeBtn.disabled = true;
+        const btnText = analyzeBtn.querySelector('.button-text');
+        if (btnText) btnText.textContent = 'Analyzing...';
+    }
+    
+    // Send request
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    fetch('/predict/fracture', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('📡 Response:', response.status);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('📊 Result:', data);
+        showResults(data);
+    })
+    .catch(error => {
+        console.error('🚫 Error:', error);
+        alert('Connection error! Please try again.\n' + error.message);
+    })
+    .finally(() => {
+        // Reset UI
+        if (loading) loading.classList.add('d-none');
+        if (analyzeBtn) {
+            analyzeBtn.disabled = false;
+            const btnText = analyzeBtn.querySelector('.button-text');
+            if (btnText) btnText.textContent = 'Start Analysis';
         }
     });
+}
 
-    // Zoom in/out functionality
-    $('#zoomIn').on('click', function() {
-        if (zoomLevel < 5) {
-            zoomLevel += 0.5;
-            $('#zoomLevel').text(zoomLevel.toFixed(1) + 'x');
-            updateZoom();
-        }
-    });
+// Show results
+function showResults(data) {
+    const resultsSection = document.getElementById('resultsSection');
+    const analysisResults = document.getElementById('analysisResults');
     
-    $('#zoomOut').on('click', function() {
-        if (zoomLevel > 1.5) {
-            zoomLevel -= 0.5;
-            $('#zoomLevel').text(zoomLevel.toFixed(1) + 'x');
-            updateZoom();
-        }
-    });
-    
-    function updateZoom() {
-        if (zoomEnabled) {
-            const pos = getCursorPos(window.lastEvent);
-            result.style.backgroundSize = (img.width * zoomLevel) + "px " + (img.height * zoomLevel) + "px";
-            moveLens(pos.x, pos.y);
-        }
-    }
-    
-    function moveMagnifier(e) {
-        window.lastEvent = e;
-        e.preventDefault();
-        const pos = getCursorPos(e);
-        moveLens(pos.x, pos.y);
-    }
-    
-    function moveMagnifierTouch(e) {
-        window.lastEvent = e;
-        e.preventDefault();
-        const pos = getCursorPos(e.touches[0]);
-        moveLens(pos.x, pos.y);
-    }
-    
-    function getCursorPos(e) {
-        const rect = img.getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        let y = e.clientY - rect.top;
-        x = Math.min(Math.max(0, x), rect.width);
-        y = Math.min(Math.max(0, y), rect.height);
-        return {x: x, y: y};
-    }
-    
-    function moveLens(x, y) {
-        // Position the lens
-        lens.style.left = x + "px";
-        lens.style.top = y + "px";
+    if (resultsSection && analysisResults) {
+        resultsSection.style.display = 'block';
         
-        // Position the result
-        result.style.left = x + "px";
-        result.style.top = y + "px";
+        // Determine if fracture detected
+        const detections = data.detections || data.results || [];
+        const hasFracture = detections && detections.length > 0;
+        const analysisImageData = data.image || data.result_image || data.image_base64 || '';
+        // Assuming the backend sends `original_image` as another base64 string.
+        const originalImageData = data.original_image || analysisImageData; 
+
+        // Store base64 image data in global scope for easy access by other functions
+        window.analysisImageData = `data:image/jpeg;base64,${analysisImageData}`;
+        window.originalImageData = `data:image/jpeg;base64,${originalImageData}`;
+
+        // Get current date and time
+        const now = new Date();
+        const analysisDate = now.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        const analysisTime = now.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: true 
+        });
         
-        // Calculate background position for result
-        const bgX = x * zoomLevel - (result.offsetWidth / 2);
-        const bgY = y * zoomLevel - (result.offsetHeight / 2);
+        analysisResults.innerHTML = `
+            <!-- Analysis Header -->
+            <div class="glass-card mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 style="color: var(--primary-color); font-weight: 700; margin-bottom: 0.5rem;">
+                            <i class="fas fa-chart-line me-3"></i>Analysis Results
+                        </h2>
+                        <p style="color: #666; margin-bottom: 0;">
+                            <i class="fas fa-calendar-alt me-2"></i>${analysisDate} at ${analysisTime}
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+                                    border-radius: 15px; padding: 1rem; color: white; text-align: center;">
+                            <i class="fas fa-x-ray" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                            <div style="font-size: 0.9rem; font-weight: 600;">AI Diagnosis</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Results Card -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="glass-card">
+                        <!-- Detection Result -->
+                        <div class="mb-4">
+                            <h4 style="color: #333; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-bone me-2" style="color: var(--primary-color);"></i>
+                                Detection Result
+                            </h4>
+                            <div style="background: rgba(35, 60, 234, 0.05); border-left: 4px solid ${hasFracture ? '#dc3545' : '#28a745'}; 
+                                        padding: 1.5rem; border-radius: 0 10px 10px 0; margin-bottom: 2rem;">
+                                <div style="font-size: 1.8rem; font-weight: 700; color: ${hasFracture ? '#dc3545' : '#28a745'}; margin-bottom: 0.5rem;">
+                                    ${hasFracture ? 'FRACTURE DETECTED' : 'NO FRACTURE DETECTED'}
+                                </div>
+                                <div style="color: #666; font-size: 1rem;">
+                                    ${hasFracture ? `${detections.length} fracture(s) found in X-ray` : 'Normal bone structure identified'}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${hasFracture ? `
+                            <!-- Fracture Details -->
+                            <div class="mb-4">
+                                <h5 style="color: #333; font-weight: 600; margin-bottom: 1rem;">
+                                    <i class="fas fa-exclamation-triangle me-2" style="color: #dc3545;"></i>
+                                    Fracture Details
+                                </h5>
+                                ${detections.map((detection, index) => {
+                                    const confidence = Math.round((detection.confidence || detection.score || 0) * 100);
+                                    return `
+                                        <div style="border: 2px solid #dc3545; border-radius: 15px; padding: 1.5rem; margin-bottom: 1rem; background: rgba(220, 53, 69, 0.05);">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div style="color: #dc3545; font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">
+                                                        Detection ${index + 1}
+                                                    </div>
+                                                    <div style="color: #666; font-size: 1rem;">
+                                                        Type: ${detection.class || 'Fracture'}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 text-end">
+                                                    <div style="color: #dc3545; font-weight: 700; font-size: 1.8rem;">
+                                                        ${confidence}%
+                                                    </div>
+                                                    <div style="color: #666; font-size: 0.9rem;">
+                                                        Confidence
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        ` : `
+                            <!-- Normal Structure Details -->
+                            <div class="mb-4">
+                                <h5 style="color: #333; font-weight: 600; margin-bottom: 1rem;">
+                                    <i class="fas fa-check-circle me-2" style="color: #28a745;"></i>
+                                    Normal Assessment
+                                </h5>
+                                <div style="border: 2px solid #28a745; border-radius: 15px; padding: 1.5rem; background: rgba(40, 167, 69, 0.05);">
+                                    <div style="color: #28a745; font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem;">
+                                        Healthy Bone Structure
+                                    </div>
+                                    <div style="color: #666; font-size: 1rem;">
+                                        No signs of fractures or abnormalities detected in the X-ray image.
+                                    </div>
+                                </div>
+                            </div>
+                        `}
+                        
+                        <!-- Analysis Details -->
+                        <div>
+                            <h5 style="color: #333; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-info-circle me-2" style="color: var(--primary-color);"></i>
+                                Analysis Details
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px; margin-bottom: 1rem;">
+                                        <div style="color: #666; font-size: 0.9rem;">Model Type</div>
+                                        <div style="color: #333; font-weight: 600;">YOLO Object Detection</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px; margin-bottom: 1rem;">
+                                        <div style="color: #666; font-size: 0.9rem;">Architecture</div>
+                                        <div style="color: #333; font-weight: 600;">Deep Learning CNN</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                                        <div style="color: #666; font-size: 0.9rem;">Analysis Status</div>
+                                        <div style="color: #28a745; font-weight: 600;">
+                                            <i class="fas fa-check-circle me-1"></i>Complete
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                                        <div style="color: #666; font-size: 0.9rem;">Processing Time</div>
+                                        <div style="color: #333; font-weight: 600;">< 2 seconds</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image Display -->
+                <div class="col-lg-6">
+                    <div class="glass-card text-center">
+                        <h5 style="color: #333; font-weight: 600; margin-bottom: 1.5rem;">
+                            <i class="fas fa-microscope me-2" style="color: var(--primary-color);"></i>
+                            Medical Image Lab
+                        </h5>
+                        ${analysisImageData ? `
+                            <div id="imageLabViewerWrapper">
+                                <div class="image-lab-viewer" id="imageLabViewer">
+                                    <!-- Image Controls -->
+                                    <div class="image-controls">
+                                        <div class="control-group">
+                                            <button class="image-control-btn" onclick="rotateImage(-90)" title="Rotate Left">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button class="image-control-btn" onclick="rotateImage(90)" title="Rotate Right">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </div>
+                                        <div class="control-group">
+                                            <button class="image-control-btn" onclick="flipImage('horizontal')" title="Flip Horizontal">
+                                                <i class="fas fa-arrows-alt-h"></i>
+                                            </button>
+                                            <button class="image-control-btn" onclick="flipImage('vertical')" title="Flip Vertical">
+                                                <i class="fas fa-arrows-alt-v"></i>
+                                            </button>
+                                        </div>
+                                        <div class="control-group">
+                                            <button class="image-control-btn" onclick="resetImage()" title="Reset">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                            <button class="image-control-btn" onclick="openFullscreen()" title="Fullscreen">
+                                                <i class="fas fa-expand"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Adjustment Controls -->
+                                    <div class="adjustment-controls" id="adjustmentControls">
+                                        <div class="adjustment-item">
+                                            <span>Brightness</span>
+                                            <input type="range" class="adjustment-slider" id="brightnessSlider" 
+                                                   min="0" max="200" value="100" oninput="adjustImage()">
+                                        </div>
+                                        <div class="adjustment-item">
+                                            <span>Contrast</span>
+                                            <input type="range" class="adjustment-slider" id="contrastSlider" 
+                                                   min="0" max="200" value="100" oninput="adjustImage()">
+                                        </div>
+                                        <div class="adjustment-item">
+                                            <span>Saturation</span>
+                                            <input type="range" class="adjustment-slider" id="saturationSlider" 
+                                                   min="0" max="200" value="100" oninput="adjustImage()">
+                                        </div>
+                                        <div class="adjustment-item">
+                                            <span>Hue</span>
+                                            <input type="range" class="adjustment-slider" id="hueSlider" 
+                                                   min="0" max="360" value="0" oninput="adjustImage()">
+                                        </div>
+                                    </div>
+
+                                    ${hasFracture ? `
+                                        <!-- Detection Toggle Controls -->
+                                        <div class="detection-controls">
+                                            <div class="detection-toggle active" onclick="toggleDetections()">
+                                                <i class="fas fa-eye-slash"></i>
+                                                <span>Hide Detections</span>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+
+                                    <!-- Image Container -->
+                                    <div class="image-container" id="imageContainer">
+                                        <img src="data:image/jpeg;base64,${analysisImageData}" 
+                                             class="analyzed-image" 
+                                             id="analyzedImage"
+                                             draggable="false">
+                                    </div>
+
+                                    <!-- Zoom Controls -->
+                                    <div class="zoom-controls">
+                                        <button class="zoom-btn" onclick="zoomImage(-0.1)" title="Zoom Out">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input type="range" class="zoom-slider" id="zoomSlider" 
+                                               min="0.1" max="5" step="0.1" value="1" oninput="setZoom(this.value)">
+                                        <span class="zoom-percentage" id="zoomPercentage">100%</span>
+                                        <button class="zoom-btn" onclick="zoomImage(0.1)" title="Zoom In">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        ` : `
+                            <div style="padding: 3rem; background: #f8f9fa; border-radius: 15px; color: #666;">
+                                <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; color: #ccc;"></i>
+                                <div>No image available</div>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Medical Disclaimer -->
+            <div class="disclaimer-card mt-4" style="background: linear-gradient(135deg, #fff3cd, #ffeaa7);">
+                <div class="row align-items-center">
+                    <div class="col-md-1 text-center">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #856404;"></i>
+                    </div>
+                    <div class="col-md-11">
+                        <h6 style="color: #856404; font-weight: 600; margin-bottom: 0.5rem;">
+                            Important Medical Disclaimer
+                        </h6>
+                        <p style="color: #856404; margin-bottom: 0; font-size: 0.95rem;">
+                            This AI analysis is for educational and informational purposes only. 
+                            It should not replace professional medical diagnosis or treatment. 
+                            Please consult with a qualified radiologist for proper medical evaluation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- New Analysis Button -->
+            <div class="text-center mt-4">
+                <button onclick="startNewAnalysis()" class="new-analysis-btn">
+                    <i class="fas fa-plus me-2"></i>Analyze New X-ray
+                </button>
+            </div>
+        `;
         
-        // Update the background position
-        result.style.backgroundImage = `url("${$('#detectionImage').attr('src')}")`;
-        result.style.backgroundSize = (img.width * zoomLevel) + "px " + (img.height * zoomLevel) + "px";
-        result.style.backgroundPosition = "-" + (bgX) + "px -" + (bgY) + "px";
+        // Initialize image lab functionality
+        setTimeout(() => {
+            initializeImageLab();
+        }, 100);
+        
+        setTimeout(() => {
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+    }
+}
+
+// Start new analysis function
+function startNewAnalysis() {
+    console.log('🔄 Starting new analysis...');
+    
+    // Hide results section
+    const resultsSection = document.getElementById('resultsSection');
+    if (resultsSection) {
+        resultsSection.style.display = 'none';
     }
     
-    // Initialize zoom display when image is loaded
-    $('#detectionImage').on('load', function() {
-        // Add initial setup for magnifier
-        result.style.backgroundImage = `url("${$(this).attr('src')}")`;
-    });
+    // Reset drop zone to original state
+    const dropZone = document.getElementById('dropZone');
+    if (dropZone) {
+        dropZone.innerHTML = `
+            <div class="drop-zone-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <h4 class="mb-3" style="color: var(--primary-color); font-weight: 600;">Upload X-ray for Analysis</h4>
+            <p class="mb-4" style="color: #666;">Click the button below to select your X-ray image</p>
+            
+            <input type="file" id="fractureFile" name="file" accept="image/*,.jpg,.jpeg,.png" 
+                   required style="display: none;">
+            
+            <label for="fractureFile" class="btn" 
+                   style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+                          color: white; border: none; border-radius: 20px; 
+                          padding: 0.8rem 1.5rem; font-weight: 600;
+                          cursor: pointer; display: inline-block;">
+                <i class="fas fa-folder-open me-2"></i>Select X-ray
+            </label>
+            
+            <div class="mt-3">
+                <small class="text-muted">Supported formats: JPG, PNG</small>
+            </div>
+        `;
+    }
+    
+    // Hide analyze button
+    const analyzeContainer = document.getElementById('analyzeButtonContainer');
+    if (analyzeContainer) {
+        analyzeContainer.style.display = 'none';
+    }
+    
+    // Clear global variables
+    selectedFile = null;
+    globalFileInput = null;
+    
+    // Re-setup event listeners for new file input
+    setTimeout(() => {
+        const newFileInput = document.getElementById('fractureFile') || document.querySelector('input[type="file"]');
+        if (newFileInput) {
+            newFileInput.addEventListener('change', handleFileSelection);
+            globalFileInput = newFileInput;
+            console.log('✅ New file input listener added');
+        }
+    }, 100);
+    
+    // Smooth scroll to upload section
+    setTimeout(() => {
+        const uploadSection = document.querySelector('.skin-hero');
+        if (uploadSection) {
+            uploadSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, 200);
+    
+    console.log('🎉 Ready for new analysis!');
+}
+
+// Image Lab Variables
+let imageTransform = {
+    scale: 1,
+    rotation: 0,
+    translateX: 0,
+    translateY: 0,
+    flipX: 1,
+    flipY: 1,
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+    hue: 0
+};
+
+let isDragging = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
+
+// Initialize Image Lab functionality
+function initializeImageLab() {
+    const imageContainer = document.getElementById('imageContainer');
+    const image = document.getElementById('analyzedImage');
+    
+    if (!imageContainer || !image) return;
+    
+    // Set initial image size
+    const containerRect = imageContainer.getBoundingClientRect();
+    const imageNaturalRatio = image.naturalHeight / image.naturalWidth;
+    
+    if (imageNaturalRatio > 1) {
+        // Portrait image
+        image.style.height = '100%';
+        image.style.width = 'auto';
+    } else {
+        // Landscape image
+        image.style.width = '100%';
+        image.style.height = 'auto';
+    }
+    
+    // Mouse events for panning
+    imageContainer.addEventListener('mousedown', startDrag);
+    imageContainer.addEventListener('mousemove', drag);
+    imageContainer.addEventListener('mouseup', stopDrag);
+    imageContainer.addEventListener('mouseleave', stopDrag);
+    
+    // Touch events for mobile
+    imageContainer.addEventListener('touchstart', handleTouchStart);
+    imageContainer.addEventListener('touchmove', handleTouchMove);
+    imageContainer.addEventListener('touchend', handleTouchEnd);
+    
+    // Prevent image dragging
+    image.addEventListener('dragstart', (e) => e.preventDefault());
+    
+    console.log('🔬 Image Lab initialized');
+}
+
+// Drag functions with improved performance
+function startDrag(e) {
+    isDragging = true;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+    e.preventDefault();
+    
+    // Optimize for dragging
+    const image = document.getElementById('analyzedImage');
+    if (image) {
+        image.style.willChange = 'transform';
+    }
+}
+
+function drag(e) {
+    if (!isDragging) return;
+    
+    const deltaX = e.clientX - lastMouseX;
+    const deltaY = e.clientY - lastMouseY;
+    
+    // Use more responsive movement multiplier
+    imageTransform.translateX += deltaX * 1.2;
+    imageTransform.translateY += deltaY * 1.2;
+    
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+    
+    // Use requestAnimationFrame for smooth updates
+    requestAnimationFrame(updateImageTransform);
+    e.preventDefault();
+}
+
+function stopDrag() {
+    isDragging = false;
+    
+    // Remove optimization after dragging
+    const image = document.getElementById('analyzedImage');
+    if (image) {
+        image.style.willChange = 'auto';
+    }
+}
+
+// Touch events for mobile with improved performance
+function handleTouchStart(e) {
+    const touch = e.touches[0];
+    lastMouseX = touch.clientX;
+    lastMouseY = touch.clientY;
+    isDragging = true;
+    e.preventDefault();
+    
+    // Optimize for touch dragging
+    const image = document.getElementById('analyzedImage');
+    if (image) {
+        image.style.willChange = 'transform';
+    }
+}
+
+function handleTouchMove(e) {
+    if (!isDragging) return;
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - lastMouseX;
+    const deltaY = touch.clientY - lastMouseY;
+    
+    // Use more responsive movement for touch
+    imageTransform.translateX += deltaX * 1.3;
+    imageTransform.translateY += deltaY * 1.3;
+    
+    lastMouseX = touch.clientX;
+    lastMouseY = touch.clientY;
+    
+    // Use requestAnimationFrame for smooth touch updates
+    requestAnimationFrame(updateImageTransform);
+    e.preventDefault();
+}
+
+function handleTouchEnd() {
+    isDragging = false;
+    
+    // Remove optimization after touch dragging
+    const image = document.getElementById('analyzedImage');
+    if (image) {
+        image.style.willChange = 'auto';
+    }
+}
+
+// Zoom functions
+function zoomImage(delta) {
+    const newScale = Math.max(0.1, Math.min(5, imageTransform.scale + delta));
+    imageTransform.scale = newScale;
+    
+    const zoomSlider = document.getElementById('zoomSlider');
+    const zoomPercentage = document.getElementById('zoomPercentage');
+    
+    if (zoomSlider) zoomSlider.value = newScale;
+    if (zoomPercentage) zoomPercentage.textContent = Math.round(newScale * 100) + '%';
+    
+    updateImageTransform();
+}
+
+function setZoom(value) {
+    imageTransform.scale = parseFloat(value);
+    
+    const zoomPercentage = document.getElementById('zoomPercentage');
+    if (zoomPercentage) zoomPercentage.textContent = Math.round(value * 100) + '%';
+    
+    updateImageTransform();
+}
+
+// Rotation functions
+function rotateImage(degrees) {
+    imageTransform.rotation += degrees;
+    updateImageTransform();
+}
+
+// Flip functions
+function flipImage(direction) {
+    if (direction === 'horizontal') {
+        imageTransform.flipX *= -1;
+    } else if (direction === 'vertical') {
+        imageTransform.flipY *= -1;
+    }
+    updateImageTransform();
+}
+
+// Reset function
+function resetImage() {
+    imageTransform = {
+        scale: 1,
+        rotation: 0,
+        translateX: 0,
+        translateY: 0,
+        flipX: 1,
+        flipY: 1,
+        brightness: 100,
+        contrast: 100,
+        saturation: 100,
+        hue: 0
+    };
+    
+    // Reset sliders
+    const zoomSlider = document.getElementById('zoomSlider');
+    const zoomPercentage = document.getElementById('zoomPercentage');
+    const brightnessSlider = document.getElementById('brightnessSlider');
+    const contrastSlider = document.getElementById('contrastSlider');
+    const saturationSlider = document.getElementById('saturationSlider');
+    const hueSlider = document.getElementById('hueSlider');
+    
+    if (zoomSlider) zoomSlider.value = 1;
+    if (zoomPercentage) zoomPercentage.textContent = '100%';
+    if (brightnessSlider) brightnessSlider.value = 100;
+    if (contrastSlider) contrastSlider.value = 100;
+    if (saturationSlider) saturationSlider.value = 100;
+    if (hueSlider) hueSlider.value = 0;
+    
+    updateImageTransform();
+}
+
+// Adjust image filters
+function adjustImage() {
+    const brightnessSlider = document.getElementById('brightnessSlider');
+    const contrastSlider = document.getElementById('contrastSlider');
+    const saturationSlider = document.getElementById('saturationSlider');
+    const hueSlider = document.getElementById('hueSlider');
+    
+    if (brightnessSlider) imageTransform.brightness = parseInt(brightnessSlider.value);
+    if (contrastSlider) imageTransform.contrast = parseInt(contrastSlider.value);
+    if (saturationSlider) imageTransform.saturation = parseInt(saturationSlider.value);
+    if (hueSlider) imageTransform.hue = parseInt(hueSlider.value);
+    
+    updateImageTransform();
+}
+
+// Update image transform and filters with improved performance
+function updateImageTransform() {
+    const image = document.getElementById('analyzedImage');
+    if (!image) return;
+    
+    // Use CSS custom properties for better performance
+    const transform = `translate3d(${imageTransform.translateX}px, ${imageTransform.translateY}px, 0) scale(${imageTransform.scale * imageTransform.flipX}, ${imageTransform.scale * imageTransform.flipY}) rotate(${imageTransform.rotation}deg)`;
+    
+    const filter = `brightness(${imageTransform.brightness}%) contrast(${imageTransform.contrast}%) saturate(${imageTransform.saturation}%) hue-rotate(${imageTransform.hue}deg)`;
+    
+    // Apply transforms more efficiently
+    image.style.transform = transform;
+    image.style.filter = filter;
+}
+
+// Fullscreen functions
+function openFullscreen() {
+    console.log('Opening fullscreen...');
+    const fullscreenViewer = document.getElementById('fullscreenViewer');
+    const imageLabViewer = document.getElementById('imageLabViewer');
+    
+    if (!fullscreenViewer || !imageLabViewer) {
+        console.error('❌ Cannot open fullscreen, required elements missing:', {
+            fullscreenViewer: !!fullscreenViewer,
+            imageLabViewer: !!imageLabViewer
+        });
+        return;
+    }
+    
+    const fullscreenContent = fullscreenViewer.querySelector('.fullscreen-content');
+    if (!fullscreenContent) {
+        console.error('❌ Fullscreen content area not found.');
+        return;
+    }
+    
+    // Store original parent to restore later
+    imageLabViewer.dataset.originalParent = imageLabViewer.parentElement.id || 'imageLabViewerWrapper';
+    
+    // Move to fullscreen
+    fullscreenContent.appendChild(imageLabViewer);
+    fullscreenViewer.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    console.log('✅ Fullscreen opened successfully');
+}
+
+function closeFullscreen() {
+    console.log('Closing fullscreen...');
+    const fullscreenViewer = document.getElementById('fullscreenViewer');
+    const imageLabViewer = document.getElementById('imageLabViewer');
+    
+    if (!fullscreenViewer || !imageLabViewer) {
+        console.error('❌ Cannot close fullscreen, required elements missing.');
+        if (fullscreenViewer) fullscreenViewer.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        return;
+    }
+    
+    // Get original parent
+    const originalParentId = imageLabViewer.dataset.originalParent || 'imageLabViewerWrapper';
+    const originalParent = document.getElementById(originalParentId);
+    
+    if (originalParent) {
+        originalParent.appendChild(imageLabViewer);
+    } else {
+        // Fallback: try to find imageLabViewerWrapper
+        const wrapper = document.getElementById('imageLabViewerWrapper');
+        if (wrapper) {
+            wrapper.appendChild(imageLabViewer);
+        }
+    }
+    
+    fullscreenViewer.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    console.log('✅ Fullscreen closed successfully');
+}
+
+
+// Toggle between original and analyzed images
+function toggleDetections() {
+    const image = document.getElementById('analyzedImage');
+    const toggleBtn = document.querySelector('.detection-toggle');
+    const icon = toggleBtn.querySelector('i');
+    const span = toggleBtn.querySelector('span');
+
+    if (image.src === window.analysisImageData) {
+        image.src = window.originalImageData;
+        icon.className = 'fas fa-eye';
+        span.textContent = 'Show Detections';
+        toggleBtn.classList.remove('active');
+    } else {
+        image.src = window.analysisImageData;
+        icon.className = 'fas fa-eye-slash';
+        span.textContent = 'Hide Detections';
+        toggleBtn.classList.add('active');
+    }
+}
+
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📋 DOM ready - initializing...');
+    
+    setTimeout(() => {
+        // Find elements
+        let fileInput = document.getElementById('fractureFile');
+        if (!fileInput) fileInput = document.querySelector('input[type="file"]');
+        
+        const form = document.getElementById('fractureUploadForm') || document.querySelector('form');
+        const closeFullscreenBtn = document.getElementById('closeFullscreenBtn');
+        
+        console.log('🔍 Found elements:');
+        console.log('  - File input:', fileInput ? '✅' : '❌');
+        console.log('  - Form:', form ? '✅' : '❌');
+        console.log('  - Close Fullscreen Button:', closeFullscreenBtn ? '✅' : '❌');
+
+        // Setup listeners
+        if (fileInput) {
+            fileInput.addEventListener('change', handleFileSelection);
+            console.log('✅ File input listener added');
+        }
+        
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitAnalysis();
+            });
+            console.log('✅ Form listener added');
+        }
+
+        if (closeFullscreenBtn) {
+            closeFullscreenBtn.addEventListener('click', closeFullscreen);
+            console.log('✅ Close fullscreen listener added');
+        }
+        
+        console.log('🎉 Initialization complete!');
+    }, 200);
 });
 </script>
 {% endblock %}

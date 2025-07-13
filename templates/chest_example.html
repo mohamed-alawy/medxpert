@@ -1,68 +1,338 @@
 {% extends "layout.html" %}
 
-{% block title %}Chest X-ray Analysis Example - MedXpert{% endblock %}
+{% block title %}Chest X-ray AI Education & Examples - MedXpert{% endblock %}
 
 {% block content %}
 <style>
+/* Modern Hero Section */
 .example-hero {
-    background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+    background: linear-gradient(135deg, #1a2cb3 0%, #233cea 50%, #3346e8 100%);
     color: white;
-    padding: 120px 0 100px;
+    padding: 100px 0 80px;
     margin-top: 0;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.example-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" fill-opacity="0.05"/><circle cx="75" cy="75" r="1" fill="%23ffffff" fill-opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.example-hero .container {
+    position: relative;
+    z-index: 2;
 }
 
 .example-hero h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
+    font-size: 3.8rem;
+    font-weight: 900;
     margin-bottom: 1.5rem;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .example-hero p {
-    font-size: 1.4rem;
-    opacity: 0.9;
-    max-width: 800px;
+    font-size: 1.3rem;
+    opacity: 0.95;
+    max-width: 700px;
     margin: 0 auto;
-    line-height: 1.6;
+    line-height: 1.7;
+    font-weight: 400;
 }
 
-.example-section {
-    padding: 100px 0;
-    background: #f8f9fa;
+/* Education Section Styles */
+.education-section {
+    padding: 60px 0;
+    background: #ffffff;
 }
 
-.model-stats {
-    display: flex;
+.conditions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
-    flex-wrap: wrap;
+    margin: 40px 0;
+}
+
+.condition-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 10px 40px rgba(26, 44, 179, 0.08);
+    transition: all 0.4s ease;
+    border: 2px solid rgba(26, 44, 179, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.condition-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(26, 44, 179, 0.15);
+    border-color: rgba(26, 44, 179, 0.2);
+}
+
+.condition-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    transition: all 0.3s ease;
+}
+
+.condition-card.covid::before { background: linear-gradient(90deg, #dc2626, #ef4444); }
+.condition-card.opacity::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
+.condition-card.normal::before { background: linear-gradient(90deg, #059669, #10b981); }
+.condition-card.pneumonia::before { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+
+.condition-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: white;
+    font-weight: bold;
 }
 
-.stat-item {
-    background: rgba(26, 44, 179, 0.1);
-    padding: 20px 30px;
-    border-radius: 15px;
-    text-align: center;
-}
+.condition-card.covid .condition-icon { background: linear-gradient(135deg, #dc2626, #ef4444); }
+.condition-card.opacity .condition-icon { background: linear-gradient(135deg, #d97706, #f59e0b); }
+.condition-card.normal .condition-icon { background: linear-gradient(135deg, #059669, #10b981); }
+.condition-card.pneumonia .condition-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); }
 
-.stat-label {
-    font-size: 1.1rem;
-    color: #1a2cb3;
-    margin-bottom: 8px;
-}
-
-.stat-value {
+.condition-title {
     font-size: 1.4rem;
     font-weight: 700;
     color: #1a2cb3;
+    margin-bottom: 15px;
 }
 
-.example-showcase {
+.condition-description {
+    color: #666;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* GradCAM Section */
+.gradcam-section {
+    padding: 50px 0;
+    background: #ffffff;
+}
+
+.gradcam-showcase {
     background: white;
     border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 20px 60px rgba(26, 44, 179, 0.08);
+    padding: 50px 40px;
+    box-shadow: 0 10px 30px rgba(26, 44, 179, 0.08);
+    margin: 0;
+    border: 1px solid rgba(26, 44, 179, 0.05);
+}
+
+.gradcam-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 15px;
+}
+
+.gradcam-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 35px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.gradcam-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 0;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 35px 25px;
+    background: linear-gradient(135deg, rgba(26, 44, 179, 0.04), rgba(35, 60, 234, 0.02));
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(26, 44, 179, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1a2cb3, #233cea);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    background: linear-gradient(135deg, rgba(26, 44, 179, 0.08), rgba(35, 60, 234, 0.04));
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(26, 44, 179, 0.15);
+    border-color: rgba(26, 44, 179, 0.15);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon {
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: white;
+    font-size: 1.6rem;
+    box-shadow: 0 8px 20px rgba(26, 44, 179, 0.3);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 12px 30px rgba(26, 44, 179, 0.4);
+}
+
+.feature-title {
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+
+.feature-description {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Clinical Applications Section */
+.applications-section {
+    padding: 60px 0;
+    background: #ffffff;
+}
+
+.applications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.application-card {
+    background: linear-gradient(135deg, rgba(26, 44, 179, 0.03), rgba(35, 60, 234, 0.02));
+    border-radius: 15px;
+    padding: 30px;
+    border-left: 4px solid #1a2cb3;
+    transition: all 0.3s ease;
+}
+
+.application-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(26, 44, 179, 0.1);
+}
+
+.application-icon {
+    font-size: 2rem;
+    color: #1a2cb3;
+    margin-bottom: 15px;
+}
+
+.application-title {
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.application-description {
+    color: #666;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Enhanced Stats */
+.enhanced-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 35px 25px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(26, 44, 179, 0.08);
+    border: 2px solid rgba(26, 44, 179, 0.05);
+    transition: all 0.3s ease;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(26, 44, 179, 0.15);
+    border-color: rgba(26, 44, 179, 0.2);
+}
+
+.stat-number {
+    font-size: 2.2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+    line-height: 1.1;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: visible;
+}
+
+.stat-label {
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+/* Example Showcase Enhanced */
+.example-showcase {
+    background: white;
+    border-radius: 25px;
+    padding: 50px;
+    box-shadow: 0 20px 60px rgba(26, 44, 179, 0.1);
+    margin: 40px 0;
 }
 
 .example-title {
@@ -117,29 +387,68 @@
     font-size: 1.5rem;
 }
 
+/* Try Model Button Enhanced */
 .try-model-btn {
-    display: block;
-    width: fit-content;
-    margin: 50px auto 0;
+    display: inline-block;
     background: linear-gradient(135deg, #1a2cb3, #233cea);
     color: white;
-    padding: 15px 40px;
-    border-radius: 30px;
+    padding: 18px 45px;
+    border-radius: 35px;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.2rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(26, 44, 179, 0.2);
+    transition: all 0.4s ease;
+    box-shadow: 0 15px 40px rgba(26, 44, 179, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .try-model-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(26, 44, 179, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 50px rgba(26, 44, 179, 0.4);
     color: white;
     text-decoration: none;
+    background: linear-gradient(135deg, #233cea, #3346e8);
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
+    .example-hero h1 {
+        font-size: 2.8rem;
+    }
+    
+    .example-hero p {
+        font-size: 1.1rem;
+    }
+    
+    .enhanced-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .conditions-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .gradcam-features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .feature-card {
+        padding: 30px 20px;
+    }
+    
+    .gradcam-showcase {
+        padding: 40px 25px;
+    }
+    
+    .applications-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
     .before-after-container {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -153,44 +462,203 @@
     .image-container {
         padding: 25px;
     }
+    
+    .gradcam-showcase {
+        padding: 30px;
+    }
+    
+    .example-showcase {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .enhanced-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+        line-height: 1.1;
+    }
+    
+    .stat-card {
+        padding: 25px 15px;
+        min-width: auto;
+    }
+    
+    .condition-card {
+        padding: 25px;
+    }
+    
+    .gradcam-title {
+        font-size: 1.8rem;
+    }
+    
+    .gradcam-showcase {
+        padding: 35px 20px;
+    }
+    
+    .feature-card {
+        padding: 25px 15px;
+    }
+    
+    .feature-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 1.4rem;
+    }
+    
+    .try-model-btn {
+        padding: 15px 30px;
+        font-size: 1rem;
+    }
 }
 </style>
 
 <!-- Hero Section -->
 <section class="example-hero">
     <div class="container">
-        <h1>Chest X-ray Analysis</h1>
-        <p>Multi-class classification for lung pathology detection using advanced AI technology</p>
+        <h1><i class="fas fa-microscope me-3"></i>Chest X-ray AI</h1>
+        <p>Advanced AI technology for medical diagnosis with educational insights and real-world examples</p>
     </div>
 </section>
 
-<!-- Example Section -->
-<section class="example-section">
+<!-- Enhanced Stats Section -->
+<section class="education-section">
     <div class="container">
-        <!-- Model Stats -->
-        <div class="model-stats">
-            <div class="stat-item">
+        <div class="enhanced-stats">
+            <div class="stat-card">
+                <div class="stat-number">95%</div>
                 <div class="stat-label">Accuracy</div>
-                <div class="stat-value">95%</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Conditions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">EfficientNet</div>
                 <div class="stat-label">Architecture</div>
-                <div class="stat-value">CNN</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-label">Classes</div>
-                <div class="stat-value">14 Conditions</div>
+            <div class="stat-card">
+                <div class="stat-number">16K+</div>
+                <div class="stat-label">Training Images</div>
             </div>
         </div>
 
-        <!-- Example Showcase -->
+        <!-- Medical Conditions Grid -->
+        <div class="text-center mb-4" style="margin-top: 40px;">
+            <h2 style="color: #1a2cb3; font-weight: 700; font-size: 2.5rem; margin-bottom: 20px;">
+                AI Detection Capabilities
+            </h2>
+            <p style="color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Our AI model can accurately identify and classify four critical chest conditions
+            </p>
+        </div>
+        
+        <div class="conditions-grid">
+            <div class="condition-card covid">
+                <div class="condition-icon">
+                    <i class="fas fa-virus"></i>
+                </div>
+                <h3 class="condition-title">COVID-19</h3>
+                <p class="condition-description">
+                    Detects radiographic patterns consistent with COVID-19 infection, typically showing bilateral peripheral ground-glass opacities and consolidations.
+                </p>
+            </div>
+            
+            <div class="condition-card opacity">
+                <div class="condition-icon">
+                    <i class="fas fa-cloud"></i>
+                </div>
+                <h3 class="condition-title">Lung Opacity</h3>
+                <p class="condition-description">
+                    Identifies hazy areas in the lungs that could indicate various conditions such as pneumonia, pulmonary edema, or hemorrhage.
+                </p>
+            </div>
+            
+            <div class="condition-card normal">
+                <div class="condition-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="condition-title">Normal</h3>
+                <p class="condition-description">
+                    Confirms when no significant abnormalities are detected in the lung fields or other visible structures in the chest X-ray.
+                </p>
+            </div>
+            
+            <div class="condition-card pneumonia">
+                <div class="condition-icon">
+                    <i class="fas fa-lungs-virus"></i>
+                </div>
+                <h3 class="condition-title">Viral Pneumonia</h3>
+                <p class="condition-description">
+                    Recognizes patterns consistent with pneumonia caused by viral infection, showing diffuse interstitial patterns.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- GradCAM Education Section -->
+<section class="gradcam-section">
+    <div class="container">
+        <div class="gradcam-showcase">
+            <h2 class="gradcam-title">
+                <i class="fas fa-eye me-3"></i>GradCAM Visualization
+            </h2>
+            <p class="gradcam-subtitle">
+                Understanding how AI makes decisions through advanced heatmap visualization technology
+            </p>
+            
+            <div class="gradcam-features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4 class="feature-title">AI Attention</h4>
+                    <p class="feature-description">
+                        Visualizes which areas of the X-ray the AI focuses on during diagnosis
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-toggle-on"></i>
+                    </div>
+                    <h4 class="feature-title">Interactive Toggle</h4>
+                    <p class="feature-description">
+                        Switch between original and heatmap overlay views with adjustable opacity
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <h4 class="feature-title">Enhanced Analysis</h4>
+                    <p class="feature-description">
+                        Provides transparency and explainability in AI medical diagnosis
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Example Showcase -->
+<section class="education-section">
+    <div class="container">
         <div class="example-showcase">
-            <h4 class="example-title">COVID-19 Detection Example</h4>
+            <h2 class="example-title" style="font-size: 2.2rem; margin-bottom: 30px;">
+                <i class="fas fa-play-circle me-3"></i>Live AI Analysis Example
+            </h2>
             <div class="before-after-container">
                 <div class="image-container">
-                    <div class="image-label">Chest X-ray</div>
+                    <div class="image-label">Original Chest X-ray</div>
                     <img src="{{ url_for('static', filename='images/COVID.png') }}" alt="Chest X-ray Original" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
-                    <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">Standard chest radiograph showing possible lung opacity</div>
+                    <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">Standard chest radiograph for AI analysis</div>
                 </div>
                 
                 <div class="arrow-icon">
@@ -198,26 +666,28 @@
                 </div>
                 
                 <div class="image-container">
-                    <div class="image-label">AI Analysis</div>
+                    <div class="image-label">AI Analysis with GradCAM</div>
                     <div style="position: relative;">
                         <img src="{{ url_for('static', filename='images/gradcam_COVID.png') }}" alt="Chest X-ray with COVID-19 Detection" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
-                        <div style="position: absolute; top: 20px; right: 20px; background: rgba(220, 53, 69, 0.9); color: white; padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 1.1rem; backdrop-filter: blur(10px);">
-                            COVID-19
+                        <div style="position: absolute; top: 20px; right: 20px; background: rgba(220, 53, 69, 0.95); color: white; padding: 10px 18px; border-radius: 25px; font-weight: 700; font-size: 1.1rem; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);">
+                            <i class="fas fa-virus me-2"></i>COVID-19
                         </div>
-                        <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(220, 53, 69, 0.9); color: white; padding: 5px 12px; border-radius: 15px; font-weight: 600; backdrop-filter: blur(10px);">
-                            100% Confidence
+                        <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(16, 185, 129, 0.95); color: white; padding: 8px 15px; border-radius: 20px; font-weight: 600; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                            <i class="fas fa-percentage me-1"></i>95% Confidence
                         </div>
                     </div>
-                    <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">AI highlighted COVID-19 patterns with heatmap visualization</div>
+                    <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">AI highlighted patterns with heatmap overlay</div>
                 </div>
             </div>
         </div>
 
         <!-- Try Model Button -->
-        <a href="{{ url_for('chest') }}" class="try-model-btn">
-            <i class="fas fa-play"></i>
-            Try This Model
-        </a>
+        <div class="text-center">
+            <a href="{{ url_for('chest') }}" class="try-model-btn">
+                <i class="fas fa-play me-2"></i>
+                Try This AI Model
+            </a>
+        </div>
     </div>
 </section>
 {% endblock %} 

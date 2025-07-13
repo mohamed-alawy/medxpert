@@ -3,247 +3,535 @@
 
 {% block head %}
 <style>
-    .slider-container {
-        margin-bottom: 15px;
+    /* Simple Medical Hero Section */
+    .brain-hero {
+        background: #ffffff;
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        padding: 2rem 0;
     }
-    .image-container {
+    
+    .hero-content {
+        text-align: center;
+    }
+    
+    /* Clean Professional Title */
+    .hero-title {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 2rem;
+        font-weight: 400;
+    }
+    
+    /* Clean Simple Card */
+    .glass-card {
+        background: white;
+        border-radius: 20px;
+        border: 2px solid rgba(35, 60, 234, 0.1);
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+        padding: 2.5rem;
+        margin-top: 2rem;
         position: relative;
-        max-width: 100%;
-        margin: 0 auto;
-        border-radius: 12px;
         overflow: hidden;
-        height: 500px; /* Increased height from 400px to 500px to make image bigger */
     }
-    .image-container img {
-        max-width: 100%;
-        width: 100%;
-        height: 100%;
-        margin: 0 auto;
-        display: block;
-        border-radius: 12px;
-        object-fit: contain; /* Maintain aspect ratio */
-    }
-    .image-overlay {
+    
+    .glass-card::before {
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.7;
-        border-radius: 12px;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        border-radius: 20px 20px 0 0;
     }
-    .control-panel {
-        background-color: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-    .slice-navigation {
+    
+    /* Clean Simple Drop Zone */
+    .drop-zone {
+        border: 2px dashed var(--primary-color);
+        border-radius: 15px;
+        padding: 3rem;
         text-align: center;
-        margin: 20px 0;
+        background: linear-gradient(135deg, rgba(35, 60, 234, 0.05), rgba(89, 96, 238, 0.03));
+        transition: all 0.3s ease;
+        color: var(--primary-color);
+        position: relative;
     }
-    .slice-slider {
-        width: 100%;
-        margin: 0 auto;
+    
+    .drop-zone:hover {
+        border-color: var(--primary-light);
+        background: linear-gradient(135deg, rgba(35, 60, 234, 0.08), rgba(89, 96, 238, 0.05));
+        transform: translateY(-2px);
     }
-    .tumor-info-card {
-        background-color: #f8f9fa;
-        border-left: 4px solid #0d6efd;
-        padding: 15px;
-        margin-bottom: 20px;
+    
+    .drop-zone-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
     }
-    .upload-container {
-        background-color: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        max-width: 750px;
-        margin: 0 auto;
+    
+    .drop-zone h4, .drop-zone p {
+        color: var(--primary-color);
     }
-    .brain-header {
-        background-color: rgba(35, 60, 234, 0.1);
-        border-radius: var(--border-radius);
+    
+    /* رفع الملف: عند اختيار ملف، أضف خلفية خضراء وعلامة صح */
+    .drop-zone.selected {
+        background: linear-gradient(135deg, #e6f9ed 60%, #f0fff7 100%) !important;
+        border-color: #28a745 !important;
+        color: #28a745 !important;
+        box-shadow: 0 0 0 2px #28a74533;
     }
+    .drop-zone.selected .drop-zone-icon i {
+        color: #28a745 !important;
+    }
+    .drop-zone.selected .file-success {
+        display: inline-block;
+        color: #28a745;
+        font-size: 1.5rem;
+        margin-left: 0.5rem;
+        vertical-align: middle;
+    }
+    .drop-zone.selected h4 {
+        color: #28a745 !important;
+    }
+    .drop-zone.selected label[for="brainFile"] {
+        background: #28a745 !important;
+        color: #fff !important;
+        border: none;
+    }
+    
+    /* Clean Professional Button */
+    .analyze-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        border: none;
+        border-radius: 25px;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .analyze-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(35, 60, 234, 0.4);
+        color: white;
+    }
+    
+    /* New Analysis Button */
+    .new-analysis-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        border: none;
+        border-radius: 25px;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .new-analysis-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(35, 60, 234, 0.4);
+        color: white;
+    }
+    
+    /* Clean Result Cards */
+    .result-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2.5rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(35, 60, 234, 0.1);
+        border: 1px solid rgba(35, 60, 234, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .result-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+    }
+    
+    /* Simple Loading Overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        flex-direction: column;
+    }
+    
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(35, 60, 234, 0.2);
+        border-top: 4px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    .loading-text {
+        margin-top: 1rem;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Brain-specific MRI Viewer Styles */
+    .brain-viewer {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(35, 60, 234, 0.1);
+        border: 1px solid rgba(35, 60, 234, 0.1);
+        margin-top: 2rem;
+    }
+
+    .mri-controls {
+        background: rgba(35, 60, 234, 0.05);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .mri-controls h5 {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .control-group {
+        margin-bottom: 1rem;
+    }
+
+    .control-group label {
+        color: #666;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-range {
+        margin-bottom: 0.5rem;
+    }
+
+    .slice-navigation {
+        background: rgba(35, 60, 234, 0.05);
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .slice-navigation h5 {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .slice-nav-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .slice-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .slice-btn:hover {
+        background: var(--primary-dark);
+        transform: scale(1.1);
+    }
+
+    .tumor-info {
+        background: linear-gradient(135deg, rgba(35, 60, 234, 0.1), rgba(89, 96, 238, 0.05));
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .tumor-info h5 {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .tumor-info p {
+        color: #666;
+        margin: 0;
+    }
+
+    .image-display {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(35, 60, 234, 0.1);
+        box-shadow: 0 10px 30px rgba(35, 60, 234, 0.08);
+    }
+
+    .mri-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        position: relative;
+        background: transparent;
+        box-shadow: none;
+    }
+
     #segmentationOverlay {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        display: block; /* Changed from 'none' to 'block' to show by default */
+        display: block;
+    }
+
+    .image-label {
+        text-align: center;
+        margin-top: 1rem;
+        color: #666;
+        font-weight: 500;
+    }
+
+    /* عداد الشرائح فوق الصور */
+    .slice-label-top {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255,255,255,0.85);
+        color: var(--primary-color);
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 2px 14px;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(35,60,234,0.07);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .brain-hero {
+            min-height: 60vh;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+        
+        .glass-card {
+            padding: 1.5rem;
+        }
+        
+        .drop-zone {
+            padding: 1.5rem;
+        }
+        
+        .analyze-btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .result-card, .brain-viewer {
+            padding: 1.5rem;
+        }
+
+        .image-display {
+            height: 400px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="model-header brain-header py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-12 text-center">
-                <h1>Brain Tumor Detection</h1>
-                <p class="lead">Upload an MRI brain scan to detect and segment tumor regions with state-of-the-art accuracy.</p>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="loading-overlay d-none">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Analyzing MRI Scan...</div>
+</div>
 
-<!-- Section 1: Upload and Analysis -->
-<section class="py-5 bg-light">
+<!-- Hero Section -->
+<section class="brain-hero">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-upload me-2"></i>Upload MRI Scan</h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ url_for('predict_brain') }}" method="POST" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Select MRI image (NII.GZ format)</label>
-                                <input type="file" class="form-control" id="file" name="file" accept=".nii.gz" required>
-                                <div class="form-text">Supported format: NII.GZ (NIFTI) scan images</div>
+            <div class="col-lg-10 hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-brain me-3"></i>Brain Tumor Detection
+                </h1>
+                <p class="hero-subtitle">AI-Powered MRI Analysis</p>
+                
+                <!-- Upload Card -->
+                <div class="glass-card">
+                    <form id="brainUploadForm" action="{{ url_for('predict_brain') }}" method="POST" enctype="multipart/form-data">
+                        <div class="drop-zone" id="dropZone">
+                            <div class="drop-zone-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
                             </div>
-                            <button type="submit" class="btn btn-primary" id="analyzeBrainBtn">
-                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                Analyze MRI
+                            <h4 class="mb-3" style="color: var(--primary-color); font-weight: 600;">Upload MRI Scan for Analysis</h4>
+                            <p class="mb-4" style="color: #666;" id="dropZoneText">Click the button below to select your MRI scan (NII.GZ format)</p>
+                            <span class="file-success" style="display:none;"><i class="fas fa-check-circle"></i></span>
+                            
+                            <!-- Hidden file input - keep it outside the dynamic content -->
+                            <input type="file" id="brainFile" name="file" accept=".nii.gz" 
+                                   required style="display: none;">
+                            
+                            <!-- Single upload button -->
+                            <label for="brainFile" class="btn" id="uploadLabel"
+                                   style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+                                          color: white; border: none; border-radius: 20px; 
+                                          padding: 0.8rem 1.5rem; font-weight: 600;
+                                          cursor: pointer; display: inline-block;">
+                                <i class="fas fa-folder-open me-2"></i>Select MRI Scan
+                            </label>
+                            
+                            <div class="mt-3">
+                                <small class="text-muted">Supported formats: NII.GZ (NIFTI) scan images</small>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4" id="analyzeButtonContainer" style="display: none;">
+                            <button type="submit" class="analyze-btn" id="analyzeBrainBtn">
+                                <i class="fas fa-search me-2"></i>
+                                <span class="button-text">Start Analysis</span>
+                                <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
                             </button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 2: Results Analysis -->
-<section class="py-5 bg-white">
-    <div class="container">
-        {% if original_img_b64 %}
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card mb-4 shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>MRI Analysis Results</h3>
-                    </div>
-                    <div class="card-body">
-                        <!-- Tumor Info Card -->
-                        <div class="tumor-info-card">
-                            <h5><i class="fas fa-info-circle me-2"></i>Tumor Detection Summary</h5>
-                            <p class="mb-1" id="slice-count-info">Detecting tumor information...</p>
-                            <p class="mb-0" id="current-slice-info">Current slice: analyzing...</p>
-                        </div>
-                        
-                        <!-- MRI Image Display with Rearranged Layout -->
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                <!-- Control Panel moved to left side -->
-                                <div class="control-panel">
-                                    <h5 class="mb-3">Image Controls</h5>
-                                    <div class="slider-container">
-                                        <label for="brightness" class="form-label">Brightness: <span id="brightnessValue">0</span></label>
-                                        <input type="range" class="form-range" min="-100" max="100" value="0" id="brightness">
-                                    </div>
-                                    <div class="slider-container">
-                                        <label for="contrast" class="form-label">Contrast: <span id="contrastValue">100</span>%</label>
-                                        <input type="range" class="form-range" min="0" max="200" value="100" id="contrast">
-                                    </div>
-                                    
-                                    <div class="form-check form-switch mt-3">
-                                        <input class="form-check-input" type="checkbox" id="toggleSegmentation" checked>
-                                        <label class="form-check-label" for="toggleSegmentation">Show Tumor Segmentation</label>
-                                    </div>
-                                    
-                                    <div class="text-center mt-3">
-                                        <button class="btn btn-sm btn-outline-primary" id="resetAdjustments">Reset Adjustments</button>
-                                    </div>
-                                    
-                                    <!-- MRI Slice Navigation moved under the controls -->
-                                    <div class="slice-navigation mt-4">
-                                        <h5 class="mb-3">Slice Navigation</h5>
-                                        <div class="d-flex align-items-center justify-content-center mb-3">
-                                            <button id="prevSlice" class="btn btn-sm btn-outline-secondary me-3">
-                                                <i class="fas fa-chevron-left"></i>
-                                            </button>
-                                            <span id="sliceCounter">Slice 1 of 64</span>
-                                            <button id="nextSlice" class="btn btn-sm btn-outline-secondary ms-3">
-                                                <i class="fas fa-chevron-right"></i>
-                                            </button>
-                                        </div>
-                                        <input type="range" class="form-range slice-slider" min="0" max="63" value="0" id="sliceSlider">
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-8 col-md-8">
-                                <!-- MRI Image moved to right side -->
-                                <div class="image-container">
-                                    <img src="data:image/png;base64,{{ original_img_b64 }}" class="img-fluid rounded" id="baseImage" alt="MRI Slice">
-                                    <img src="data:image/png;base64,{{ segmented_img_b64 }}" class="img-fluid rounded" id="segmentationOverlay" alt="Tumor Segmentation">
-                                </div>
-                                <p class="text-center text-muted mt-2" id="sliceLabel">Slice 1/64</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-    </div>
-</section>
-
-<!-- Section 3: Educational Information -->
-<section class="py-5 bg-light">
+<!-- Results Section -->
+<section class="py-5" id="resultsSection" {% if original_img_b64 %}style="display: block; background: #fff;"{% else %}style="display: none; background: #fff;"{% endif %}>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-book-medical me-2"></i>Educational Information</h3>
+            <div class="col-lg-11">
+                {% if original_img_b64 %}
+                <div class="result-card">
+                    <h3 class="mb-4" style="color: var(--primary-color); font-weight: 600;">
+                        <i class="fas fa-chart-bar me-2"></i>MRI Analysis Results
+                    </h3>
+                    
+                    <!-- Tumor Detection Summary -->
+                    <div class="tumor-info">
+                        <h5><i class="fas fa-info-circle me-2"></i>Tumor Detection Summary</h5>
+                        <p class="mb-1" id="slice-count-info">Detecting tumor information...</p>
+                        <p class="mb-0" id="current-slice-info">Current slice: analyzing...</p>
                     </div>
-                    <div class="card-body">
-                        <h4>About Brain Tumor Detection</h4>
-                        <p>Brain tumors are masses or growths of abnormal cells in the brain. They can be benign (non-cancerous) or malignant (cancerous), and early detection is crucial for effective treatment.</p>
-                        
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <h5>How Our AI Works</h5>
-                                <p>Our brain tumor detection model uses a U-Net architecture trained on the BraTS dataset to segment tumor regions in MRI scans. The model analyzes multiple MRI slices to identify abnormal tissue patterns associated with tumors.</p>
+                    
+                    <div class="row">
+                        <!-- MRI Controls Panel -->
+                        <div class="col-lg-4 col-md-12">
+                            <div class="mri-controls">
+                                <h5><i class="fas fa-cogs me-2"></i>Image Controls</h5>
                                 
-                                <h6 class="mt-4">Segmentation Labels:</h6>
-                                <ul class="list-group">
-                                    <li class="list-group-item d-flex align-items-center">
-                                        <span class="badge bg-warning text-dark me-2" style="width: 20px; height: 20px;"></span>
-                                        <span>Tumor region - Areas the AI has identified as potential tumor tissue</span>
-                                    </li>
-                                </ul>
+                                <div class="control-group">
+                                    <label for="brightness">Brightness: <span id="brightnessValue">0</span></label>
+                                    <input type="range" class="form-range" min="-100" max="100" value="0" id="brightness">
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label for="contrast">Contrast: <span id="contrastValue">100</span>%</label>
+                                    <input type="range" class="form-range" min="0" max="200" value="100" id="contrast">
+                                </div>
+                                
+                                <div class="form-check form-switch mt-3">
+                                    <input class="form-check-input" type="checkbox" id="toggleSegmentation" checked>
+                                    <label class="form-check-label" for="toggleSegmentation">
+                                        Show Tumor Segmentation
+                                    </label>
+                                </div>
+                                
+                                <div class="text-center mt-3">
+                                    <button class="btn btn-outline-primary btn-sm" id="resetAdjustments">
+                                        <i class="fas fa-undo me-1"></i>Reset Adjustments
+                                    </button>
+                                </div>
                             </div>
                             
-                            <div class="col-md-6">
-                                <h5>Types of Brain Tumors</h5>
-                                <ul>
-                                    <li><strong>Gliomas:</strong> Tumors that occur in the brain and spinal cord, including astrocytomas, oligodendrogliomas, and glioblastomas</li>
-                                    <li><strong>Meningiomas:</strong> Tumors that arise from the membranes surrounding the brain and spinal cord</li>
-                                    <li><strong>Pituitary Adenomas:</strong> Tumors that develop in the pituitary gland</li>
-                                    <li><strong>Schwannomas:</strong> Tumors that develop from the Schwann cells that surround nerves</li>
-                                    <li><strong>Metastatic Brain Tumors:</strong> Cancer that spreads to the brain from another part of the body</li>
-                                </ul>
+                            <!-- Slice Navigation -->
+                            <div class="slice-navigation">
+                                <h5><i class="fas fa-layer-group me-2"></i>Slice Navigation</h5>
+                                
+                                <div class="slice-nav-buttons">
+                                    <button id="prevSlice" class="slice-btn">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span id="sliceCounter" style="color: var(--primary-color); font-weight: 600;">Slice 1 of 64</span>
+                                    <button id="nextSlice" class="slice-btn">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                
+                                <input type="range" class="form-range" min="0" max="63" value="0" id="sliceSlider">
                             </div>
                         </div>
                         
-                        <div class="row mt-4">
-                            <div class="col-md-12">
-                                <h5>MRI in Brain Tumor Diagnosis</h5>
-                                <p>Magnetic Resonance Imaging (MRI) is the preferred imaging method for diagnosing brain tumors because it provides detailed images of the brain's soft tissues. Different MRI sequences (T1, T2, FLAIR, etc.) highlight different aspects of brain tissue and tumor characteristics.</p>
+                        <!-- MRI Image Display -->
+                        <div class="col-lg-8 col-md-12">
+                            <div class="image-display">
+                                <div class="slice-label-top" id="sliceLabelTop">Slice 1/64</div>
+                                <img src="data:image/png;base64,{{ original_img_b64 }}" class="mri-image" id="baseImage" alt="MRI Slice">
+                                <img src="data:image/png;base64,{{ segmented_img_b64 }}" class="mri-image" id="segmentationOverlay" alt="Tumor Segmentation">
                             </div>
-                        </div>
-                        
-                        <div class="alert alert-warning mt-4">
-                            <p class="mb-0"><strong>Disclaimer:</strong> This AI tool is designed to assist medical professionals in detecting brain tumors. It should not replace professional medical diagnosis. Always consult with healthcare providers for medical decisions.</p>
                         </div>
                     </div>
+                    
+                    <!-- New Analysis Button -->
+                    <div class="text-center mt-4">
+                        <button class="new-analysis-btn" id="newAnalysisBtn">
+                            <i class="fas fa-plus me-2"></i>New Analysis
+                        </button>
+                    </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -252,29 +540,130 @@
 
 {% block scripts %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add event listener to the brain analysis form to show loading spinner
-        const brainForm = document.querySelector('form');
-        const analyzeBtn = document.getElementById('analyzeBrainBtn');
-        
-        if (brainForm) {
-            brainForm.addEventListener('submit', function() {
-                // Show spinner and disable button
-                const spinner = analyzeBtn.querySelector('.spinner-border');
-                spinner.classList.remove('d-none');
-                analyzeBtn.disabled = true;
-            });
+// Global variables for brain analysis
+let globalFileInput = null;
+let selectedFile = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🧠 Brain tumor analysis page loading...');
+    
+    // File input handling
+    const fileInput = document.getElementById('brainFile');
+    const analyzeButtonContainer = document.getElementById('analyzeButtonContainer');
+    const analyzeBrainBtn = document.getElementById('analyzeBrainBtn');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const dropZone = document.getElementById('dropZone');
+    const fileSuccess = document.querySelector('.file-success');
+    
+    globalFileInput = fileInput;
+    
+    // File selection handler
+    fileInput.addEventListener('change', function(e) {
+        selectedFile = e.target.files[0];
+        if (selectedFile) {
+            analyzeButtonContainer.style.display = 'block';
+            // فقط غيّر النصوص والشكل، ولا تزيل input من الـ DOM
+            dropZone.classList.add('selected');
+            dropZone.querySelector('.drop-zone-icon i').className = 'fas fa-check-circle';
+            dropZone.querySelector('h4').textContent = selectedFile.name;
+            dropZone.querySelector('h4').style.color = '#28a745';
+            dropZone.querySelector('h4').style.fontWeight = '600';
+            dropZone.querySelector('#dropZoneText').textContent = `File size: ${Math.round(selectedFile.size/1024)}KB | Ready for analysis`;
+            dropZone.querySelector('#dropZoneText').style.color = '#666';
+            let fileSuccess = dropZone.querySelector('.file-success');
+            if (fileSuccess) fileSuccess.style.display = 'inline-block';
+            // أخفي زرار الرفع
+            let uploadLabel = document.getElementById('uploadLabel');
+            if (uploadLabel) uploadLabel.style.display = 'none';
+        } else {
+            dropZone.classList.remove('selected');
+            let fileSuccess = dropZone.querySelector('.file-success');
+            if (fileSuccess) fileSuccess.style.display = 'none';
+            let uploadLabel = document.getElementById('uploadLabel');
+            if (uploadLabel) uploadLabel.style.display = 'inline-block';
+            dropZone.querySelector('h4').textContent = 'Upload MRI Scan for Analysis';
+            dropZone.querySelector('h4').style.color = 'var(--primary-color)';
+            dropZone.querySelector('h4').style.fontWeight = '600';
+            dropZone.querySelector('#dropZoneText').textContent = 'Click the button below to select your MRI scan (NII.GZ format)';
+            dropZone.querySelector('#dropZoneText').style.color = '#666';
         }
     });
+    
+    // Form submission handler
+    const brainForm = document.getElementById('brainUploadForm');
+    if (brainForm) {
+        brainForm.addEventListener('submit', function(e) {
+            // Check if file is selected through the file input directly
+            const fileInputValue = fileInput.files && fileInput.files[0];
+            
+            if (!fileInputValue && !selectedFile) {
+                e.preventDefault();
+                alert('Please select an MRI scan file first.');
+                return;
+            }
+            
+            // Show loading
+            loadingOverlay.classList.remove('d-none');
+            
+            // Update button
+            const spinner = analyzeBrainBtn.querySelector('.spinner-border');
+            const buttonText = analyzeBrainBtn.querySelector('.button-text');
+            
+            if (spinner) spinner.classList.remove('d-none');
+            if (buttonText) buttonText.textContent = 'Analyzing...';
+            analyzeBrainBtn.disabled = true;
+            
+            // Allow form to submit naturally
+            console.log('📤 Form submitting with file:', fileInputValue ? fileInputValue.name : selectedFile.name);
+        });
+    }
+    
+    // زرار New Analysis
+    const newAnalysisBtn = document.getElementById('newAnalysisBtn');
+    if (newAnalysisBtn) {
+        newAnalysisBtn.addEventListener('click', function() {
+            // إخفاء النتائج
+            const resultsSection = document.getElementById('resultsSection');
+            if (resultsSection) resultsSection.style.display = 'none';
+            // إعادة تعيين منطقة الرفع
+            const dropZone = document.getElementById('dropZone');
+            if (dropZone) {
+                dropZone.classList.remove('selected');
+                let fileSuccess = dropZone.querySelector('.file-success');
+                if (fileSuccess) fileSuccess.style.display = 'none';
+                let uploadLabel = document.getElementById('uploadLabel');
+                if (uploadLabel) uploadLabel.style.display = 'inline-block';
+                dropZone.querySelector('h4').textContent = 'Upload MRI Scan for Analysis';
+                dropZone.querySelector('h4').style.color = 'var(--primary-color)';
+                dropZone.querySelector('h4').style.fontWeight = '600';
+                dropZone.querySelector('#dropZoneText').textContent = 'Click the button below to select your MRI scan (NII.GZ format)';
+                dropZone.querySelector('#dropZoneText').style.color = '#666';
+                // إعادة تعيين قيمة input
+                const fileInput = document.getElementById('brainFile');
+                if (fileInput) fileInput.value = '';
+            }
+            // إخفاء زر التحليل
+            const analyzeButtonContainer = document.getElementById('analyzeButtonContainer');
+            if (analyzeButtonContainer) analyzeButtonContainer.style.display = 'none';
+            // إعادة تعيين المتغيرات
+            selectedFile = null;
+            globalFileInput = null;
+            // سحب الصفحة للأعلى
+            setTimeout(() => {
+                const uploadSection = document.querySelector('.brain-hero');
+                if (uploadSection) uploadSection.scrollIntoView({ behavior: 'smooth' });
+            }, 200);
+        });
+    }
+});
 </script>
 
 {% if original_img_b64 %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize variables with data from backend
-        let currentSlice = {{ current_slice_idx if current_slice_idx else 0 }};
-        const totalSlices = {{ total_slices if total_slices else 64 }};
-        let slicesWithTumor = {{ tumor_info.tumor_slice_indices|tojson if tumor_info and tumor_info.tumor_slice_indices else '[]' }};
+        let currentSlice = {{ (current_slice_idx or 0)|tojson }};
+        const totalSlices = {{ (total_slices or 64)|tojson }};
+        let slicesWithTumor = {{ (tumor_info.tumor_slice_indices if tumor_info and tumor_info.tumor_slice_indices else [])|tojson }};
         
         // Store all slice images
         let allSlices = {
@@ -308,6 +697,7 @@
         const sliceSlider = document.getElementById('sliceSlider');
         const sliceCounter = document.getElementById('sliceCounter');
         const sliceLabel = document.getElementById('sliceLabel');
+        const sliceLabelTop = document.getElementById('sliceLabelTop');
         const sliceCountInfo = document.getElementById('slice-count-info');
         const currentSliceInfo = document.getElementById('current-slice-info');
         const brightnessSlider = document.getElementById('brightness');
@@ -343,7 +733,7 @@
         // Update slice navigation information
         function updateSliceNavigationInfo() {
             sliceCounter.textContent = `Slice ${currentSlice + 1} of ${totalSlices}`;
-            sliceLabel.textContent = `Slice ${currentSlice + 1}/${totalSlices}`;
+            if (sliceLabelTop) sliceLabelTop.textContent = `Slice ${currentSlice + 1}/${totalSlices}`;
             sliceSlider.value = currentSlice;
         }
         
@@ -375,8 +765,6 @@
             if (allSlices.segmented.length > currentSlice) {
                 segmentationOverlay.src = `data:image/png;base64,${allSlices.segmented[currentSlice]}`;
             }
-            
-            // Remove visual border indicator code
         }
         
         // Set up event listeners
@@ -424,7 +812,7 @@
         });
         
         // Mouse wheel navigation
-        const imageContainer = document.querySelector('.image-container');
+        const imageContainer = document.querySelector('.image-display');
         if (imageContainer) {
             imageContainer.addEventListener('wheel', function(event) {
                 event.preventDefault();
@@ -451,8 +839,6 @@
         updateSliceNavigationInfo();
         updateCurrentSliceInfo();
         applyFilters();
-        
-        // Remove the initial border indicator code
     });
 </script>
 {% endif %}

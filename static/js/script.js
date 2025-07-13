@@ -107,31 +107,72 @@ document.addEventListener("DOMContentLoaded", function() {
         let bsCarousel = new bootstrap.Carousel(carousel, { interval: 5000, ride: 'carousel' });
     }
 
-    // Model navigation functions
-    function showModel(index) {
-        const modelCards = document.querySelectorAll('.model-detail-card');
-        const dots = document.querySelectorAll('.indicator-dot');
-        const modelNames = ['Brain Tumor Detection', 'Chest X-ray Analysis', 'Skin Cancer Detection', 'Fracture Detection'];
-        const currentModelInfo = document.getElementById('currentModelInfo');
-        
-        // Hide all models
-        modelCards.forEach(card => card.classList.remove('active'));
-        dots.forEach(dot => dot.classList.remove('active'));
-        
-        // Show selected model
+    // static/js/script.js
+
+// ... (keep the existing code above this function)
+
+// Model navigation functions
+function showModel(index) {
+    const modelCards = document.querySelectorAll('.model-detail-card');
+    const dots = document.querySelectorAll('.indicator-dot');
+    const modelNames = ['Brain Tumor Detection', 'Chest X-ray Analysis', 'Skin Cancer Detection', 'Fracture Detection'];
+    const currentModelInfo = document.getElementById('currentModelInfo');
+
+    // --- ADD THIS CHECK ---
+    // If the elements don't exist on the page, do nothing.
+    if (!modelCards.length || !dots.length || !currentModelInfo) {
+        return;
+    }
+    // --- END OF CHECK ---
+
+    // Hide all models
+    modelCards.forEach(card => card.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    // Show selected model - Add a check to prevent errors
+    if (modelCards[index] && dots[index]) {
         modelCards[index].classList.add('active');
         dots[index].classList.add('active');
-        
-        // Update model info text
-        currentModelInfo.textContent = `${modelNames[index]} (${index + 1} of ${modelNames.length})`;
-        
-        // Update current model index
-        currentModel = index;
-        
-        // Enable/disable navigation buttons
-        document.getElementById('prevBtn').disabled = currentModel === 0;
-        document.getElementById('nextBtn').disabled = currentModel === modelNames.length - 1;
     }
+
+    // Update model info text
+    currentModelInfo.textContent = `${modelNames[index]} (${index + 1} of ${modelNames.length})`;
+
+    // Update current model index
+    // Ensure currentModel is defined in the global scope of the script if it's not already
+    // For safety, let's check if it exists or declare it.
+    if (typeof window.currentModel === 'undefined') {
+        window.currentModel = 0;
+    }
+    window.currentModel = index;
+
+    // Enable/disable navigation buttons
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) {
+        prevBtn.disabled = window.currentModel === 0;
+    }
+    if (nextBtn) {
+        nextBtn.disabled = window.currentModel === modelNames.length - 1;
+    }
+}
+
+// ... (the rest of your script.js file) ...
+
+// At the top of your script.js, make sure to declare currentModel
+let currentModel = 0;
+
+// ...
+
+// In the DOMContentLoaded event listener, modify the final showModel call:
+document.addEventListener('DOMContentLoaded', function() {
+    // ... (all the other functions and event listeners) ...
+
+    // Initialize model navigation if on the correct page
+    if(document.querySelector('.model-detail-card')) {
+        showModel(0);
+    }
+});
 
     function nextModel() {
         const modelCards = document.querySelectorAll('.model-detail-card');

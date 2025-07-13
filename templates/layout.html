@@ -1327,6 +1327,10 @@
                             <li><a class="dropdown-item" href="{{ url_for('fracture') }}">Fracture Detection</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item {% if request.path == url_for('chatbot_page') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('chatbot_page') }}">AI Assistant</a>
+                    </li>
+
 
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin() %}

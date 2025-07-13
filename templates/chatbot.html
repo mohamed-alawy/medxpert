@@ -1,0 +1,182 @@
+{% extends "layout.html" %}
+
+{% block title %}AI Assistant - MedXpert{% endblock %}
+
+{% block head %}
+<style>
+    /* Custom styles for the chatbot interface */
+    .chatbot-container {
+        display: flex;
+        height: calc(100vh - 120px); /* Full viewport height minus navbar/padding */
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .control-panel {
+        flex: 0 0 350px;
+        background-color: #f8f9fa;
+        border-radius: var(--radius);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .chat-interface {
+        flex-grow: 1;
+        background-color: #ffffff;
+        border-radius: var(--radius);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .conversation {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .chat-bubble {
+        max-width: 75%;
+        padding: 10px 15px;
+        border-radius: 18px;
+        line-height: 1.5;
+    }
+
+    .chat-bubble.user {
+        background-color: var(--primary-color);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+    }
+
+    .chat-bubble.assistant {
+        background-color: #e9ecef;
+        color: #333;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+    }
+    
+    .typing-indicator {
+        align-self: flex-start;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+    .typing-indicator span {
+        width: 8px;
+        height: 8px;
+        background-color: #ccc;
+        border-radius: 50%;
+        animation: bounce 1.4s infinite ease-in-out both;
+    }
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+
+
+    .chat-input-form {
+        padding: 20px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    /* --- Responsive for Mobile --- */
+    @media (max-width: 700px) {
+        .chatbot-container {
+            flex-direction: column;
+            height: auto;
+            padding: 8px;
+            gap: 10px;
+        }
+        .control-panel {
+            flex: unset;
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 10px;
+            padding: 12px 8px;
+            border-radius: 12px;
+            min-width: 0;
+        }
+        .chat-interface {
+            width: 100%;
+            min-width: 0;
+            border-radius: 12px;
+        }
+        .conversation {
+            padding: 10px 6px;
+            gap: 8px;
+        }
+        .chat-bubble {
+            max-width: 95%;
+            font-size: 1rem;
+            padding: 8px 10px;
+        }
+        .chat-input-form {
+            padding: 10px 6px;
+        }
+        .text-center.mt-3 {
+            margin-top: 10px !important;
+        }
+    }
+    /* --- End Responsive for Mobile --- */
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chatbot-container">
+    <aside class="control-panel">
+        <h4><i class="fas fa-book-medical me-2"></i>Document Library</h4>
+        <p class="text-muted small">Upload documents to create your knowledge base.</p>
+        <hr>
+        
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="file-input" class="form-label">Upload New Document</label>
+                <input class="form-control" type="file" id="file-input" name="file" accept=".pdf,.docx,.txt" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-upload me-2"></i>Upload
+            </button>
+        </form>
+        
+        <div id="upload-status" class="mt-3"></div>
+
+        <hr>
+        <div class="mt-2 flex-grow-1 overflow-auto">
+            <h5>My Documents</h5>
+            <ul id="doc-list" class="list-group list-group-flush">
+                <li class="list-group-item"><i class="fas fa-file-alt me-2 text-muted"></i>No documents uploaded yet.</li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="chat-interface">
+        <div class="conversation" id="conversation">
+            <div class="chat-bubble assistant">
+                Hello! I'm your AI Medical Assistant. Upload a document or ask a question about your existing library.
+            </div>
+        </div>
+        <div class="chat-input-form">
+            <form id="chat-form" class="d-flex">
+                <input type="text" id="message-input" class="form-control me-2" placeholder="Ask a question based on your documents..." required autocomplete="off">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+        <div class="text-center mt-3">
+            <button type="button" id="clear-history-btn" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-trash-alt"></i> Clear Chat History
+            </button>
+        </div>
+
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+{% endblock %}

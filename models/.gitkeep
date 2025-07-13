@@ -1,0 +1,6 @@
+# This file ensures the models directory is created
+# Place your AI models here:
+# - best_metric_model.pth (Brain tumor model)
+# - best_model_skin.h5 (Skin cancer model)  
+# - best_model_chest.h5 (Chest X-ray model)
+# - best.pt (Fracture detection model)

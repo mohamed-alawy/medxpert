@@ -1,68 +1,289 @@
 {% extends "layout.html" %}
 
-{% block title %}Fracture Detection Example - MedXpert{% endblock %}
+{% block title %}Fracture Detection AI Education & Examples - MedXpert{% endblock %}
 
 {% block content %}
 <style>
+/* Modern Hero Section */
 .example-hero {
-    background: linear-gradient(135deg, #1a2cb3, #233cea 40%, #3346e8);
+    background: linear-gradient(135deg, #1a2cb3 0%, #233cea 50%, #3346e8 100%);
     color: white;
-    padding: 120px 0 100px;
+    padding: 100px 0 80px;
     margin-top: 0;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.example-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" fill-opacity="0.05"/><circle cx="75" cy="75" r="1" fill="%23ffffff" fill-opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.example-hero .container {
+    position: relative;
+    z-index: 2;
 }
 
 .example-hero h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
+    font-size: 3.8rem;
+    font-weight: 900;
     margin-bottom: 1.5rem;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .example-hero p {
-    font-size: 1.4rem;
-    opacity: 0.9;
-    max-width: 800px;
+    font-size: 1.3rem;
+    opacity: 0.95;
+    max-width: 700px;
     margin: 0 auto;
-    line-height: 1.6;
+    line-height: 1.7;
+    font-weight: 400;
 }
 
-.example-section {
-    padding: 100px 0;
-    background: #f8f9fa;
+/* Education Section Styles */
+.education-section {
+    padding: 60px 0;
+    background: #ffffff;
 }
 
-.model-stats {
-    display: flex;
+.conditions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
-    flex-wrap: wrap;
+    margin: 40px 0;
+}
+
+.condition-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 10px 40px rgba(26, 44, 179, 0.08);
+    transition: all 0.4s ease;
+    border: 2px solid rgba(26, 44, 179, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.condition-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(26, 44, 179, 0.15);
+    border-color: rgba(26, 44, 179, 0.2);
+}
+
+.condition-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    transition: all 0.3s ease;
+}
+
+.condition-card.fracture::before { background: linear-gradient(90deg, #dc2626, #ef4444); }
+.condition-card.normal::before { background: linear-gradient(90deg, #059669, #10b981); }
+
+.condition-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: white;
+    font-weight: bold;
 }
 
-.stat-item {
-    background: rgba(26, 44, 179, 0.1);
-    padding: 20px 30px;
-    border-radius: 15px;
-    text-align: center;
-}
+.condition-card.fracture .condition-icon { background: linear-gradient(135deg, #dc2626, #ef4444); }
+.condition-card.normal .condition-icon { background: linear-gradient(135deg, #059669, #10b981); }
 
-.stat-label {
-    font-size: 1.1rem;
-    color: #1a2cb3;
-    margin-bottom: 8px;
-}
-
-.stat-value {
+.condition-title {
     font-size: 1.4rem;
     font-weight: 700;
     color: #1a2cb3;
+    margin-bottom: 15px;
 }
 
-.example-showcase {
+.condition-description {
+    color: #666;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* AI Features Section */
+.ai-features-section {
+    padding: 50px 0;
+    background: #ffffff;
+}
+
+.ai-features-showcase {
     background: white;
     border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 20px 60px rgba(26, 44, 179, 0.08);
+    padding: 50px 40px;
+    box-shadow: 0 10px 30px rgba(26, 44, 179, 0.08);
+    margin: 0;
+    border: 1px solid rgba(26, 44, 179, 0.05);
+}
+
+.ai-features-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 15px;
+}
+
+.ai-features-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 35px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ai-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 0;
+}
+
+.ai-feature-card {
+    text-align: center;
+    padding: 35px 25px;
+    background: linear-gradient(135deg, rgba(26, 44, 179, 0.04), rgba(35, 60, 234, 0.02));
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(26, 44, 179, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1a2cb3, #233cea);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.ai-feature-card:hover {
+    background: linear-gradient(135deg, rgba(26, 44, 179, 0.08), rgba(35, 60, 234, 0.04));
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(26, 44, 179, 0.15);
+    border-color: rgba(26, 44, 179, 0.15);
+}
+
+.ai-feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.ai-feature-icon {
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: white;
+    font-size: 1.6rem;
+    box-shadow: 0 8px 20px rgba(26, 44, 179, 0.3);
+    transition: all 0.3s ease;
+}
+
+.ai-feature-card:hover .ai-feature-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 12px 30px rgba(26, 44, 179, 0.4);
+}
+
+.ai-feature-title {
+    font-weight: 700;
+    color: #1a2cb3;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+
+.ai-feature-description {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Enhanced Stats */
+.enhanced-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 35px 25px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(26, 44, 179, 0.08);
+    border: 2px solid rgba(26, 44, 179, 0.05);
+    transition: all 0.3s ease;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(26, 44, 179, 0.15);
+    border-color: rgba(26, 44, 179, 0.2);
+}
+
+.stat-number {
+    font-size: 2.2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #1a2cb3, #233cea);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+    line-height: 1.1;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: visible;
+}
+
+.stat-label {
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+/* Example Showcase Enhanced */
+.example-showcase {
+    background: white;
+    border-radius: 25px;
+    padding: 50px;
+    box-shadow: 0 20px 60px rgba(26, 44, 179, 0.1);
+    margin: 40px 0;
 }
 
 .example-title {
@@ -117,29 +338,63 @@
     font-size: 1.5rem;
 }
 
+/* Try Model Button Enhanced */
 .try-model-btn {
-    display: block;
-    width: fit-content;
-    margin: 50px auto 0;
+    display: inline-block;
     background: linear-gradient(135deg, #1a2cb3, #233cea);
     color: white;
-    padding: 15px 40px;
-    border-radius: 30px;
+    padding: 18px 45px;
+    border-radius: 35px;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.2rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(26, 44, 179, 0.2);
+    transition: all 0.4s ease;
+    box-shadow: 0 15px 40px rgba(26, 44, 179, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .try-model-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(26, 44, 179, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 50px rgba(26, 44, 179, 0.4);
     color: white;
     text-decoration: none;
+    background: linear-gradient(135deg, #233cea, #3346e8);
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
+    .example-hero h1 {
+        font-size: 2.8rem;
+    }
+    
+    .example-hero p {
+        font-size: 1.1rem;
+    }
+    
+    .enhanced-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .conditions-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .ai-features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .ai-feature-card {
+        padding: 30px 20px;
+    }
+    
+    .ai-features-showcase {
+        padding: 40px 25px;
+    }
+    
     .before-after-container {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -153,39 +408,168 @@
     .image-container {
         padding: 25px;
     }
+    
+    .example-showcase {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .enhanced-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+        line-height: 1.1;
+    }
+    
+    .condition-card {
+        padding: 25px;
+    }
+    
+    .ai-features-title {
+        font-size: 1.8rem;
+    }
+    
+    .ai-features-showcase {
+        padding: 35px 20px;
+    }
+    
+    .ai-feature-card {
+        padding: 25px 15px;
+    }
+    
+    .ai-feature-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 1.4rem;
+    }
+    
+    .try-model-btn {
+        padding: 15px 30px;
+        font-size: 1rem;
+    }
 }
 </style>
 
 <!-- Hero Section -->
 <section class="example-hero">
     <div class="container">
-        <h1>Fracture Detection</h1>
-        <p>X-ray analysis for bone fracture identification using advanced AI technology</p>
+        <h1><i class="fas fa-bone me-3"></i>Fracture Detection AI</h1>
+        <p>Advanced X-ray analysis for bone fracture identification using cutting-edge AI technology</p>
     </div>
 </section>
 
-<!-- Example Section -->
-<section class="example-section">
+<!-- Enhanced Stats Section -->
+<section class="education-section">
     <div class="container">
-        <!-- Model Stats -->
-        <div class="model-stats">
-            <div class="stat-item">
+        <div class="enhanced-stats">
+            <div class="stat-card">
+                <div class="stat-number">94%</div>
                 <div class="stat-label">mAP50</div>
-                <div class="stat-value">0.94</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Classifications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">YOLO</div>
                 <div class="stat-label">Architecture</div>
-                <div class="stat-value">YOLO</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-label">Detection</div>
-                <div class="stat-value">Object</div>
+            <div class="stat-card">
+                <div class="stat-number">6K+</div>
+                <div class="stat-label">Training Images</div>
             </div>
         </div>
 
-        <!-- Example Showcase -->
+        <!-- Fracture Detection Capabilities -->
+        <div class="text-center mb-4" style="margin-top: 40px;">
+            <h2 style="color: #1a2cb3; font-weight: 700; font-size: 2.5rem; margin-bottom: 20px;">
+                AI Detection Capabilities
+            </h2>
+            <p style="color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Our AI model provides accurate detection and localization of bone fractures in X-ray images
+            </p>
+        </div>
+        
+        <div class="conditions-grid">
+            <div class="condition-card fracture">
+                <div class="condition-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="condition-title">Fracture Detection</h3>
+                <p class="condition-description">
+                    Detects various types of bone fractures including complete, incomplete, displaced, and non-displaced fractures with precise localization and bounding box visualization.
+                </p>
+            </div>
+            
+            <div class="condition-card normal">
+                <div class="condition-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="condition-title">Normal Bone Structure</h3>
+                <p class="condition-description">
+                    Identifies healthy bone structures and normal anatomical patterns, helping to rule out fractures and provide reassurance when no abnormalities are detected.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AI Features Section -->
+<section class="ai-features-section">
+    <div class="container">
+        <div class="ai-features-showcase">
+            <h2 class="ai-features-title">
+                <i class="fas fa-brain me-3"></i>AI Analysis Features
+            </h2>
+            <p class="ai-features-subtitle">
+                Advanced X-ray image analysis with state-of-the-art object detection technology
+            </p>
+            
+            <div class="ai-features-grid">
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4 class="ai-feature-title">Object Detection</h4>
+                    <p class="ai-feature-description">
+                        Uses YOLO architecture to detect and localize fractures with precise bounding boxes
+                    </p>
+                </div>
+                
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <i class="fas fa-crosshairs"></i>
+                    </div>
+                    <h4 class="ai-feature-title">Precise Localization</h4>
+                    <p class="ai-feature-description">
+                        Provides exact coordinates and boundaries of detected fractures for accurate diagnosis
+                    </p>
+                </div>
+                
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <i class="fas fa-x-ray"></i>
+                    </div>
+                    <h4 class="ai-feature-title">Multi-bone Analysis</h4>
+                    <p class="ai-feature-description">
+                        Analyzes various bone types including wrist, ankle, spine, and other skeletal structures
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Example Showcase -->
+<section class="education-section">
+    <div class="container">
         <div class="example-showcase">
-            <h4 class="example-title">Wrist Fracture Detection</h4>
+            <h2 class="example-title" style="font-size: 2.2rem; margin-bottom: 30px;">
+                <i class="fas fa-play-circle me-3"></i>Live AI Analysis Example
+            </h2>
             <div class="before-after-container">
                 <div class="image-container">
                     <div class="image-label">X-ray Image</div>
@@ -199,17 +583,21 @@
                 
                 <div class="image-container">
                     <div class="image-label">Fracture Detected</div>
-                    <img src="{{ url_for('static', filename='images/result_bone.jpg') }}" alt="Wrist X-ray with Fracture Detection" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                    <div style="position: relative;">
+                        <img src="{{ url_for('static', filename='images/result_bone.jpg') }}" alt="Wrist X-ray with Fracture Detection" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; border-radius: 16px; border: 3px solid rgba(26, 44, 179, 0.15); box-shadow: 0 8px 25px rgba(26, 44, 179, 0.1); transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(26, 44, 179, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 25px rgba(26, 44, 179, 0.1)'">
+                    </div>
                     <div class="image-description" style="font-size: 1rem; color: #666; margin-top: 15px; line-height: 1.5;">AI detected distal radius fracture with precise localization</div>
                 </div>
             </div>
         </div>
 
         <!-- Try Model Button -->
-        <a href="{{ url_for('fracture') }}" class="try-model-btn">
-            <i class="fas fa-play"></i>
-            Try This Model
-        </a>
+        <div class="text-center">
+            <a href="{{ url_for('fracture') }}" class="try-model-btn">
+                <i class="fas fa-play me-2"></i>
+                Try This AI Model
+            </a>
+        </div>
     </div>
 </section>
-{% endblock %} 
+{% endblock %}

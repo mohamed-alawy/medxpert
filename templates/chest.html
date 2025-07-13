@@ -4,6 +4,610 @@
 
 {% block head %}
 <style>
+    /* Simple Medical Hero Section */
+    .chest-hero {
+        background: #ffffff;
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        padding: 2rem 0;
+    }
+    
+    .hero-content {
+        text-align: center;
+    }
+    
+    /* Clean Professional Title */
+    .hero-title {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 2rem;
+        font-weight: 400;
+    }
+    
+    /* Clean Simple Card */
+    .glass-card {
+        background: white;
+        border-radius: 20px;
+        border: 2px solid rgba(35, 60, 234, 0.1);
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+        padding: 2.5rem;
+        margin-top: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        border-radius: 20px 20px 0 0;
+    }
+    
+    /* Clean Simple Drop Zone */
+    .drop-zone {
+        border: 2px dashed var(--primary-color);
+        border-radius: 15px;
+        padding: 3rem;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(35, 60, 234, 0.05), rgba(89, 96, 238, 0.03));
+        transition: all 0.3s ease;
+        color: var(--primary-color);
+        position: relative;
+    }
+    
+    .drop-zone:hover {
+        border-color: var(--primary-light);
+        background: linear-gradient(135deg, rgba(35, 60, 234, 0.08), rgba(89, 96, 238, 0.05));
+        transform: translateY(-2px);
+    }
+    
+    .drop-zone-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary-color);
+    }
+    
+    .drop-zone h4, .drop-zone p {
+        color: var(--primary-color);
+    }
+    
+    /* Upload Button */
+    label[for="chestFile"] {
+        cursor: pointer !important;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+    
+    label[for="chestFile"]:hover {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+        color: white !important;
+    }
+    
+    label[for="chestFile"]:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(35, 60, 234, 0.2);
+    }
+    
+    /* Clean Professional Button */
+    .analyze-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        border: none;
+        border-radius: 25px;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .analyze-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(35, 60, 234, 0.4);
+        color: white;
+    }
+    
+    /* New Analysis Button */
+    .new-analysis-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        border: none;
+        border-radius: 25px;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 8px 25px rgba(35, 60, 234, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .new-analysis-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(35, 60, 234, 0.4);
+        color: white;
+    }
+    
+    /* Medical Disclaimer Card (no blue border) */
+    .disclaimer-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+        padding: 2.5rem;
+        margin-top: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Clean Result Cards */
+    .result-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2.5rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(35, 60, 234, 0.1);
+        border: 1px solid rgba(35, 60, 234, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .result-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(35, 60, 234, 0.15);
+    }
+    
+    /* Simple Loading Overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        flex-direction: column;
+    }
+    
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(35, 60, 234, 0.2);
+        border-top: 4px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    .loading-text {
+        margin-top: 1rem;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Image Viewer Lab Controls */
+    .image-lab-viewer {
+        position: relative;
+        background: #000;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 3px solid var(--primary-color);
+    }
+    
+    .image-container {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        overflow: hidden;
+        cursor: grab;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        will-change: transform;
+    }
+    
+    .image-container:active {
+        cursor: grabbing;
+    }
+    
+    .analyzed-image {
+        max-width: none;
+        max-height: none;
+        transform-origin: center center;
+        will-change: transform, filter;
+        user-select: none;
+        pointer-events: none;
+    }
+    
+    /* GradCAM specific styles */
+    .gradcam-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .gradcam-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        will-change: transform, filter;
+        user-select: none;
+        pointer-events: none;
+    }
+    
+    .image-controls {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 15;
+        padding: 6px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+    
+    .image-controls:hover {
+        opacity: 1;
+    }
+    
+    .control-group {
+        display: flex;
+        gap: 10px;
+        padding: 2px;
+    }
+    
+    .image-control-btn {
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    .image-control-btn:hover {
+        background: var(--primary-color);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(35, 60, 234, 0.4);
+    }
+    
+    .zoom-controls {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 8px 16px;
+        border-radius: 25px;
+        z-index: 15;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+    
+    .zoom-controls:hover {
+        opacity: 1;
+    }
+    
+    .zoom-btn {
+        background: transparent;
+        color: white;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+    }
+    
+    .zoom-btn:hover {
+        background: var(--primary-color);
+        transform: scale(1.1);
+    }
+    
+    .zoom-slider {
+        width: 140px;
+        height: 5px;
+        background: #333;
+        border-radius: 3px;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+    
+    .zoom-slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+    }
+    
+    .zoom-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: none;
+    }
+    
+    .zoom-percentage {
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+        min-width: 35px;
+        text-align: center;
+    }
+    
+    .adjustment-controls {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 12px;
+        border-radius: 10px;
+        z-index: 15;
+        min-width: 200px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+    
+    .adjustment-controls:hover {
+        opacity: 1;
+    }
+    
+    .adjustment-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        color: white;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    
+    .adjustment-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .adjustment-slider {
+        width: 120px;
+        height: 4px;
+        background: #333;
+        border-radius: 2px;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+        margin-left: 12px;
+    }
+    
+    .adjustment-slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+    }
+    
+    .adjustment-slider::-moz-range-thumb {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: none;
+    }
+    
+    /* Enhanced GradCAM Toggle Controls */
+    .gradcam-controls {
+        background: rgba(0, 0, 0, 0.85);
+        padding: 12px;
+        border-radius: 10px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .gradcam-controls:hover {
+        background: rgba(0, 0, 0, 0.9);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+    
+    .gradcam-switch {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        color: white;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    
+    .toggle-switch {
+        position: relative;
+        width: 45px;
+        height: 22px;
+        background: #444;
+        border-radius: 11px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .toggle-switch.active {
+        background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+        border-color: var(--primary-light);
+        box-shadow: 0 0 15px rgba(35, 60, 234, 0.4);
+    }
+    
+    .toggle-slider {
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    
+    .toggle-switch.active .toggle-slider {
+        transform: translateX(22px);
+    }
+    
+    .opacity-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .opacity-slider {
+        width: 100px;
+        height: 4px;
+        background: #444;
+        border-radius: 2px;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+    }
+    
+    .opacity-slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(35, 60, 234, 0.4);
+    }
+    
+    .opacity-slider::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(35, 60, 234, 0.4);
+    }
+    
+    .fullscreen-viewer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .fullscreen-content {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+    }
+    
+    .fullscreen-content .image-container {
+        height: 85vh !important;
+        cursor: grab;
+    }
+    
+    .fullscreen-content .image-container:active {
+        cursor: grabbing;
+    }
+    
+    .fullscreen-content .analyzed-image {
+        will-change: transform, filter;
+        user-select: none;
+        pointer-events: none;
+    }
+    
+    .close-fullscreen {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+        z-index: 10001;
+    }
+    
+    .close-fullscreen:hover {
+        background: var(--primary-color);
+    }
+    
+    /* Legacy styles for backward compatibility */
     .chest-header {
         background-color: rgba(22, 163, 74, 0.1);
         border-radius: var(--border-radius);
@@ -81,36 +685,6 @@
         color: #3b82f6;
     }
 
-    .image-controls {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 1rem;
-    }
-
-    .slider-container {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        margin-top: 0.5rem;
-    }
-
-    .slider-container label {
-        margin-right: 1rem;
-        width: 80px;
-        text-align: right;
-    }
-
-    .slider-container input {
-        flex-grow: 1;
-    }
-
-    .slider-value {
-        width: 40px;
-        margin-left: 1rem;
-        text-align: center;
-    }
-
     .class-probability-bars {
         margin-top: 1rem;
     }
@@ -174,328 +748,228 @@
         border: none;
     }
     
-    /* Make the meaning section wider */
-    .meaning-section {
-        margin-top: 2rem;
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .chest-hero {
+            min-height: 60vh;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+        
+        .glass-card {
+            padding: 1.5rem;
+        }
+        
+        .drop-zone {
+            padding: 1.5rem;
+        }
+        
+        .analyze-btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .result-card {
+            padding: 1.5rem;
+        }
+        
+        /* Mobile optimizations for image lab */
+        .image-controls {
+            top: 10px;
+            right: 10px;
+            gap: 8px;
+            padding: 6px;
+        }
+        
+        .control-group {
+            gap: 6px;
+        }
+        
+        .image-control-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
+        }
+        
+        .zoom-controls {
+            bottom: 10px;
+            padding: 8px 16px;
+            gap: 10px;
+        }
+        
+        .zoom-slider {
+            width: 100px;
+        }
+        
+        .adjustment-controls {
+            top: 10px;
+            left: 10px;
+            padding: 12px;
+            min-width: 200px;
+        }
+        
+        .adjustment-item {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        .adjustment-slider {
+            width: 100px;
+        }
+        
+        .image-container {
+            height: 400px;
+        }
+        
+        /* Mobile optimizations for GradCAM controls */
+        .gradcam-controls {
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        
+        .gradcam-switch {
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .toggle-switch {
+            width: 40px;
+            height: 20px;
+        }
+        
+        .toggle-slider {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(18px);
+        }
+        
+        .opacity-control {
+            gap: 8px;
+            font-size: 11px;
+        }
+        
+        .opacity-slider {
+            width: 80px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .adjustment-controls {
+            min-width: 180px;
+            padding: 10px;
+        }
+        
+        .zoom-slider {
+            width: 80px;
+        }
+        
+        .adjustment-slider {
+            width: 80px;
+        }
+        
+        .image-container {
+            height: 350px;
+        }
+        
+        /* Extra small screens - compact GradCAM controls */
+        .gradcam-controls {
+            margin-bottom: 8px;
+            padding: 8px;
+        }
+        
+        .gradcam-switch {
+            gap: 6px;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+        
+        .opacity-control {
+            gap: 6px;
+            font-size: 10px;
+        }
+        
+        .opacity-slider {
+            width: 60px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="model-header py-5" style="background-color: rgba(35, 60, 234, 0.1);">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-12 text-center">
-                <h1>Chest X-ray Analysis</h1>
-                <p class="lead">Upload a chest X-ray to detect various lung conditions with high accuracy.</p>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="loading-overlay d-none">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Analyzing X-ray...</div>
+</div>
 
-<!-- Section 1: Upload and X-ray Analysis -->
-<section class="py-5 bg-light">
+<!-- Hero Section -->
+<section class="chest-hero">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-upload me-2"></i>Image Upload</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="chestUploadForm" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="chestFile" class="form-label">Select X-ray Image</label>
-                                <input class="form-control" type="file" id="chestFile" name="file" accept=".jpg,.jpeg,.png">
-                                <div class="form-text">Supported formats: JPG, JPEG, PNG</div>
-                            </div>
-                            <button type="submit" class="btn btn-primary" id="analyzeChestBtn">
-                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                Analyze X-ray
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Section 2: Results Analysis -->
-<section class="py-5 bg-white">
-    <div class="container">
-        <div class="results-container mt-2 d-none" id="chestResults">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="card mb-4 shadow">
-                        <div class="card-header bg-primary text-white">
-                            <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Analysis Results</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <!-- Control Panel moved to left side -->
-                                    <div class="control-panel p-3 border rounded bg-white">
-                                        <h5 class="mb-3">Image Controls</h5>
-                                        <div class="mb-3">
-                                            <label for="brightness" class="form-label mb-1">Brightness: <span id="brightnessValue">0</span></label>
-                                            <input type="range" class="form-range" min="-100" max="100" value="0" id="brightness">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="contrast" class="form-label mb-1">Contrast: <span id="contrastValue">100</span>%</label>
-                                            <input type="range" class="form-range" min="0" max="200" value="100" id="contrast">
-                                        </div>
-                                        
-                                        <!-- Grad-CAM controls -->
-                                        <hr>
-                                        <h5 class="mb-3">Grad-CAM Controls</h5>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="toggleGradCAM" checked>
-                                            <label class="form-check-label ms-2" for="toggleGradCAM">Show Heatmap</label>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="opacitySlider" class="form-label mb-1">Opacity: <span id="opacityValue">100%</span></label>
-                                            <input type="range" class="form-range" id="opacitySlider" min="0" max="100" value="100">
-                                        </div>
-                                        
-                                        <div class="text-center mt-3">
-                                            <button class="btn btn-sm btn-outline-primary" id="resetAdjustments">Reset Adjustments</button>
-                                        </div>
-                                        
-                                        <!-- Classification Result Summary -->
-                                        <div class="mt-4">
-                                            <div id="chestClassification" class="classification-label p-2 mt-3">Classification: Unknown</div>
-                                            <div id="chestConfidence" class="text-center mt-1">Confidence: 0%</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="col-md-7">
-                                            <!-- Image container moved to left side of this column -->
-                                            <div class="image-compare-container">
-                                                <!-- Original image -->
-                                                <img id="original-xray" src="" alt="Original X-ray Image">
-                                                
-                                                <!-- Grad-CAM overlay (togglable) -->
-                                                <div id="gradcam-overlay" class="image-overlay">
-                                                    <img id="gradcam-xray" src="" alt="Grad-CAM Visualization">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-md-5">
-                                            <!-- Class probability bars moved to the right -->
-                                            <div class="card h-100">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Classification Probabilities</h5>
-                                                    <div class="class-probability-bars">
-                                                        <div class="class-probability-bar">
-                                                            <div class="progress-label">
-                                                                <span>COVID-19</span>
-                                                                <span id="covidProb">0%</span>
-                                                            </div>
-                                                            <div class="probability-bar">
-                                                                <div class="probability-value covid-prob" style="width: 0%"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="class-probability-bar">
-                                                            <div class="progress-label">
-                                                                <span>Lung Opacity</span>
-                                                                <span id="opacityProb">0%</span>
-                                                            </div>
-                                                            <div class="probability-bar">
-                                                                <div class="probability-value opacity-prob" style="width: 0%"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="class-probability-bar">
-                                                            <div class="progress-label">
-                                                                <span>Normal</span>
-                                                                <span id="normalProb">0%</span>
-                                                            </div>
-                                                            <div class="probability-bar">
-                                                                <div class="probability-value normal-prob" style="width: 0%"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="class-probability-bar">
-                                                            <div class="progress-label">
-                                                                <span>Viral Pneumonia</span>
-                                                                <span id="pneumoniaProb">0%</span>
-                                                            </div>
-                                                            <div class="probability-bar">
-                                                                <div class="probability-value pneumonia-prob" style="width: 0%"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="alert alert-info mt-3 mb-0">
-                                                        <small><strong>Note:</strong> Grad-CAM visualization highlights the regions that influenced the model's classification decision.</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-lg-10 hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-microscope me-3"></i>Chest X-ray Analysis
+                </h1>
+                <p class="hero-subtitle">AI-Powered Medical Diagnosis with GradCAM Visualization</p>
                 
-            </div>
-            
-            <!-- Diagnostic Information -->
-            <div class="row justify-content-center mt-5">
-                <div class="col-lg-10">
-                    <div class="card mb-4 shadow">
-                        <div class="card-header bg-primary text-white">
-                            <h3 class="mb-0"><i class="fas fa-stethoscope me-2"></i>Diagnostic Information</h3>
-                        </div>
-                        <div class="card-body">
-                            <div id="covidInfo" class="condition-info d-none">
-                                <h5>COVID-19 <i class="fas fa-virus"></i></h5>
-                                <p>The AI model predicts this X-ray shows patterns consistent with COVID-19 infection.</p>
-                                
-                                <h6>Common Radiological Findings:</h6>
-                                <ul class="finding-list">
-                                    <li><strong>Ground glass opacities</strong> - often bilateral and peripheral</li>
-                                    <li><strong>Consolidation</strong> in later stages</li>
-                                    <li><strong>Crazy paving pattern</strong> - thickened interlobular and intralobular lines</li>
-                                    <li>Peripheral and lower zone predominance</li>
-                                </ul>
-                                
-                                <div class="treatment-box">
-                                    <h6>Typical Management:</h6>
-                                    <p>Treatment typically involves supportive care, monitoring oxygen levels, and in severe cases, respiratory support. Specific treatments depend on disease severity and current guidelines.</p>
-                                </div>
+                <!-- Upload Card -->
+                <div class="glass-card">
+                    <form id="chestUploadForm" enctype="multipart/form-data">
+                        <div class="drop-zone" id="dropZone">
+                            <div class="drop-zone-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
                             </div>
+                            <h4 class="mb-3" style="color: var(--primary-color); font-weight: 600;">Upload Image for Analysis</h4>
+                            <p class="mb-4" style="color: #666;">Click the button below to select your image</p>
                             
-                            <div id="opacityInfo" class="condition-info d-none">
-                                <h5>Lung Opacity <i class="fas fa-lungs"></i></h5>
-                                <p>The AI model detects lung opacities which represent an area of hazy lung density.</p>
-                                
-                                <h6>Possible Causes:</h6>
-                                <ul class="finding-list">
-                                    <li><strong>Pneumonia</strong> (bacterial, viral, or fungal)</li>
-                                    <li><strong>Pulmonary edema</strong> (fluid in lungs)</li>
-                                    <li><strong>Pulmonary hemorrhage</strong> (bleeding)</li>
-                                    <li><strong>Atelectasis</strong> (collapsed or airless lung)</li>
-                                    <li>Various other inflammatory or infectious conditions</li>
-                                </ul>
-                                
-                                <div class="treatment-box">
-                                    <h6>Next Steps:</h6>
-                                    <p>Further evaluation is needed to determine the cause of opacity. This may include additional imaging, laboratory tests, or clinical assessment.</p>
-                                </div>
-                            </div>
+                            <!-- Hidden file input -->
+                            <input type="file" id="chestFile" name="file" accept="image/*,.jpg,.jpeg,.png" 
+                                   required style="display: none;">
                             
-                            <div id="normalInfo" class="condition-info d-none">
-                                <h5>Normal <i class="fas fa-check-circle"></i></h5>
-                                <p>The AI model predicts this X-ray appears normal without significant abnormalities.</p>
-                                
-                                <h6>Characteristics of Normal Chest X-rays:</h6>
-                                <ul class="finding-list">
-                                    <li><strong>Clear lung fields</strong> without opacities or consolidations</li>
-                                    <li><strong>Normal cardiac silhouette</strong> (width less than half the thorax)</li>
-                                    <li><strong>Normal mediastinum</strong> and hilar structures</li>
-                                    <li><strong>Clear costophrenic angles</strong> (no fluid)</li>
-                                    <li>Normal bony thorax without deformities</li>
-                                </ul>
-                                
-                                <div class="alert alert-success mt-3">
-                                    <p class="mb-0">If the patient is showing symptoms despite a normal X-ray, further evaluation may be needed, as some conditions may not be visible on plain radiographs.</p>
-                                </div>
-                            </div>
+                            <!-- Single upload button -->
+                            <label for="chestFile" class="btn" 
+                                   style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+                                          color: white; border: none; border-radius: 20px; 
+                                          padding: 0.8rem 1.5rem; font-weight: 600;
+                                          cursor: pointer; display: inline-block;">
+                                <i class="fas fa-folder-open me-2"></i>Select Image
+                            </label>
                             
-                            <div id="pneumoniaInfo" class="condition-info d-none">
-                                <h5>Viral Pneumonia <i class="fas fa-biohazard"></i></h5>
-                                <p>The AI model detects patterns consistent with viral pneumonia.</p>
-                                
-                                <h6>Typical Radiological Features:</h6>
-                                <ul class="finding-list">
-                                    <li><strong>Bilateral interstitial patterns</strong> - typically diffuse</li>
-                                    <li><strong>Patchy or diffuse airspace opacities</strong></li>
-                                    <li><strong>Ground-glass opacities</strong></li>
-                                    <li>Generally lacks lobar consolidation (more common in bacterial pneumonia)</li>
-                                    <li>May have small pleural effusions</li>
-                                </ul>
-                                
-                                <div class="treatment-box">
-                                    <h6>Typical Management:</h6>
-                                    <p>Treatment usually focuses on supportive care including rest, hydration, and fever management. Antiviral medications may be considered in specific cases.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="disclaimer mt-3">
-                                <hr>
-                                <p><small class="text-muted"><strong>Disclaimer:</strong> This AI tool is for educational purposes only and is not a substitute for professional medical diagnosis. Always consult with healthcare providers for medical decisions.</small></p>
+                            <div class="mt-3">
+                                <small class="text-muted">Supported formats: JPG, PNG</small>
                             </div>
                         </div>
-                    </div>
+                        
+                        <div class="text-center mt-4" id="analyzeButtonContainer" style="display: none;">
+                            <button type="submit" class="analyze-btn" id="analyzeChestBtn">
+                                <i class="fas fa-search me-2"></i>
+                                <span class="button-text">Start Analysis</span>
+                                <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 3: Educational Information -->
-<section class="py-5 bg-light">
+<!-- Results Section -->
+<section class="py-5" id="resultsSection" style="display: none; background: #ffffff;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0"><i class="fas fa-book-medical me-2"></i>Educational Information</h3>
-                    </div>
-                    <div class="card-body">
-                        <h4>About Chest X-ray Analysis</h4>
-                        <p>Chest X-rays are one of the most common imaging tests in medicine, providing valuable information about the lungs, heart, and chest wall.</p>
-                        
-                        <h5 class="mt-4">How Our AI Works</h5>
-                        <p>Our AI model has been trained on thousands of chest X-ray images to identify four different conditions:</p>
-                        
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <h6><span class="badge bg-danger me-2">COVID-19</span></h6>
-                                <p>Radiographic patterns consistent with COVID-19 infection, typically showing bilateral peripheral ground-glass opacities.</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span class="badge bg-warning me-2">Lung Opacity</span></h6>
-                                <p>Hazy areas in the lungs that could indicate various conditions such as pneumonia, edema, or hemorrhage.</p>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <h6><span class="badge bg-success me-2">Normal</span></h6>
-                                <p>No significant abnormalities detected in the lung fields or other visible structures.</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span class="badge bg-primary me-2">Viral Pneumonia</span></h6>
-                                <p>Patterns consistent with pneumonia caused by viral infection, showing diffuse interstitial patterns.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <h5>What is Grad-CAM?</h5>
-                                <p>Gradient-weighted Class Activation Mapping (Grad-CAM) is a technique that helps visualize which parts of an image are most important for the model's classification decision. The heatmap highlights regions that strongly influenced the model's output, providing insight into what the AI is "looking at" when making diagnoses.</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h5>Clinical Applications</h5>
-                                <ul>
-                                    <li>Screening for respiratory conditions</li>
-                                    <li>Emergency department triage</li>
-                                    <li>Monitoring disease progression</li>
-                                    <li>Educational purposes for medical training</li>
-                                    <li>Research on pulmonary diseases</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="alert alert-info mt-4">
-                            <p class="mb-0"><strong>Note:</strong> While our AI model provides valuable insights, it should be used as a supportive tool for qualified healthcare professionals rather than a standalone diagnostic system.</p>
-                        </div>
-                    </div>
+                <div id="analysisResults">
+                    <!-- Results will be populated by JavaScript -->
                 </div>
             </div>
         </div>
@@ -509,14 +983,33 @@
 $(document).ready(function() {
     // Initialize variables
     let gradcamOpacity = 1.0;
-    let classificationData = {
-        'COVID': 0,
-        'Lung_Opacity': 0,
-        'Normal': 0,
-        'Viral Pneumonia': 0
-    };
     
-    // Handle brightness and contrast adjustments
+    // Image Lab Variables
+    let imageTransform = {
+        scale: 1,
+        rotation: 0,
+        translateX: 0,
+        translateY: 0,
+        flipX: 1,
+        flipY: 1,
+        brightness: 100,
+        contrast: 100,
+        saturation: 100,
+        hue: 0
+    };
+
+    let isDragging = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    
+    // Submission state management
+    let isSubmitting = false;
+    
+    // Global file storage to persist across DOM recreations
+    let persistedFile = null;
+    let persistedFileName = null;
+    
+    // Handle brightness and contrast adjustments (legacy compatibility)
     $('#brightness').on('input', function() {
         const brightnessValue = $(this).val();
         $('#brightnessValue').text(brightnessValue);
@@ -555,7 +1048,7 @@ $(document).ready(function() {
         $('#gradcam-xray').css('filter', `brightness(${(brightness+100)/100}) contrast(${contrast/100})`);
     }
     
-    // Toggle Grad-CAM visibility
+    // Toggle Grad-CAM visibility (legacy compatibility)
     $('#toggleGradCAM').on('change', function() {
         if ($(this).is(':checked')) {
             $('#gradcam-overlay').css('opacity', gradcamOpacity);
@@ -564,7 +1057,7 @@ $(document).ready(function() {
         }
     });
     
-    // Opacity slider
+    // Opacity slider (legacy compatibility)
     $('#opacitySlider').on('input', function() {
         gradcamOpacity = $(this).val() / 100;
         $('#opacityValue').text($(this).val() + '%');
@@ -574,7 +1067,7 @@ $(document).ready(function() {
         }
     });
     
-    // Function to apply class styling to the classification label
+    // Function to apply class styling to the classification label (legacy compatibility)
     function setClassificationStyle(className) {
         // Remove all possible classes first
         $('#chestClassification').removeClass('covid-label opacity-label normal-label pneumonia-label');
@@ -591,7 +1084,7 @@ $(document).ready(function() {
         }
     }
     
-    // Update probability bars
+    // Update probability bars (legacy compatibility)
     function updateProbabilityBars(classData) {
         // Set width and text for each class probability
         for (const [className, probability] of Object.entries(classData)) {
@@ -617,145 +1110,444 @@ $(document).ready(function() {
         }
     }
 
-    // Form submission
-    $('#chestUploadForm').on('submit', function(e) {
-        e.preventDefault();
+    // Global variables for file handling
+    let selectedFile = null;
+    let globalFileInput = null;
+
+    // File selection handler
+    function handleFileSelection() {
+        console.log('File selection event triggered');
         
-        const fileInput = $('#chestFile')[0];
-        if (fileInput.files.length === 0) {
-            alert('Please select a file to upload');
+        // Use global reference or find file input
+        let fileInput = globalFileInput;
+        if (!fileInput) {
+            fileInput = document.getElementById('chestFile');
+            if (!fileInput) {
+                fileInput = document.querySelector('input[type="file"]');
+            }
+            if (!fileInput) {
+                fileInput = document.querySelector('[name="file"]');
+            }
+            // Save global reference
+            globalFileInput = fileInput;
+        }
+        
+        if (!fileInput) {
+            console.error('❌ No file input found in DOM');
+            alert('Error: File input not found. Please refresh the page.');
             return;
         }
         
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
+        if (!fileInput.files || fileInput.files.length === 0) {
+            console.log('⚠️ No file selected');
+            selectedFile = null; // Clear stored file
+            return;
+        }
         
-        // Show loading spinner
-        $('#analyzeChestBtn .spinner-border').removeClass('d-none');
-        $('#analyzeChestBtn').prop('disabled', true);
+        const file = fileInput.files[0];
+        selectedFile = file; // Store globally for later use
+        console.log('✅ File selected:', file.name, '(' + Math.round(file.size/1024) + 'KB)');
         
-        // Clear previous results
-        $('#chestResults').addClass('d-none');
-        $('.condition-info').addClass('d-none');
+        // Update UI
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            dropZone.innerHTML = `
+                <div class="drop-zone-icon" style="color: #28a745;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h4 style="color: #28a745; font-weight: 600; margin-bottom: 1rem;">
+                    ${file.name}
+                </h4>
+                <p style="color: #666; margin-bottom: 1.5rem;">
+                    File size: ${Math.round(file.size/1024)}KB | Ready for analysis
+                </p>
+                <div style="background: rgba(40, 167, 69, 0.1); border: 2px solid rgba(40, 167, 69, 0.3); 
+                            border-radius: 15px; padding: 1.2rem; display: inline-block;">
+                    <div style="color: #28a745; font-weight: 600; font-size: 1.1rem;">
+                        <i class="fas fa-check-double me-2"></i>Ready for Analysis
+                    </div>
+                </div>
+            `;
+        }
         
-        $.ajax({
-            url: '/predict/chest',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                if (response.status === 'success') {
-                    // Display results
-                    $('#chestResults').removeClass('d-none');
-                    
-                    // Reset image adjustments
-                    $('#brightness').val(0);
-                    $('#contrast').val(100);
-                    $('#brightnessValue').text(0);
-                    $('#contrastValue').text(100);
-                    
-                    // Set classification and confidence
-                    const classText = response.class.replace('_', ' ');
-                    $('#chestClassification').text(`Classification: ${classText}`);
-                    $('#chestConfidence').text(`Confidence: ${response.confidence.toFixed(2)}%`);
-                    
-                    // Apply appropriate styling
-                    setClassificationStyle(response.class);
-                    
-                    // Set original image
-                    if (response.original_base64) {
-                        $('#original-xray').attr('src', `data:image/png;base64,${response.original_base64}`);
-                    } else {
-                        $('#original-xray').attr('src', response.image_path);
+        // Show analyze button
+        const analyzeContainer = document.getElementById('analyzeButtonContainer');
+        if (analyzeContainer) {
+            analyzeContainer.style.display = 'block';
+        }
+    }
+
+    // Legacy setup file handling - now redundant but kept for compatibility
+    function setupFileHandling() {
+        console.log('� Legacy setupFileHandling called - using enhanced version');
+        // This function is now handled by setupEnhancedFileHandling
+    }
+    
+    // Initialize file handling
+    // No longer calling setupFileHandling() - now using setupEnhancedFileHandling() in $(document).ready()
+
+    // Enhanced form submission with better file validation (using event delegation)
+    // isSubmitting already declared globally above
+    
+    $(document).on('submit', '#chestUploadForm', function(e) {
+        e.preventDefault();
+        console.log('📤 Form submission triggered');
+        
+        // Prevent multiple submissions
+        if (isSubmitting) {
+            console.log('⚠️ Already submitting, ignoring duplicate submission');
+            return;
+        }
+        
+        isSubmitting = true;
+        
+        // Add a small delay to ensure DOM is fully ready
+        setTimeout(() => {
+            // Try comprehensive methods to find the file input
+            let fileInput = null;
+            
+            console.log('🔍 Using persisted file instead of DOM search...');
+            let fileToSubmit = null;
+            
+            // Priority 1: Use persisted file
+            if (persistedFile) {
+                fileToSubmit = persistedFile;
+                console.log('✅ Using persisted file:', persistedFileName);
+                
+                // Try to find file input and assign file to it for form submission
+                let fileInput = document.getElementById('chestFile') || 
+                              document.querySelector('input[type="file"]') ||
+                              this.querySelector('input[type="file"]');
+                
+                if (fileInput) {
+                    try {
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(persistedFile);
+                        fileInput.files = dataTransfer.files;
+                        console.log('✅ File assigned to input for form submission');
+                    } catch (error) {
+                        console.warn('⚠️ Could not assign file to input, will use FormData directly');
                     }
-                    
-                    // Handle Grad-CAM with comprehensive error protection
-                    handleGradCam(response);
-                    
-                    // Show appropriate info section
-                    $('.condition-info').addClass('d-none');
-                    if (response.class === 'COVID') {
-                        $('#covidInfo').removeClass('d-none');
-                    } else if (response.class === 'Lung_Opacity') {
-                        $('#opacityInfo').removeClass('d-none');
-                    } else if (response.class === 'Normal') {
-                        $('#normalInfo').removeClass('d-none');
-                    } else if (response.class === 'Viral Pneumonia') {
-                        $('#pneumoniaInfo').removeClass('d-none');
-                    }
-                    
-                    // Update probability bars with mock data for demonstration
-                    // In a real app, these would come from the model
-                    const classData = {
-                        'COVID': 0.05,
-                        'Lung_Opacity': 0.08,
-                        'Normal': 0.02,
-                        'Viral Pneumonia': 0.03
-                    };
-                    
-                    // Set the detected class to high probability
-                    classData[response.class] = response.confidence / 100;
-                    
-                    // Update probability bars
-                    updateProbabilityBars(classData);
-                    
-                } else {
-                    alert('Error: ' + response.message);
                 }
-            },
-            error: function(xhr, status, error) {
-                alert('Error processing image: ' + error);
-            },
-            complete: function() {
-                // Hide loading spinner
-                $('#analyzeChestBtn .spinner-border').addClass('d-none');
-                $('#analyzeChestBtn').prop('disabled', false);
+            } else {
+                console.error('❌ No persisted file found');
+                alert('Error: No file selected. Please select a file first.');
+                isSubmitting = false;
+                return;
+            }
+            
+            // Skip the DOM search and variable declaration since we already have fileToSubmit
+            
+            // Check the current DOM state
+            console.log('🔍 DOM State Check:');
+            console.log('  - Document ready state:', document.readyState);
+            console.log('  - Total forms:', document.querySelectorAll('form').length);
+            console.log('  - Total file inputs:', document.querySelectorAll('input[type="file"]').length);
+            console.log('  - DropZone exists:', !!document.getElementById('dropZone'));
+            console.log('  - Form exists:', !!document.getElementById('chestUploadForm'));
+            
+            // Method 1: By ID
+            console.log('🔍 Method 1: Searching by ID...');
+            fileInput = document.getElementById('chestFile');
+            if (fileInput) {
+                console.log('✅ Found by ID: chestFile');
+            } else {
+                console.log('❌ Not found by ID: chestFile');
+            }
+            
+            // Method 2: Within the form by type
+            if (!fileInput) {
+                console.log('🔍 Method 2: Searching within form by type...');
+                fileInput = this.querySelector('input[type="file"]');
+                if (fileInput) {
+                    console.log('✅ Found by form querySelector: input[type="file"]');
+                } else {
+                    console.log('❌ Not found within form by type');
+                }
+            }
+            
+            // Method 3: Within the form by name
+            if (!fileInput) {
+                console.log('🔍 Method 3: Searching within form by name...');
+                fileInput = this.querySelector('input[name="file"]');
+                if (fileInput) {
+                    console.log('✅ Found by form querySelector: input[name="file"]');
+                } else {
+                    console.log('❌ Not found within form by name');
+                }
+            }
+            
+            // Method 4: Within dropZone
+            if (!fileInput) {
+                console.log('🔍 Method 4: Searching within dropZone...');
+                const dropZone = document.querySelector('#dropZone');
+                console.log('  - DropZone found:', !!dropZone);
+                if (dropZone) {
+                    fileInput = dropZone.querySelector('input[type="file"]');
+                    if (fileInput) {
+                        console.log('✅ Found in dropZone');
+                    } else {
+                        console.log('❌ Not found in dropZone');
+                        console.log('  - DropZone content preview:', dropZone.innerHTML.substring(0, 200) + '...');
+                    }
+                } else {
+                    console.log('❌ DropZone not found');
+                }
+            }
+            
+            // Method 5: Global search for any chestFile
+            if (!fileInput) {
+                fileInput = document.querySelector('input[id="chestFile"]');
+                if (fileInput) {
+                    console.log('✅ Found by global ID selector');
+                }
+            }
+            
+            // Method 6: Search within any form
+            if (!fileInput) {
+                const allForms = document.querySelectorAll('form');
+                for (let form of allForms) {
+                    const input = form.querySelector('input[type="file"]');
+                    if (input && (input.id === 'chestFile' || input.name === 'file')) {
+                        fileInput = input;
+                        console.log('✅ Found in form:', form.id || 'unnamed');
+                        break;
+                    }
+                }
+            }
+            
+            // Method 7: Last resort - any file input in the page
+            if (!fileInput) {
+                const allFileInputs = document.querySelectorAll('input[type="file"]');
+                for (let input of allFileInputs) {
+                    if (input.id === 'chestFile' || input.name === 'file') {
+                        fileInput = input;
+                        console.log('✅ Found by global search');
+                        break;
+                    }
+                }
+            }
+            
+            if (!fileInput) {
+                console.error('❌ File input not found with any method after comprehensive search');
+                console.log('🔍 Available file inputs on page:');
+                const allInputs = document.querySelectorAll('input[type="file"]');
+                console.log('📊 Total file inputs found:', allInputs.length);
+                allInputs.forEach((input, index) => {
+                    console.log(`  [${index}] ID: ${input.id || 'none'}, Name: ${input.name || 'none'}, Form: ${input.form?.id || 'none'}, Parent: ${input.parentElement?.id || 'none'}`);
+                });
+                
+                // Check dropZone content
+                const dropZone = document.getElementById('dropZone');
+                console.log('🔍 DropZone element:', dropZone);
+                console.log('🔍 DropZone innerHTML length:', dropZone?.innerHTML?.length || 0);
+                
+                // Check form content
+                const form = document.getElementById('chestUploadForm');
+                console.log('🔍 Form element:', form);
+                console.log('🔍 Form inputs:', form?.querySelectorAll('input').length || 0);
+                
+                alert('Error: File input not found. Please refresh the page.');
+                isSubmitting = false; // Reset lock
+                return;
+            }
+            
+            // We already have fileToSubmit from persisted file, validate it
+            if (!fileToSubmit) {
+                console.log('⚠️ No file available for upload');
+                alert('Please select an X-ray image to upload');
+                isSubmitting = false;
+                return;
+            }
+            
+            console.log('Submitting file:', fileToSubmit.name, '(' + Math.round(fileToSubmit.size/1024) + 'KB)');
+            
+            // Proceed with form submission
+            const formData = new FormData();
+            formData.append('file', fileToSubmit);
+            
+            // Show loading spinner and overlay
+            $('#analyzeChestBtn .spinner-border').removeClass('d-none');
+            $('#analyzeChestBtn').prop('disabled', true);
+            $('.loading-overlay').removeClass('d-none');
+            
+            $.ajax({
+                url: '/predict/chest',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    console.log('✅ Analysis complete:', response);
+                    if (response.status === 'success') {
+                        // Display results with new enhanced viewer
+                        displayResults(response);
+                        
+                        // Show results section
+                        $('#resultsSection').show();
+                        
+                        // Smooth scroll to results
+                        setTimeout(() => {
+                            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+                        }, 500);
+                        
+                    } else {
+                        console.error('❌ Analysis failed:', response.message);
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('❌ AJAX error:', error);
+                    alert('Error processing image: ' + error);
+                },
+                complete: function() {
+                    // Hide loading spinner and overlay
+                    $('#analyzeChestBtn .spinner-border').addClass('d-none');
+                    $('#analyzeChestBtn').prop('disabled', false);
+                    $('.loading-overlay').addClass('d-none');
+                    isSubmitting = false; // Reset lock
+                }
+            });
+        }, 50); // Small delay to ensure DOM stability
+    });
+
+    // Initialize file input event listener with improved binding
+    $(document).ready(function() {
+        console.log('🚀 Chest X-ray analysis page loading...');
+        
+        // Wait for DOM to be fully ready then setup file handling
+        setTimeout(() => {
+            setupEnhancedFileHandling();
+            console.log('🎉 Chest X-ray page initialization complete!');
+        }, 100);
+    });
+
+    // Enhanced file handling setup with event delegation
+    function setupEnhancedFileHandling() {
+        console.log('🔧 Setting up enhanced file handling...');
+        
+        // Remove any existing listeners first to prevent duplicates
+        $(document).off('change', 'input[type="file"]');
+        
+        // Use event delegation with multiple selectors to handle dynamically created file inputs
+        $(document).on('change', 'input[type="file"]', function() {
+            // Only handle chest file inputs
+            if (this.id === 'chestFile' || this.name === 'file') {
+                console.log('📁 File change event triggered on:', this.id || this.name);
+                // Prevent multiple calls by checking if we're already processing
+                if ($(this).data('processing')) {
+                    console.log('⚠️ Already processing this file input, skipping...');
+                    return;
+                }
+                $(this).data('processing', true);
+                
+                handleFileSelection(this);
+                
+                // Clear processing flag after a delay
+                setTimeout(() => {
+                    $(this).removeData('processing');
+                }, 1000);
             }
         });
-    });
-    
-    // Handle Grad-CAM with comprehensive error protection
-    function handleGradCam(response) {
-        // Remove any previous error messages
-        $('.gradcam-error-message').remove();
         
-        try {
-            // Check if there's an explicit gradcam_error in the response
-            if (response.gradcam_error) {
-                throw new Error(response.gradcam_error);
+        console.log('✅ File handling setup complete with enhanced event delegation');
+    }
+
+    // Enhanced file selection handler
+    function handleFileSelection(fileInput) {
+        console.log('📂 Processing file selection...');
+        
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            console.log('⚠️ No file selected');
+            // Clear persisted file data
+            persistedFile = null;
+            persistedFileName = null;
+            // Hide analyze button
+            const analyzeContainer = document.getElementById('analyzeButtonContainer');
+            if (analyzeContainer) {
+                analyzeContainer.style.display = 'none';
             }
-            
-            // Check if gradcam_base64 exists and is not empty
-            if (!response.gradcam_base64 || response.gradcam_base64.trim().length === 0) {
-                throw new Error('Grad-CAM data missing');
-            }
-            
-            // Verify it's a valid base64 string
-            const validBase64 = /^[A-Za-z0-9+/=]+$/.test(response.gradcam_base64.trim());
-            if (!validBase64) {
-                throw new Error('Invalid Grad-CAM data');
-            }
-            
-            // Set the Grad-CAM image
-            $('#gradcam-xray').attr('src', `data:image/png;base64,${response.gradcam_base64}`);
-            
-            // Enable Grad-CAM controls
-            $('#gradcam-overlay').css('opacity', gradcamOpacity);
-            $('#toggleGradCAM').prop('checked', true).prop('disabled', false);
-            $('#opacitySlider').prop('disabled', false);
-            
-            // Add load event handler to detect image loading issues
-            $('#gradcam-xray').on('error', function() {
-                // If image fails to load after setting src
-                displayGradCAMError('Failed to render Grad-CAM visualization');
-            });
-            
-        } catch (error) {
-            // Handle all Grad-CAM errors
-            console.error('Grad-CAM error:', error);
-            displayGradCAMError();
+            return;
         }
+        
+        const file = fileInput.files[0];
+        console.log('✅ File selected:', file.name, '(' + Math.round(file.size/1024) + 'KB)');
+        
+        // Store file data globally for persistence across DOM recreations
+        persistedFile = file;
+        persistedFileName = file.name;
+        console.log('💾 File stored globally for persistence');
+        
+        // Skip form validation since it can cause issues with dynamic file inputs
+        // The form submission will handle validation properly
+        console.log('✅ File input processing - skipping form validation to prevent loops');
+        
+        // Update UI to show file selected while preserving the file input
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            // First, preserve the existing file input if it exists
+            let existingFileInput = dropZone.querySelector('input[type="file"]');
+            
+            dropZone.innerHTML = `
+                <div class="drop-zone-icon" style="color: #28a745;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h4 style="color: #28a745; font-weight: 600; margin-bottom: 1rem;">
+                    ${file.name}
+                </h4>
+                <p style="color: #666; margin-bottom: 1.5rem;">
+                    File size: ${Math.round(file.size/1024)}KB | Ready for analysis
+                </p>
+                <div style="background: rgba(40, 167, 69, 0.1); border: 2px solid rgba(40, 167, 69, 0.3); 
+                            border-radius: 15px; padding: 1.2rem; display: inline-block;">
+                    <div style="color: #28a745; font-weight: 600; font-size: 1.1rem;">
+                        <i class="fas fa-check-double me-2"></i>Ready for Analysis
+                    </div>
+                </div>
+            `;
+            
+            // Re-add the file input to maintain form functionality
+            if (existingFileInput) {
+                dropZone.appendChild(existingFileInput);
+                console.log('✅ File input preserved after UI update');
+            } else {
+                // Create new file input if one doesn't exist
+                const newFileInput = document.createElement('input');
+                newFileInput.type = 'file';
+                newFileInput.id = 'chestFile';
+                newFileInput.name = 'file';
+                newFileInput.accept = 'image/*,.jpg,.jpeg,.png';
+                newFileInput.required = true;
+                newFileInput.style.display = 'none';
+                
+                // Set the file to the input
+                try {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    newFileInput.files = dataTransfer.files;
+                    console.log('✅ File assigned to new input');
+                } catch (error) {
+                    console.warn('⚠️ Could not assign file to input:', error);
+                }
+                
+                dropZone.appendChild(newFileInput);
+                console.log('✅ New file input created and added after UI update');
+            }
+        }
+        
+        // Show analyze button
+        const analyzeContainer = document.getElementById('analyzeButtonContainer');
+        if (analyzeContainer) {
+            analyzeContainer.style.display = 'block';
+            console.log('✅ Analyze button shown');
+        }
+    }
+    
+    // Handle Grad-CAM with comprehensive error protection (legacy compatibility)
+    function handleGradCam(response) {
+        // This function is kept for backward compatibility
+        // The new system handles GradCAM in the displayResults function
+        console.log('Legacy handleGradCam called - using new display system');
     }
     
     // Function to display Grad-CAM error message
@@ -774,6 +1566,1547 @@ $(document).ready(function() {
             
         // Add error message below the image
         $('.image-compare-container').after(errorDiv);
+    }
+
+    // Initialize Image Lab functionality
+    function initializeImageLab() {
+        const imageContainer = document.getElementById('imageContainer');
+        const originalImage = document.getElementById('original-xray');
+        const gradcamImage = document.getElementById('gradcam-xray');
+        
+        if (!imageContainer || !originalImage) return;
+        
+        // Set initial image size
+        const containerRect = imageContainer.getBoundingClientRect();
+        const imageNaturalRatio = originalImage.naturalHeight / originalImage.naturalWidth;
+        
+        if (imageNaturalRatio > 1) {
+            // Portrait image
+            originalImage.style.height = '100%';
+            originalImage.style.width = 'auto';
+            if (gradcamImage) {
+                gradcamImage.style.height = '100%';
+                gradcamImage.style.width = 'auto';
+            }
+        } else {
+            // Landscape image
+            originalImage.style.width = '100%';
+            originalImage.style.height = 'auto';
+            if (gradcamImage) {
+                gradcamImage.style.width = '100%';
+                gradcamImage.style.height = 'auto';
+            }
+        }
+        
+        // Mouse events for panning
+        imageContainer.addEventListener('mousedown', startDrag);
+        imageContainer.addEventListener('mousemove', drag);
+        imageContainer.addEventListener('mouseup', stopDrag);
+        imageContainer.addEventListener('mouseleave', stopDrag);
+        
+        // Touch events for mobile
+        imageContainer.addEventListener('touchstart', handleTouchStart);
+        imageContainer.addEventListener('touchmove', handleTouchMove);
+        imageContainer.addEventListener('touchend', handleTouchEnd);
+        
+        // Prevent image dragging
+        originalImage.addEventListener('dragstart', (e) => e.preventDefault());
+        if (gradcamImage) gradcamImage.addEventListener('dragstart', (e) => e.preventDefault());
+        
+        console.log('🔬 Image Lab initialized for Chest X-ray with GradCAM');
+    }
+
+    // Drag functions with improved performance
+    function startDrag(e) {
+        isDragging = true;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        e.preventDefault();
+        
+        // Optimize for dragging
+        const originalImage = document.getElementById('original-xray');
+        const gradcamImage = document.getElementById('gradcam-xray');
+        if (originalImage) originalImage.style.willChange = 'transform';
+        if (gradcamImage) gradcamImage.style.willChange = 'transform';
+    }
+
+    function drag(e) {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - lastMouseX;
+        const deltaY = e.clientY - lastMouseY;
+        
+        // Use more responsive movement multiplier
+        imageTransform.translateX += deltaX * 1.2;
+        imageTransform.translateY += deltaY * 1.2;
+        
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        
+        // Use requestAnimationFrame for smooth updates
+        requestAnimationFrame(updateImageTransform);
+        e.preventDefault();
+    }
+
+    function stopDrag() {
+        isDragging = false;
+        
+        // Remove optimization after dragging
+        const originalImage = document.getElementById('original-xray');
+        const gradcamImage = document.getElementById('gradcam-xray');
+        if (originalImage) originalImage.style.willChange = 'auto';
+        if (gradcamImage) gradcamImage.style.willChange = 'auto';
+    }
+
+    // Touch events for mobile with improved performance
+    function handleTouchStart(e) {
+        const touch = e.touches[0];
+        lastMouseX = touch.clientX;
+        lastMouseY = touch.clientY;
+        isDragging = true;
+        e.preventDefault();
+        
+        // Optimize for touch dragging
+        const originalImage = document.getElementById('original-xray');
+        const gradcamImage = document.getElementById('gradcam-xray');
+        if (originalImage) originalImage.style.willChange = 'transform';
+        if (gradcamImage) gradcamImage.style.willChange = 'transform';
+    }
+
+    function handleTouchMove(e) {
+        if (!isDragging) return;
+        
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - lastMouseX;
+        const deltaY = touch.clientY - lastMouseY;
+        
+        // Use more responsive movement for touch
+        imageTransform.translateX += deltaX * 1.3;
+        imageTransform.translateY += deltaY * 1.3;
+        
+        lastMouseX = touch.clientX;
+        lastMouseY = touch.clientY;
+        
+        // Use requestAnimationFrame for smooth touch updates
+        requestAnimationFrame(updateImageTransform);
+        e.preventDefault();
+    }
+
+    function handleTouchEnd() {
+        isDragging = false;
+        
+        // Remove optimization after touch dragging
+        const originalImage = document.getElementById('original-xray');
+        const gradcamImage = document.getElementById('gradcam-xray');
+        if (originalImage) originalImage.style.willChange = 'auto';
+        if (gradcamImage) gradcamImage.style.willChange = 'auto';
+    }
+
+    // Zoom functions
+    window.zoomImage = function(delta) {
+        const newScale = Math.max(0.1, Math.min(5, imageTransform.scale + delta));
+        imageTransform.scale = newScale;
+        
+        const zoomSlider = document.getElementById('zoomSlider');
+        const zoomPercentage = document.getElementById('zoomPercentage');
+        
+        if (zoomSlider) zoomSlider.value = newScale;
+        if (zoomPercentage) zoomPercentage.textContent = Math.round(newScale * 100) + '%';
+        
+        updateImageTransform();
+    }
+
+    window.setZoom = function(value) {
+        imageTransform.scale = parseFloat(value);
+        
+        const zoomPercentage = document.getElementById('zoomPercentage');
+        if (zoomPercentage) zoomPercentage.textContent = Math.round(value * 100) + '%';
+        
+        updateImageTransform();
+    }
+
+    // Rotation functions
+    window.rotateImage = function(degrees) {
+        imageTransform.rotation += degrees;
+        updateImageTransform();
+    }
+
+    // Flip functions
+    window.flipImage = function(direction) {
+        if (direction === 'horizontal') {
+            imageTransform.flipX *= -1;
+        } else if (direction === 'vertical') {
+            imageTransform.flipY *= -1;
+        }
+        updateImageTransform();
+    }
+
+    // Reset function
+    window.resetImage = function() {
+        imageTransform = {
+            scale: 1,
+            rotation: 0,
+            translateX: 0,
+            translateY: 0,
+            flipX: 1,
+            flipY: 1,
+            brightness: 100,
+            contrast: 100,
+            saturation: 100,
+            hue: 0
+        };
+        
+        // Reset sliders
+        const zoomSlider = document.getElementById('zoomSlider');
+        const zoomPercentage = document.getElementById('zoomPercentage');
+        const brightnessSlider = document.getElementById('brightnessSlider');
+        const contrastSlider = document.getElementById('contrastSlider');
+        const saturationSlider = document.getElementById('saturationSlider');
+        const hueSlider = document.getElementById('hueSlider');
+        
+        if (zoomSlider) zoomSlider.value = 1;
+        if (zoomPercentage) zoomPercentage.textContent = '100%';
+        if (brightnessSlider) brightnessSlider.value = 100;
+        if (contrastSlider) contrastSlider.value = 100;
+        if (saturationSlider) saturationSlider.value = 100;
+        if (hueSlider) hueSlider.value = 0;
+        
+        updateImageTransform();
+    }
+
+    // Adjust image filters
+    window.adjustImage = function() {
+        const brightnessSlider = document.getElementById('brightnessSlider');
+        const contrastSlider = document.getElementById('contrastSlider');
+        const saturationSlider = document.getElementById('saturationSlider');
+        const hueSlider = document.getElementById('hueSlider');
+        
+        if (brightnessSlider) imageTransform.brightness = parseInt(brightnessSlider.value);
+        if (contrastSlider) imageTransform.contrast = parseInt(contrastSlider.value);
+        if (saturationSlider) imageTransform.saturation = parseInt(saturationSlider.value);
+        if (hueSlider) imageTransform.hue = parseInt(hueSlider.value);
+        
+        updateImageTransform();
+    }
+
+    // Update image transform and filters with improved performance
+    function updateImageTransform() {
+        const originalImage = document.getElementById('original-xray');
+        const gradcamImage = document.getElementById('gradcam-xray');
+        
+        if (!originalImage) return;
+        
+        // Use CSS custom properties for better performance
+        const transform = `translate3d(${imageTransform.translateX}px, ${imageTransform.translateY}px, 0) scale(${imageTransform.scale * imageTransform.flipX}, ${imageTransform.scale * imageTransform.flipY}) rotate(${imageTransform.rotation}deg)`;
+        
+        const filter = `brightness(${imageTransform.brightness}%) contrast(${imageTransform.contrast}%) saturate(${imageTransform.saturation}%) hue-rotate(${imageTransform.hue}deg)`;
+        
+        // Apply transforms more efficiently to both images
+        originalImage.style.transform = transform;
+        originalImage.style.filter = filter;
+        
+        // Apply same transforms to GradCAM if it exists
+        if (gradcamImage) {
+            gradcamImage.style.transform = transform;
+            gradcamImage.style.filter = filter;
+            
+            // Ensure both images have exact same positioning
+            gradcamImage.style.width = originalImage.style.width || '100%';
+            gradcamImage.style.height = originalImage.style.height || '100%';
+            gradcamImage.style.objectFit = 'contain';
+            gradcamImage.style.objectPosition = 'center';
+        }
+    }
+
+    // Fullscreen functions
+    window.openFullscreen = function() {
+        const fullscreenViewer = document.getElementById('fullscreenViewer');
+        const fullscreenContent = document.getElementById('fullscreenContent');
+        const imageLabViewer = document.getElementById('imageLabViewer');
+        
+        if (fullscreenViewer && fullscreenContent && imageLabViewer) {
+            // Clone the image lab viewer
+            const clonedViewer = imageLabViewer.cloneNode(true);
+            clonedViewer.style.width = '90vw';
+            clonedViewer.style.height = '90vh';
+            
+            // Update IDs to avoid conflicts
+            const clonedContainer = clonedViewer.querySelector('.image-container');
+            const clonedOriginalImage = clonedViewer.querySelector('#original-xray');
+            const clonedGradcamImage = clonedViewer.querySelector('#gradcam-xray');
+            const clonedZoomSlider = clonedViewer.querySelector('#zoomSlider');
+            const clonedZoomPercentage = clonedViewer.querySelector('#zoomPercentage');
+            const clonedBrightnessSlider = clonedViewer.querySelector('#brightnessSlider');
+            const clonedContrastSlider = clonedViewer.querySelector('#contrastSlider');
+            const clonedSaturationSlider = clonedViewer.querySelector('#saturationSlider');
+            const clonedHueSlider = clonedViewer.querySelector('#hueSlider');
+            
+            if (clonedContainer) clonedContainer.id = 'fullscreenImageContainer';
+            if (clonedOriginalImage) clonedOriginalImage.id = 'fullscreen-original-xray';
+            if (clonedGradcamImage) clonedGradcamImage.id = 'fullscreen-gradcam-xray';
+            if (clonedZoomSlider) clonedZoomSlider.id = 'fullscreenZoomSlider';
+            if (clonedZoomPercentage) clonedZoomPercentage.id = 'fullscreenZoomPercentage';
+            if (clonedBrightnessSlider) clonedBrightnessSlider.id = 'fullscreenBrightnessSlider';
+            if (clonedContrastSlider) clonedContrastSlider.id = 'fullscreenContrastSlider';
+            if (clonedSaturationSlider) clonedSaturationSlider.id = 'fullscreenSaturationSlider';
+            if (clonedHueSlider) clonedHueSlider.id = 'fullscreenHueSlider';
+            
+            // Update button onclick handlers for fullscreen
+            const buttons = clonedViewer.querySelectorAll('button[onclick]');
+            buttons.forEach(button => {
+                const onclick = button.getAttribute('onclick');
+                if (onclick) {
+                    button.setAttribute('onclick', onclick.replace(/\(/g, 'Fullscreen('));
+                }
+            });
+            
+            // Update slider oninput handlers for fullscreen
+            const sliders = clonedViewer.querySelectorAll('input[oninput]');
+            sliders.forEach(slider => {
+                const oninput = slider.getAttribute('oninput');
+                if (oninput && oninput.includes('adjustImage')) {
+                    slider.setAttribute('oninput', 'adjustImageFullscreen()');
+                } else if (oninput && oninput.includes('setZoom')) {
+                    slider.setAttribute('oninput', 'setZoomFullscreen(this.value)');
+                }
+            });
+            
+            // Clear previous content and add cloned viewer
+            fullscreenContent.innerHTML = '';
+            fullscreenContent.appendChild(clonedViewer);
+            
+            // Show fullscreen
+            fullscreenViewer.style.display = 'flex';
+            
+            // Re-initialize controls for cloned elements
+            setTimeout(() => {
+                initializeFullscreenControls(clonedViewer);
+            }, 100);
+        }
+    }
+
+    window.closeFullscreen = function() {
+        const fullscreenViewer = document.getElementById('fullscreenViewer');
+        if (fullscreenViewer) {
+            fullscreenViewer.style.display = 'none';
+        }
+    }
+
+    function initializeFullscreenControls(viewer) {
+        const imageContainer = viewer.querySelector('#fullscreenImageContainer');
+        const originalImage = viewer.querySelector('#fullscreen-original-xray');
+        const gradcamImage = viewer.querySelector('#fullscreen-gradcam-xray');
+        
+        if (!imageContainer || !originalImage) return;
+        
+        // Apply current transform to fullscreen images
+        updateImageTransformFullscreen();
+        
+        // Re-bind drag events for fullscreen
+        imageContainer.addEventListener('mousedown', startDragFullscreen);
+        imageContainer.addEventListener('mousemove', dragFullscreen);
+        imageContainer.addEventListener('mouseup', stopDragFullscreen);
+        imageContainer.addEventListener('mouseleave', stopDragFullscreen);
+        
+        // Touch events for fullscreen mobile
+        imageContainer.addEventListener('touchstart', handleTouchStartFullscreen);
+        imageContainer.addEventListener('touchmove', handleTouchMoveFullscreen);
+        imageContainer.addEventListener('touchend', handleTouchEndFullscreen);
+        
+        // Prevent image dragging
+        originalImage.addEventListener('dragstart', (e) => e.preventDefault());
+        if (gradcamImage) gradcamImage.addEventListener('dragstart', (e) => e.preventDefault());
+        
+        console.log('🔬 Fullscreen Image Lab initialized for Chest X-ray with GradCAM');
+    }
+
+    // Fullscreen-specific drag functions
+    function startDragFullscreen(e) {
+        isDragging = true;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        e.preventDefault();
+        
+        const originalImage = document.getElementById('fullscreen-original-xray');
+        const gradcamImage = document.getElementById('fullscreen-gradcam-xray');
+        if (originalImage) originalImage.style.willChange = 'transform';
+        if (gradcamImage) gradcamImage.style.willChange = 'transform';
+    }
+
+    function dragFullscreen(e) {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - lastMouseX;
+        const deltaY = e.clientY - lastMouseY;
+        
+        imageTransform.translateX += deltaX * 1.2;
+        imageTransform.translateY += deltaY * 1.2;
+        
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        
+        requestAnimationFrame(updateImageTransformFullscreen);
+        e.preventDefault();
+    }
+
+    function stopDragFullscreen() {
+        isDragging = false;
+        
+        const originalImage = document.getElementById('fullscreen-original-xray');
+        const gradcamImage = document.getElementById('fullscreen-gradcam-xray');
+        if (originalImage) originalImage.style.willChange = 'auto';
+        if (gradcamImage) gradcamImage.style.willChange = 'auto';
+    }
+
+    // Fullscreen touch events
+    function handleTouchStartFullscreen(e) {
+        const touch = e.touches[0];
+        lastMouseX = touch.clientX;
+        lastMouseY = touch.clientY;
+        isDragging = true;
+        e.preventDefault();
+        
+        const originalImage = document.getElementById('fullscreen-original-xray');
+        const gradcamImage = document.getElementById('fullscreen-gradcam-xray');
+        if (originalImage) originalImage.style.willChange = 'transform';
+        if (gradcamImage) gradcamImage.style.willChange = 'transform';
+    }
+
+    function handleTouchMoveFullscreen(e) {
+        if (!isDragging) return;
+        
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - lastMouseX;
+        const deltaY = touch.clientY - lastMouseY;
+        
+        imageTransform.translateX += deltaX * 1.3;
+        imageTransform.translateY += deltaY * 1.3;
+        
+        lastMouseX = touch.clientX;
+        lastMouseY = touch.clientY;
+        
+        requestAnimationFrame(updateImageTransformFullscreen);
+        e.preventDefault();
+    }
+
+    function handleTouchEndFullscreen() {
+        isDragging = false;
+        
+        const originalImage = document.getElementById('fullscreen-original-xray');
+        const gradcamImage = document.getElementById('fullscreen-gradcam-xray');
+        if (originalImage) originalImage.style.willChange = 'auto';
+        if (gradcamImage) gradcamImage.style.willChange = 'auto';
+    }
+
+    // Fullscreen-specific control functions
+    function updateImageTransformFullscreen() {
+        const originalImage = document.getElementById('fullscreen-original-xray');
+        const gradcamImage = document.getElementById('fullscreen-gradcam-xray');
+        
+        if (!originalImage) return;
+        
+        const transform = `translate3d(${imageTransform.translateX}px, ${imageTransform.translateY}px, 0) scale(${imageTransform.scale * imageTransform.flipX}, ${imageTransform.scale * imageTransform.flipY}) rotate(${imageTransform.rotation}deg)`;
+        const filter = `brightness(${imageTransform.brightness}%) contrast(${imageTransform.contrast}%) saturate(${imageTransform.saturation}%) hue-rotate(${imageTransform.hue}deg)`;
+        
+        originalImage.style.transform = transform;
+        originalImage.style.filter = filter;
+        
+        if (gradcamImage) {
+            gradcamImage.style.transform = transform;
+            gradcamImage.style.filter = filter;
+        }
+    }
+
+    window.zoomImageFullscreen = function(delta) {
+        const newScale = Math.max(0.1, Math.min(5, imageTransform.scale + delta));
+        imageTransform.scale = newScale;
+        
+        const zoomSlider = document.getElementById('fullscreenZoomSlider');
+        const zoomPercentage = document.getElementById('fullscreenZoomPercentage');
+        
+        if (zoomSlider) zoomSlider.value = newScale;
+        if (zoomPercentage) zoomPercentage.textContent = Math.round(newScale * 100) + '%';
+        
+        updateImageTransformFullscreen();
+    }
+
+    window.setZoomFullscreen = function(value) {
+        imageTransform.scale = parseFloat(value);
+        
+        const zoomPercentage = document.getElementById('fullscreenZoomPercentage');
+        if (zoomPercentage) zoomPercentage.textContent = Math.round(value * 100) + '%';
+        
+        updateImageTransformFullscreen();
+    }
+
+    window.rotateImageFullscreen = function(degrees) {
+        imageTransform.rotation += degrees;
+        updateImageTransformFullscreen();
+    }
+
+    window.flipImageFullscreen = function(direction) {
+        if (direction === 'horizontal') {
+            imageTransform.flipX *= -1;
+        } else if (direction === 'vertical') {
+            imageTransform.flipY *= -1;
+        }
+        updateImageTransformFullscreen();
+    }
+
+    window.resetImageFullscreen = function() {
+        imageTransform = {
+            scale: 1,
+            rotation: 0,
+            translateX: 0,
+            translateY: 0,
+            flipX: 1,
+            flipY: 1,
+            brightness: 100,
+            contrast: 100,
+            saturation: 100,
+            hue: 0
+        };
+        
+        // Reset fullscreen sliders
+        const zoomSlider = document.getElementById('fullscreenZoomSlider');
+        const zoomPercentage = document.getElementById('fullscreenZoomPercentage');
+        const brightnessSlider = document.getElementById('fullscreenBrightnessSlider');
+        const contrastSlider = document.getElementById('fullscreenContrastSlider');
+        const saturationSlider = document.getElementById('fullscreenSaturationSlider');
+        const hueSlider = document.getElementById('fullscreenHueSlider');
+        
+        if (zoomSlider) zoomSlider.value = 1;
+        if (zoomPercentage) zoomPercentage.textContent = '100%';
+        if (brightnessSlider) brightnessSlider.value = 100;
+        if (contrastSlider) contrastSlider.value = 100;
+        if (saturationSlider) saturationSlider.value = 100;
+        if (hueSlider) hueSlider.value = 0;
+        
+        updateImageTransformFullscreen();
+    }
+
+    window.adjustImageFullscreen = function() {
+        const brightnessSlider = document.getElementById('fullscreenBrightnessSlider');
+        const contrastSlider = document.getElementById('fullscreenContrastSlider');
+        const saturationSlider = document.getElementById('fullscreenSaturationSlider');
+        const hueSlider = document.getElementById('fullscreenHueSlider');
+        
+        if (brightnessSlider) imageTransform.brightness = parseInt(brightnessSlider.value);
+        if (contrastSlider) imageTransform.contrast = parseInt(contrastSlider.value);
+        if (saturationSlider) imageTransform.saturation = parseInt(saturationSlider.value);
+        if (hueSlider) imageTransform.hue = parseInt(hueSlider.value);
+        
+        updateImageTransformFullscreen();
+    }
+
+    // Enhanced results display function
+    function displayResults(data) {
+        console.log('🖼️ Displaying enhanced results with interactive viewer');
+        
+        // Calculate confidence level description and color based on diagnosis
+        const confidence = Math.round(data.confidence || 0);
+        const classification = (data.class || '').toLowerCase();
+        let confidenceLevel = '';
+        let confidenceColor = '';
+        
+        // Determine color based on diagnosis type
+        const isDangerous = classification.includes('covid') || 
+                           classification.includes('pneumonia') || 
+                           classification.includes('opacity');
+        
+        if (isDangerous) {
+            if (confidence >= 90) {
+                confidenceLevel = 'Very High';
+                confidenceColor = '#dc3545'; // Red for danger
+            } else if (confidence >= 75) {
+                confidenceLevel = 'High';
+                confidenceColor = '#fd7e14'; // Orange for high danger
+            } else if (confidence >= 60) {
+                confidenceLevel = 'Moderate';
+                confidenceColor = '#ffc107'; // Yellow for moderate
+            } else {
+                confidenceLevel = 'Low';
+                confidenceColor = '#6c757d'; // Gray for low confidence
+            }
+        } else {
+            // Normal cases - green colors
+            if (confidence >= 90) {
+                confidenceLevel = 'Very High';
+                confidenceColor = '#28a745'; // Green for normal
+            } else if (confidence >= 75) {
+                confidenceLevel = 'High';
+                confidenceColor = '#17a2b8'; // Blue for normal
+            } else if (confidence >= 60) {
+                confidenceLevel = 'Moderate';
+                confidenceColor = '#ffc107'; // Yellow for moderate
+            } else {
+                confidenceLevel = 'Low';
+                confidenceColor = '#6c757d'; // Gray for low confidence
+            }
+        }
+        
+        // Get current date and time
+        const now = new Date();
+        const analysisDate = now.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        const analysisTime = now.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: true 
+        });
+        
+        $('#analysisResults').html(`
+            <!-- Analysis Header -->
+            <div class="glass-card mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 style="color: var(--primary-color); font-weight: 700; margin-bottom: 0.5rem;">
+                            <i class="fas fa-chart-line me-3"></i>Chest X-ray Analysis Results
+                        </h2>
+                        <p style="color: #666; margin-bottom: 0;">
+                            <i class="fas fa-calendar-alt me-2"></i>${analysisDate} at ${analysisTime}
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+                                    border-radius: 15px; padding: 1rem; color: white; text-align: center;">
+                            <i class="fas fa-stethoscope" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                            <div style="font-size: 0.9rem; font-weight: 600;">AI Diagnosis</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Results Card -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="glass-card">
+                        <!-- Classification Result -->
+                        <div class="mb-4">
+                            <h4 style="color: #333; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-diagnoses me-2" style="color: var(--primary-color);"></i>
+                                Classification Result
+                            </h4>
+                            <div style="background: rgba(35, 60, 234, 0.05); border-left: 4px solid ${isDangerous ? '#dc3545' : 'var(--primary-color)'}; 
+                                        padding: 1.5rem; border-radius: 0 10px 10px 0; margin-bottom: 2rem;">
+                                <div style="font-size: 1.8rem; font-weight: 700; color: ${isDangerous ? '#dc3545' : 'var(--primary-color)'}; margin-bottom: 0.5rem;">
+                                    ${data.class.replace('_', ' ') || 'Unknown Classification'}
+                                </div>
+                                <div style="color: #666; font-size: 1rem;">
+                                    Detected chest condition classification
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Confidence Analysis -->
+                        <div class="mb-4">
+                            <h5 style="color: #333; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-percentage me-2" style="color: var(--primary-color);"></i>
+                                Confidence Analysis
+                            </h5>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div style="text-align: center; padding: 1rem; border: 2px solid ${confidenceColor}; 
+                                                border-radius: 15px; background: linear-gradient(135deg, rgba(${confidenceColor.replace('#', '')}, 0.1), rgba(${confidenceColor.replace('#', '')}, 0.05));">
+                                        <div style="font-size: 2.2rem; font-weight: 700; color: ${confidenceColor};">
+                                            ${confidence}%
+                                        </div>
+                                        <div style="color: #666; font-size: 1rem; margin-top: 0.5rem; font-weight: 600;">
+                                            Accuracy Score
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div style="text-align: center; padding: 1rem; border: 2px solid ${confidenceColor}; 
+                                                border-radius: 15px; background: linear-gradient(135deg, rgba(${confidenceColor.replace('#', '')}, 0.1), rgba(${confidenceColor.replace('#', '')}, 0.05));">
+                                        <div style="font-size: 2.2rem; font-weight: 700; color: ${confidenceColor};">
+                                            ${confidenceLevel}
+                                        </div>
+                                        <div style="color: #666; font-size: 1rem; margin-top: 0.5rem; font-weight: 600;">
+                                            Confidence Level
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Details -->
+                        <div>
+                            <h5 style="color: #333; font-weight: 600; margin-bottom: 1rem;">
+                                <i class="fas fa-info-circle me-2" style="color: var(--primary-color);"></i>
+                                Analysis Details
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px; margin-bottom: 1rem;">
+                                        <div style="color: #666; font-size: 0.9rem;">Processing Method</div>
+                                        <div style="color: #333; font-weight: 600;">Deep Learning CNN</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px; margin-bottom: 1rem;">
+                                        <div style="color: #666; font-size: 0.9rem;">Model Type</div>
+                                        <div style="color: #333; font-weight: 600;">Chest X-ray Analysis AI</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                                        <div style="color: #666; font-size: 0.9rem;">Analysis Status</div>
+                                        <div style="color: #28a745; font-weight: 600;">
+                                            <i class="fas fa-check-circle me-1"></i>Complete
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                                        <div style="color: #666; font-size: 0.9rem;">GradCAM Heatmap</div>
+                                        <div style="color: #333; font-weight: 600;">
+                                            <i class="fas fa-eye me-1"></i>Available
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Image Viewer -->
+                <div class="col-lg-6">
+                    <div class="glass-card text-center">
+                        <h5 style="color: #333; font-weight: 600; margin-bottom: 1.5rem;">
+                            <i class="fas fa-microscope me-2" style="color: var(--primary-color);"></i>
+                            Medical Image Lab with GradCAM
+                        </h5>
+                        ${data.original_base64 || data.image_path ? `
+                            <div class="image-lab-viewer" id="imageLabViewer">
+                                <!-- Image Controls -->
+                                <div class="image-controls">
+                                    <div class="control-group">
+                                        <button class="image-control-btn" onclick="rotateImage(-90)" title="Rotate Left">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+                                        <button class="image-control-btn" onclick="rotateImage(90)" title="Rotate Right">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                    </div>
+                                    <div class="control-group">
+                                        <button class="image-control-btn" onclick="flipImage('horizontal')" title="Flip Horizontal">
+                                            <i class="fas fa-arrows-alt-h"></i>
+                                        </button>
+                                        <button class="image-control-btn" onclick="flipImage('vertical')" title="Flip Vertical">
+                                            <i class="fas fa-arrows-alt-v"></i>
+                                        </button>
+                                    </div>
+                                    <div class="control-group">
+                                        <button class="image-control-btn" onclick="resetImage()" title="Reset">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                        <button class="image-control-btn" onclick="openFullscreen()" title="Fullscreen">
+                                            <i class="fas fa-expand"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Adjustment Controls -->
+                                <div class="adjustment-controls" id="adjustmentControls">
+                                    <div class="adjustment-item">
+                                        <span>Brightness</span>
+                                        <input type="range" class="adjustment-slider" id="brightnessSlider" 
+                                               min="0" max="200" value="100" oninput="adjustImage()">
+                                    </div>
+                                    <div class="adjustment-item">
+                                        <span>Contrast</span>
+                                        <input type="range" class="adjustment-slider" id="contrastSlider" 
+                                               min="0" max="200" value="100" oninput="adjustImage()">
+                                    </div>
+                                    <div class="adjustment-item">
+                                        <span>Saturation</span>
+                                        <input type="range" class="adjustment-slider" id="saturationSlider" 
+                                               min="0" max="200" value="100" oninput="adjustImage()">
+                                    </div>
+                                    <div class="adjustment-item">
+                                        <span>Hue</span>
+                                        <input type="range" class="adjustment-slider" id="hueSlider" 
+                                               min="0" max="360" value="0" oninput="adjustImage()">
+                                    </div>
+                                </div>
+
+                                <!-- GradCAM Controls -->
+                                <div class="gradcam-controls" id="gradcamControls">
+                                    <div class="gradcam-switch">
+                                        <span>GradCAM</span>
+                                        <div class="toggle-switch active" id="gradcamToggle" onclick="toggleGradCAM()">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                    </div>
+                                    <div class="opacity-control">
+                                        <span>Opacity</span>
+                                        <input type="range" class="opacity-slider" id="gradcamOpacitySlider" 
+                                               min="0" max="100" value="70" oninput="adjustGradCAMOpacity(this.value)">
+                                        <span id="opacityValue">70%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Image Container -->
+                                <div class="image-container" id="imageContainer">
+                                    <!-- Original X-ray Image -->
+                                    <img src="${data.original_base64 ? `data:image/png;base64,${data.original_base64}` : data.image_path}" 
+                                         class="analyzed-image" 
+                                         id="original-xray"
+                                         draggable="false"
+                                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                                                object-fit: contain; object-position: center;">
+                                    
+                                    <!-- GradCAM Overlay -->
+                                    ${data.gradcam_base64 ? `
+                                        <img src="data:image/png;base64,${data.gradcam_base64}" 
+                                             class="gradcam-image" 
+                                             id="gradcam-xray"
+                                             draggable="false"
+                                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                                                    object-fit: contain; object-position: center; opacity: 0.7; 
+                                                    mix-blend-mode: multiply; pointer-events: none;">
+                                    ` : ''}
+                                </div>
+
+                                <!-- Zoom Controls -->
+                                <div class="zoom-controls">
+                                    <button class="zoom-btn" onclick="zoomImage(-0.1)" title="Zoom Out">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="range" class="zoom-slider" id="zoomSlider" 
+                                           min="0.1" max="5" step="0.1" value="1" oninput="setZoom(this.value)">
+                                    <span class="zoom-percentage" id="zoomPercentage">100%</span>
+                                    <button class="zoom-btn" onclick="zoomImage(0.1)" title="Zoom In">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 0.8rem; background: rgba(35, 60, 234, 0.05); 
+                                        border-radius: 10px; font-size: 0.9rem; color: #666;">
+                                <i class="fas fa-microscope me-1" style="color: var(--primary-color);"></i>
+                                Interactive Medical Image Viewer with GradCAM Heat Map
+                            </div>
+                        ` : `
+                            <div style="padding: 3rem; background: #f8f9fa; border-radius: 15px; color: #666;">
+                                <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; color: #ccc;"></i>
+                                <div>No image available</div>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Medical Disclaimer -->
+            <div class="disclaimer-card mt-4" style="background: linear-gradient(135deg, #fff3cd, #ffeaa7);">
+                <div class="row align-items-center">
+                    <div class="col-md-1 text-center">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #856404;"></i>
+                    </div>
+                    <div class="col-md-11">
+                        <h6 style="color: #856404; font-weight: 600; margin-bottom: 0.5rem;">
+                            Important Medical Disclaimer
+                        </h6>
+                        <p style="color: #856404; margin-bottom: 0; font-size: 0.95rem;">
+                            This AI analysis is for educational and informational purposes only. 
+                            It should not replace professional medical diagnosis or treatment. 
+                            Please consult with a qualified radiologist or physician for proper medical evaluation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- New Analysis Button -->
+            <div class="text-center mt-4">
+                <button onclick="startNewAnalysis()" class="new-analysis-btn">
+                    <i class="fas fa-plus me-2"></i>Analyze New Image
+                </button>
+            </div>
+        `);
+        
+        // Add fullscreen viewer to body if it doesn't exist
+        if (!document.getElementById('fullscreenViewer')) {
+            const fullscreenViewer = document.createElement('div');
+            fullscreenViewer.id = 'fullscreenViewer';
+            fullscreenViewer.className = 'fullscreen-viewer';
+            fullscreenViewer.innerHTML = `
+                <button class="close-fullscreen" onclick="closeFullscreen()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="fullscreen-content" id="fullscreenContent">
+                    <!-- Content will be cloned here -->
+                </div>
+            `;
+            document.body.appendChild(fullscreenViewer);
+        }
+        
+        // Initialize image lab functionality
+        setTimeout(() => {
+            initializeImageLab();
+        }, 100);
+        
+        console.log('✅ Enhanced results displayed successfully');
+    }
+
+    // Enhanced GradCAM control functions
+    window.toggleGradCAM = function() {
+        const toggle = document.getElementById('gradcamToggle');
+        const gradcamImage = document.getElementById('gradcam-xray');
+        
+        if (!toggle || !gradcamImage) return;
+        
+        const isActive = toggle.classList.contains('active');
+        
+        if (isActive) {
+            // Disable GradCAM overlay
+            toggle.classList.remove('active');
+            gradcamImage.style.opacity = '0';
+            console.log('🔄 GradCAM overlay disabled');
+        } else {
+            // Enable GradCAM overlay
+            toggle.classList.add('active');
+            const opacitySlider = document.getElementById('gradcamOpacitySlider');
+            const opacity = opacitySlider ? opacitySlider.value / 100 : 0.7;
+            gradcamImage.style.opacity = opacity;
+            console.log('🔄 GradCAM overlay enabled at', (opacity * 100) + '%');
+        }
+    }
+
+    window.adjustGradCAMOpacity = function(value) {
+        const gradcamImage = document.getElementById('gradcam-xray');
+        const toggle = document.getElementById('gradcamToggle');
+        const opacityValue = document.getElementById('opacityValue');
+        
+        // Update opacity display
+        if (opacityValue) {
+            opacityValue.textContent = value + '%';
+        }
+        
+        // Apply opacity only if GradCAM is enabled
+        if (gradcamImage && toggle && toggle.classList.contains('active')) {
+            gradcamImage.style.opacity = value / 100;
+            console.log('🎚️ GradCAM opacity adjusted to', value + '%');
+        }
+    }
+    
+    // Setup GradCAM controls after results display
+    window.setupGradCAMControls = function() {
+        const toggle = document.getElementById('gradcamToggle');
+        const opacitySlider = document.getElementById('gradcamOpacitySlider');
+        const gradcamImage = document.getElementById('gradcam-xray');
+        const opacityValue = document.getElementById('opacityValue');
+        
+        if (toggle && gradcamImage) {
+            // Initialize GradCAM as enabled by default
+            toggle.classList.add('active');
+            
+            // Set initial opacity
+            if (opacitySlider) {
+                const initialOpacity = opacitySlider.value / 100;
+                gradcamImage.style.opacity = initialOpacity;
+                
+                // Update opacity display
+                if (opacityValue) {
+                    opacityValue.textContent = opacitySlider.value + '%';
+                }
+            }
+            
+            console.log('✅ Enhanced GradCAM controls initialized successfully');
+        }
+    }
+
+    // Enhanced Results Display Function
+    function displayResults(data) {
+        const analysisResults = document.getElementById('analysisResults');
+        
+        if (analysisResults) {
+            // Calculate confidence level description and color based on diagnosis
+            const confidence = Math.round(data.confidence || 0);
+            const classification = (data.class || '').toLowerCase();
+            let confidenceLevel = '';
+            let confidenceColor = '';
+            
+            // Determine color based on diagnosis type
+            const isAbnormal = classification.includes('covid') || 
+                             classification.includes('opacity') || 
+                             classification.includes('pneumonia');
+            
+            if (isAbnormal) {
+                // Abnormal cases - red/orange colors
+                if (confidence >= 90) {
+                    confidenceLevel = 'Very High';
+                    confidenceColor = '#dc3545'; // Red for high confidence abnormal
+                } else if (confidence >= 75) {
+                    confidenceLevel = 'High';
+                    confidenceColor = '#dc3545'; // Red for high abnormal
+                } else if (confidence >= 60) {
+                    confidenceLevel = 'Moderate';
+                    confidenceColor = '#fd7e14'; // Orange for moderate abnormal
+                } else {
+                    confidenceLevel = 'Low';
+                    confidenceColor = '#ffc107'; // Yellow for low abnormal
+                }
+            } else {
+                // Normal cases - green/blue colors
+                if (confidence >= 90) {
+                    confidenceLevel = 'Very High';
+                    confidenceColor = '#28a745'; // Green for normal
+                } else if (confidence >= 75) {
+                    confidenceLevel = 'High';
+                    confidenceColor = '#17a2b8'; // Blue for normal
+                } else if (confidence >= 60) {
+                    confidenceLevel = 'Moderate';
+                    confidenceColor = '#ffc107'; // Yellow for moderate
+                } else {
+                    confidenceLevel = 'Low';
+                    confidenceColor = '#6c757d'; // Gray for low confidence
+                }
+            }
+            
+            // Get current date and time
+            const now = new Date();
+            const analysisDate = now.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            const analysisTime = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+            });
+            
+            analysisResults.innerHTML = `
+                <!-- Analysis Header -->
+                <div class="glass-card mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 style="color: var(--primary-color); font-weight: 700; margin-bottom: 0.5rem;">
+                                <i class="fas fa-chart-line me-3"></i>Chest X-ray Analysis Results
+                            </h2>
+                            <p style="color: #666; margin-bottom: 0;">
+                                <i class="fas fa-calendar-alt me-2"></i>${analysisDate} at ${analysisTime}
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+                                        border-radius: 15px; padding: 1rem; color: white; text-align: center;">
+                                <i class="fas fa-x-ray" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                                <div style="font-size: 0.9rem; font-weight: 600;">AI X-ray Analysis</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Results Card -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="glass-card">
+                            <!-- Classification Result -->
+                            <div class="mb-4">
+                                <h4 style="color: #333; font-weight: 600; margin-bottom: 1.5rem;">
+                                    <i class="fas fa-diagnoses me-2" style="color: var(--primary-color);"></i>
+                                    Classification Result
+                                </h4>
+                                <div style="background: rgba(35, 60, 234, 0.05); border-left: 4px solid ${isAbnormal ? '#dc3545' : 'var(--primary-color)'}; 
+                                            padding: 1.5rem; border-radius: 0 10px 10px 0; margin-bottom: 2rem;">
+                                    <div style="font-size: 1.8rem; font-weight: 700; color: ${isAbnormal ? '#dc3545' : 'var(--primary-color)'}; margin-bottom: 0.5rem;">
+                                        ${data.class.replace('_', ' ') || 'Unknown Classification'}
+                                    </div>
+                                    <div style="color: #666; font-size: 1rem;">
+                                        Detected chest X-ray classification
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Confidence Analysis -->
+                            <div class="mb-4">
+                                <h5 style="color: #333; font-weight: 600; margin-bottom: 1rem;">
+                                    <i class="fas fa-percentage me-2" style="color: var(--primary-color);"></i>
+                                    Confidence Analysis
+                                </h5>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div style="text-align: center; padding: 1rem; border: 2px solid ${confidenceColor}; 
+                                                    border-radius: 15px; background: rgba(${confidenceColor.replace('#', '')}, 0.05);">
+                                            <div style="font-size: 2.2rem; font-weight: 700; color: ${confidenceColor};">
+                                                ${confidence}%
+                                            </div>
+                                            <div style="color: #666; font-size: 1rem; margin-top: 0.5rem; font-weight: 600;">
+                                                Accuracy Score
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div style="text-align: center; padding: 1rem; border: 2px solid ${confidenceColor}; 
+                                                    border-radius: 15px; background: rgba(${confidenceColor.replace('#', '')}, 0.05);">
+                                            <div style="font-size: 2.2rem; font-weight: 700; color: ${confidenceColor};">
+                                                ${confidenceLevel}
+                                            </div>
+                                            <div style="color: #666; font-size: 1rem; margin-top: 0.5rem; font-weight: 600;">
+                                                Confidence Level
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Analysis Details -->
+                            <div>
+                                <h5 style="color: #333; font-weight: 600; margin-bottom: 1rem;">
+                                    <i class="fas fa-info-circle me-2" style="color: var(--primary-color);"></i>
+                                    Analysis Details
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px; margin-bottom: 1rem;">
+                                            <div style="color: #666; font-size: 0.9rem;">Processing Method</div>
+                                            <div style="color: #333; font-weight: 600;">Deep Learning CNN</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px; margin-bottom: 1rem;">
+                                            <div style="color: #666; font-size: 0.9rem;">Model Type</div>
+                                            <div style="color: #333; font-weight: 600;">Chest X-ray AI with GradCAM</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                                            <div style="color: #666; font-size: 0.9rem;">Analysis Status</div>
+                                            <div style="color: #28a745; font-weight: 600;">
+                                                <i class="fas fa-check-circle me-1"></i>Complete
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                                            <div style="color: #666; font-size: 0.9rem;">Processing Time</div>
+                                            <div style="color: #333; font-weight: 600;">< 3 seconds</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Image Display with Interactive Viewer -->
+                    <div class="col-lg-6">
+                        <div class="glass-card text-center">
+                            <h5 style="color: #333; font-weight: 600; margin-bottom: 1.5rem;">
+                                <i class="fas fa-x-ray me-2" style="color: var(--primary-color);"></i>
+                                Advanced Medical Image Lab
+                            </h5>
+                            ${(data.original_base64 || data.image_path) ? `
+                                <div class="image-lab-viewer" id="imageLabViewer">
+                                    <!-- Image Controls -->
+                                    <div class="image-controls">
+                                        <div class="control-group">
+                                            <button class="image-control-btn" onclick="rotateImage(-90)" title="Rotate Left">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button class="image-control-btn" onclick="rotateImage(90)" title="Rotate Right">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </div>
+                                        <div class="control-group">
+                                            <button class="image-control-btn" onclick="flipImage('horizontal')" title="Flip Horizontal">
+                                                <i class="fas fa-arrows-alt-h"></i>
+                                            </button>
+                                            <button class="image-control-btn" onclick="flipImage('vertical')" title="Flip Vertical">
+                                                <i class="fas fa-arrows-alt-v"></i>
+                                            </button>
+                                        </div>
+                                        <div class="control-group">
+                                            <button class="image-control-btn" onclick="resetImage()" title="Reset">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                            <button class="image-control-btn" onclick="openFullscreen()" title="Fullscreen">
+                                                <i class="fas fa-expand"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Enhanced Adjustment Controls with Improved GradCAM -->
+                                    <div class="adjustment-controls" id="adjustmentControls">
+                                        <!-- GradCAM Controls Section -->
+                                        <div class="gradcam-controls">
+                                            <h6 style="color: white; margin-bottom: 12px; font-size: 13px; font-weight: 600;">
+                                                <i class="fas fa-eye me-2" style="color: var(--primary-color);"></i>
+                                                GradCAM Visualization
+                                            </h6>
+                                            <div class="gradcam-switch">
+                                                <div class="toggle-switch active" id="gradcamToggle" onclick="toggleGradCAM()">
+                                                    <div class="toggle-slider"></div>
+                                                </div>
+                                                <span>Show Overlay</span>
+                                            </div>
+                                            <div class="opacity-control">
+                                                <span>Opacity:</span>
+                                                <input type="range" class="opacity-slider" id="gradcamOpacitySlider" 
+                                                       min="0" max="100" value="70" oninput="adjustGradCAMOpacity(this.value)">
+                                                <span id="opacityValue">70%</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Image Adjustment Controls -->
+                                        <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px;">
+                                            <div class="adjustment-item">
+                                                <span>Brightness</span>
+                                                <input type="range" class="adjustment-slider" id="brightnessSlider" 
+                                                       min="0" max="200" value="100" oninput="adjustImage()">
+                                            </div>
+                                            <div class="adjustment-item">
+                                                <span>Contrast</span>
+                                                <input type="range" class="adjustment-slider" id="contrastSlider" 
+                                                       min="0" max="200" value="100" oninput="adjustImage()">
+                                            </div>
+                                            <div class="adjustment-item">
+                                                <span>Saturation</span>
+                                                <input type="range" class="adjustment-slider" id="saturationSlider" 
+                                                       min="0" max="200" value="100" oninput="adjustImage()">
+                                            </div>
+                                            <div class="adjustment-item">
+                                                <span>Hue</span>
+                                                <input type="range" class="adjustment-slider" id="hueSlider" 
+                                                       min="0" max="360" value="0" oninput="adjustImage()">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Image Container with both Original and GradCAM -->
+                                    <div class="image-container" id="imageContainer">
+                                        <!-- Original X-ray image -->
+                                        <img src="${data.original_base64 ? `data:image/png;base64,${data.original_base64}` : data.image_path}" 
+                                             class="analyzed-image" 
+                                             id="original-xray"
+                                             draggable="false"
+                                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                                                    object-fit: contain; object-position: center;">
+                                        
+                                        <!-- Enhanced GradCAM overlay with better visualization -->
+                                        ${data.gradcam_base64 ? `
+                                            <div class="gradcam-overlay" id="gradcam-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.7; pointer-events: none;">
+                                                <img src="data:image/png;base64,${data.gradcam_base64}" 
+                                                     class="gradcam-image" 
+                                                     id="gradcam-xray"
+                                                     draggable="false"
+                                                     style="width: 100%; height: 100%; object-fit: contain; object-position: center; 
+                                                            mix-blend-mode: multiply; filter: contrast(1.2) saturate(1.3);">
+                                            </div>
+                                        ` : ''}
+                                    </div>
+
+                                    <!-- Zoom Controls -->
+                                    <div class="zoom-controls">
+                                        <button class="zoom-btn" onclick="zoomImage(-0.1)" title="Zoom Out">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input type="range" class="zoom-slider" id="zoomSlider" 
+                                               min="0.1" max="5" step="0.1" value="1" oninput="setZoom(this.value)">
+                                        <span class="zoom-percentage" id="zoomPercentage">100%</span>
+                                        <button class="zoom-btn" onclick="zoomImage(0.1)" title="Zoom In">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 1rem; padding: 0.8rem; background: rgba(35, 60, 234, 0.05); 
+                                            border-radius: 10px; font-size: 0.9rem; color: #666;">
+                                    <i class="fas fa-x-ray me-1" style="color: var(--primary-color);"></i>
+                                    Interactive Medical Image Viewer with Enhanced GradCAM Heat Map Visualization
+                                    <div style="font-size: 0.8rem; margin-top: 0.3rem; color: #888;">
+                                        Toggle GradCAM overlay to see AI attention areas • Adjust opacity for optimal viewing
+                                    </div>
+                                </div>
+                            ` : `
+                                <div style="padding: 3rem; background: #f8f9fa; border-radius: 15px; color: #666;">
+                                    <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; color: #ccc;"></i>
+                                    <div>No X-ray image available</div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Medical Disclaimer -->
+                <div class="disclaimer-card mt-4" style="background: linear-gradient(135deg, #fff3cd, #ffeaa7);">
+                    <div class="row align-items-center">
+                        <div class="col-md-1 text-center">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #856404;"></i>
+                        </div>
+                        <div class="col-md-11">
+                            <h6 style="color: #856404; font-weight: 600; margin-bottom: 0.5rem;">
+                                Important Medical Disclaimer
+                            </h6>
+                            <p style="color: #856404; margin-bottom: 0; font-size: 0.95rem;">
+                                This AI analysis is for educational and informational purposes only. 
+                                It should not replace professional medical diagnosis or treatment. 
+                                Please consult with a qualified radiologist or physician for proper medical evaluation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New Analysis Button -->
+                <div class="text-center mt-4">
+                    <button onclick="startNewAnalysis()" class="new-analysis-btn">
+                        <i class="fas fa-plus me-2"></i>Analyze New Image
+                    </button>
+                </div>
+            `;
+            
+            // Add fullscreen viewer to body if it doesn't exist
+            if (!document.getElementById('fullscreenViewer')) {
+                const fullscreenViewer = document.createElement('div');
+                fullscreenViewer.id = 'fullscreenViewer';
+                fullscreenViewer.className = 'fullscreen-viewer';
+                fullscreenViewer.innerHTML = `
+                    <button class="close-fullscreen" onclick="closeFullscreen()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="fullscreen-content" id="fullscreenContent">
+                        <!-- Content will be cloned here -->
+                    </div>
+                `;
+                document.body.appendChild(fullscreenViewer);
+            }
+            
+            // Initialize image lab functionality
+            setTimeout(() => {
+                initializeImageLab();
+                setupGradCAMControls();
+            }, 100);
+        }
+    }
+
+    // Enhanced GradCAM control functions for overlay
+    window.toggleGradCAM = function() {
+        const toggle = document.getElementById('gradcamToggle');
+        const overlay = document.getElementById('gradcam-overlay');
+        
+        if (!toggle || !overlay) return;
+        
+        const isActive = toggle.classList.contains('active');
+        
+        if (isActive) {
+            // Disable GradCAM overlay
+            toggle.classList.remove('active');
+            overlay.style.opacity = '0';
+            console.log('🔄 GradCAM overlay disabled');
+        } else {
+            // Enable GradCAM overlay
+            toggle.classList.add('active');
+            const opacitySlider = document.getElementById('gradcamOpacitySlider');
+            const opacity = opacitySlider ? opacitySlider.value / 100 : 0.7;
+            overlay.style.opacity = opacity;
+            console.log('🔄 GradCAM overlay enabled at', (opacity * 100) + '%');
+        }
+    }
+
+    window.adjustGradCAMOpacity = function(value) {
+        const overlay = document.getElementById('gradcam-overlay');
+        const toggle = document.getElementById('gradcamToggle');
+        const opacityValue = document.getElementById('opacityValue');
+        
+        // Update opacity display
+        if (opacityValue) {
+            opacityValue.textContent = value + '%';
+        }
+        
+        // Apply opacity only if GradCAM is enabled
+        if (overlay && toggle && toggle.classList.contains('active')) {
+            overlay.style.opacity = value / 100;
+            console.log('🎚️ GradCAM opacity adjusted to', value + '%');
+        }
+    }
+
+    function setupGradCAMControls() {
+        const toggle = document.getElementById('gradcamToggle');
+        const overlay = document.getElementById('gradcam-overlay');
+        const opacitySlider = document.getElementById('gradcamOpacitySlider');
+        const opacityValue = document.getElementById('opacityValue');
+        
+        if (toggle && overlay) {
+            // Initialize GradCAM as enabled by default
+            toggle.classList.add('active');
+            
+            // Set initial opacity from slider value
+            if (opacitySlider) {
+                const initialOpacity = opacitySlider.value / 100;
+                overlay.style.opacity = initialOpacity;
+                
+                // Update opacity display
+                if (opacityValue) {
+                    opacityValue.textContent = opacitySlider.value + '%';
+                }
+                
+                console.log('✅ GradCAM initialized with', opacitySlider.value + '% opacity');
+            } else {
+                // Fallback opacity
+                overlay.style.opacity = 0.7;
+                console.log('✅ GradCAM initialized with default 70% opacity');
+            }
+        } else {
+            console.log('⚠️ GradCAM elements not found - overlay may be unavailable');
+        }
+    }
+
+    // Start new analysis function
+    window.startNewAnalysis = function() {
+        console.log('🔄 Starting new analysis...');
+        
+        // Clear persisted file variables to start fresh
+        persistedFile = null;
+        persistedFileName = null;
+        console.log('🗑️ Cleared persisted file variables for fresh start');
+        
+        // Hide results section
+        const resultsSection = document.getElementById('resultsSection');
+        if (resultsSection) {
+            resultsSection.style.display = 'none';
+        }
+        
+        // Reset drop zone to original state using createElement for better DOM binding
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            // Clear existing content
+            dropZone.innerHTML = '';
+            
+            // Create elements programmatically for better DOM attachment
+            const iconDiv = document.createElement('div');
+            iconDiv.className = 'drop-zone-icon';
+            
+            const title = document.createElement('h4');
+            title.className = 'mb-3';
+            title.style.cssText = 'color: var(--primary-color); font-weight: 600;';
+            
+            const subtitle = document.createElement('p');
+            subtitle.className = 'mb-4';
+            subtitle.style.cssText = 'color: #666;';
+            
+            // Check if we have a persisted file to restore (should be null after clearing)
+            if (persistedFile && persistedFileName) {
+                console.log('💾 Restoring persisted file:', persistedFileName);
+                
+                // Show file restored state
+                iconDiv.innerHTML = '<i class="fas fa-check-circle"></i>';
+                iconDiv.style.color = '#28a745';
+                title.textContent = persistedFileName;
+                title.style.color = '#28a745';
+                subtitle.textContent = `File size: ${Math.round(persistedFile.size/1024)}KB | Ready for analysis`;
+                
+                // Create success indicator
+                const successDiv = document.createElement('div');
+                successDiv.style.cssText = `background: rgba(40, 167, 69, 0.1); border: 2px solid rgba(40, 167, 69, 0.3); 
+                                           border-radius: 15px; padding: 1.2rem; display: inline-block; margin-top: 1rem;`;
+                successDiv.innerHTML = `<div style="color: #28a745; font-weight: 600; font-size: 1.1rem;">
+                                        <i class="fas fa-check-double me-2"></i>File Restored - Ready for Analysis</div>`;
+                
+                dropZone.appendChild(iconDiv);
+                dropZone.appendChild(title);
+                dropZone.appendChild(subtitle);
+                dropZone.appendChild(successDiv);
+                
+            } else {
+                // Show initial upload state (this will always run after clearing variables)
+                iconDiv.innerHTML = '<i class="fas fa-cloud-upload-alt"></i>';
+                title.textContent = 'Upload Image for Analysis';
+                subtitle.textContent = 'Click the button below to select your X-ray image';
+                
+                dropZone.appendChild(iconDiv);
+                dropZone.appendChild(title);
+                dropZone.appendChild(subtitle);
+                
+                // Create label for file input
+                const label = document.createElement('label');
+                label.setAttribute('for', 'chestFile');
+                label.className = 'btn';
+                label.style.cssText = `background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+                                       color: white; border: none; border-radius: 20px; 
+                                       padding: 0.8rem 1.5rem; font-weight: 600;
+                                       cursor: pointer; display: inline-block;`;
+                label.innerHTML = '<i class="fas fa-folder-open me-2"></i>Select Image';
+                
+                // Create help text
+                const helpDiv = document.createElement('div');
+                helpDiv.className = 'mt-3';
+                helpDiv.innerHTML = '<small class="text-muted">Supported formats: JPG, PNG</small>';
+                
+                dropZone.appendChild(label);
+                dropZone.appendChild(helpDiv);
+            }
+            
+            // Create file input programmatically
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.id = 'chestFile';
+            fileInput.name = 'file';
+            fileInput.accept = 'image/*,.jpg,.jpeg,.png';
+            fileInput.required = true;
+            fileInput.style.display = 'none';
+            
+            // Always append the file input to the dropZone (hidden)
+            dropZone.appendChild(fileInput);
+            
+            console.log('✅ File input created and added to dropZone (which is inside form)');
+            
+            console.log('✅ DOM elements created programmatically');
+            console.log('✅ File input created with ID:', fileInput.id);
+            console.log('✅ File input parent:', fileInput.parentElement?.id || 'none');
+            console.log('✅ File input form:', fileInput.form?.id || 'none');
+            console.log('✅ File input has files:', fileInput.files.length);
+        }
+        
+        // Hide analyze button since we're starting fresh
+        const analyzeContainer = document.getElementById('analyzeButtonContainer');
+        if (analyzeContainer) {
+            analyzeContainer.style.display = 'none';
+        }
+        
+        // Reset transform state
+        imageTransform = {
+            scale: 1,
+            rotation: 0,
+            translateX: 0,
+            translateY: 0,
+            flipX: 1,
+            flipY: 1,
+            brightness: 100,
+            contrast: 100,
+            saturation: 100,
+            hue: 0
+        };
+        
+        // Ensure new file input is properly accessible and setup event listeners
+        setTimeout(() => {
+            const newFileInput = document.getElementById('chestFile');
+            if (newFileInput) {
+                console.log('✅ New file input created successfully:', newFileInput.id);
+                console.log('✅ New file input form association:', newFileInput.form?.id || 'none');
+                
+                // Manually bind change event listener to the new input
+                newFileInput.addEventListener('change', function(e) {
+                    console.log('Change event on new file input');
+                    handleFileSelection(e.target);
+                });
+                
+                console.log('✅ Event listener bound to new file input');
+            } else {
+                console.warn('⚠️ New file input not found after DOM update');
+            }
+        }, 100);
+        
+        // Smooth scroll to upload section
+        setTimeout(() => {
+            const uploadSection = document.querySelector('.chest-hero');
+            if (uploadSection) {
+                uploadSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 200);
+        
+        console.log('🎉 Ready for new X-ray analysis!');
     }
 });
 </script>
