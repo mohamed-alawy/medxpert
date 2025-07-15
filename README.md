@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](Dockerfile)
 
-## � Overview
+## 🔬 Overview
 
 MedXpert is a comprehensive AI-powered medical imaging analysis platform that leverages state-of-the-art deep learning models to assist healthcare professionals in medical diagnosis. The platform provides automated analysis for multiple medical imaging modalities with high accuracy and detailed visualization.
 
@@ -164,7 +164,7 @@ docker run -p 5000:5000 medxpert
 ### Models Performance
 | Model | Architecture | Accuracy/Metric | Input Size | Training Data |
 |-------|-------------|-----------------|------------|---------------|
-| Brain Tumor | U-Net + ResNet | 0.73 Dice | 128×128×64 | 75,000+ MRI scans |
+| Brain Tumor | U-Net | 0.73 Dice | 128×128×64 | 75,000+ MRI scans |
 | Chest X-ray | EfficientNet | 95% Accuracy | 224×224×1 | 16K+ X-rays |
 | Skin Cancer | CNN | 93% Accuracy | 300×300×3 | 21K+ dermoscopic images |
 | Fracture | YOLO v8 | 94% mAP50 | 640×640×1 | 6K+ X-ray images |
