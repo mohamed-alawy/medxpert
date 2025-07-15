@@ -12,14 +12,14 @@ MedXpert is a comprehensive AI-powered medical imaging analysis platform that le
 ## ✨ Key Features
 
 ### 🧠 **Brain Tumor Detection**
-- **Technology**: U-Net architecture with ResNet backbone
+- **Technology**: U-Net architecture
 - **Input**: MRI NIFTI files (.nii.gz)
 - **Capability**: 3D tumor segmentation and volumetric analysis
 - **Performance**: 0.73 Dice Score
 - **Output**: Slice-by-slice tumor segmentation with yellow overlay visualization
 
 ### 🫁 **Chest X-ray Analysis**
-- **Technology**: ResNet-50 with attention mechanism
+- **Technology**: EfficientNetB1
 - **Input**: Standard chest X-ray images (PNG, JPG, JPEG)
 - **Capability**: Multi-class classification for lung pathologies
 - **Performance**: 95% accuracy
@@ -27,7 +27,7 @@ MedXpert is a comprehensive AI-powered medical imaging analysis platform that le
 - **Features**: GradCAM heatmap visualization for explainable AI
 
 ### 🩺 **Skin Cancer Detection**
-- **Technology**: EfficientNet-based CNN
+- **Technology**: CNN
 - **Input**: Dermoscopic images (PNG, JPG, JPEG)
 - **Capability**: Binary classification for melanoma screening
 - **Performance**: 93% accuracy
