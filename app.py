@@ -1071,8 +1071,8 @@ def fracture_example():
 # If this file is being run directly
 if __name__ == "__main__":
     try:
-        # Get port from environment variable (for Codespaces compatibility)
-        port = int(os.environ.get("PORT", 5000))
+        # Get port from environment variable (default to 7860 for HF Spaces)
+        port = int(os.environ.get("PORT", 7860))
         
         # Create models directory if it doesn't exist
         os.makedirs('models', exist_ok=True)
@@ -1081,7 +1081,7 @@ if __name__ == "__main__":
         os.makedirs(CHATBOT_UPLOAD_FOLDER, exist_ok=True)
         
         # Use host 0.0.0.0 for Codespaces compatibility
-        app.run(host="0.0.0.0", port=port, debug=True)
+        app.run(host="0.0.0.0", port=port, debug=False)
     except Exception as e:
         print(f"Error starting Flask application: {str(e)}")
         print("Detailed error:")
