@@ -1,15 +1,10 @@
-# requirements.txt
-
 flask==2.0.1
 flask-sqlalchemy==2.5.1
 sqlalchemy==1.4.46
 flask-login==0.5.0
 werkzeug==2.0.1
 matplotlib
-opencv-python
-torch
-tensorflow==2.17.0
-keras==3.5.0
+opencv-python-headless
 ultralytics
 nibabel
 scikit-image
@@ -22,4 +17,4 @@ unstructured[pdf]
 chromadb
 python-docx
 python-dotenv
-docx2txt 
+docx2txt
